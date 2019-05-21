@@ -18,6 +18,7 @@ import cv2
 import numpy as np
 import csv
 import time
+import argparse
 
 from collections import defaultdict
 from io import StringIO
@@ -33,6 +34,10 @@ try:
 except Exception as e:
     pass
     
+parser = argparse.ArgumentParser(description='Supervised training')
+parser.add_argument("--file", type=int, default="sub-1504614469486.mp4", help="video file for inference")
+
+params = parser.parse_args()
 # initialize .csv
 with open('traffic_measurement.csv', 'w') as f:
     writer = csv.writer(f)
@@ -45,7 +50,7 @@ with open('traffic_measurement.csv', 'w') as f:
 #                       )
 
 # input video
-cap = cv2.VideoCapture('sub-1504614469486.mp4')
+cap = cv2.VideoCapture(params.file)
 
 # Variables
 total_passed_vehicle = 0  # using it to count vehicles
