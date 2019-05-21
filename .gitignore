@@ -99,3 +99,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#Forked repo. need some configuration changes, therefore removing dependencies
+custom_vehicle_training/
+.gitignore
