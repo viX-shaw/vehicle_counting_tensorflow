@@ -35,7 +35,7 @@ except Exception as e:
     pass
     
 parser = argparse.ArgumentParser(description='Supervised training')
-parser.add_argument("--file", type=int, default="sub-1504614469486.mp4", help="video file for inference")
+parser.add_argument("--file", type=str, default="sub-1504614469486.mp4", help="video file for inference")
 
 params = parser.parse_args()
 # initialize .csv
