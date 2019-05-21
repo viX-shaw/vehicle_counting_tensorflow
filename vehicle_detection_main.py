@@ -28,6 +28,11 @@ from PIL import Image
 from utils import label_map_util
 from utils import visualization_utils as vis_util
 
+try:
+    os.mkdir("output")
+except Exception as e:
+    pass
+    
 # initialize .csv
 with open('traffic_measurement.csv', 'w') as f:
     writer = csv.writer(f)
@@ -224,7 +229,9 @@ def object_detection_function():
                     cv2.FONT_HERSHEY_COMPLEX_SMALL,
                     )
 
-                cv2.imshow('vehicle detection', input_frame)
+                # cv2.imshow('vehicle detection', input_frame)
+                cv2.imwrite('output/{}.jpg'.format(cap.get(1)), input_frame)
+
 
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
