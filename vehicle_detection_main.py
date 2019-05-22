@@ -128,7 +128,7 @@ def object_detection_function():
                     break
 
                 # input_frame = frame
-                im_width, im_height = image.size
+                im_width, im_height = frame.size
                 input_frame = load_image_into_numpy_array(frame)
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
