@@ -33,6 +33,7 @@ try:
     os.remove("output")
     os.mkdir("output")
 except Exception as e:
+    os.mkdir("output")
     pass
     
 parser = argparse.ArgumentParser(description='Supervised training')
