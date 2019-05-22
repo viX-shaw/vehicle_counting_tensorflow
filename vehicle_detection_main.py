@@ -127,8 +127,8 @@ def object_detection_function():
                     print ('end of the video file...')
                     break
 
-                # input_frame = frame
-                input_frame = load_image_into_numpy_array(frame)
+                input_frame = frame
+                # input_frame = load_image_into_numpy_array(frame)
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                 image_np_expanded = np.expand_dims(input_frame, axis=0)
