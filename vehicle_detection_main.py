@@ -177,7 +177,7 @@ def object_detection_function():
                 cv2.putText(
                     input_frame,
                     'ROI Line',
-                    (frame.shape(1), 440),   # made change here 190 to 440
+                    (frame.shape[1], 440),   # made change here 190 to 440
                     font,
                     0.6,
                     (0, 0, 0xFF),
