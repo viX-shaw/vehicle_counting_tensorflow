@@ -33,7 +33,6 @@ try:
     os.remove("output")
     os.mkdir("output")
 except Exception as e:
-    os.mkdir("output")
     pass
     
 parser = argparse.ArgumentParser(description='Supervised training')
@@ -128,7 +127,8 @@ def object_detection_function():
                     print ('end of the video file...')
                     break
 
-                input_frame = frame
+                # input_frame = frame
+                input_frame = load_image_into_numpy_array(frame)
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                 image_np_expanded = np.expand_dims(input_frame, axis=0)
@@ -169,16 +169,16 @@ def object_detection_function():
 
                 # when the vehicle passed over line and counted, make the color of ROI line green
                 if counter == 1:
-                    cv2.line(input_frame, (0, 200), (640, 200), (0, 0xFF, 0), 5)
+                    cv2.line(input_frame, (0, 450), (1280, 450), (0, 0xFF, 0), 5)
                 else:
-                    cv2.line(input_frame, (0, 200), (640, 200), (0, 0, 0xFF), 5)
+                    cv2.line(input_frame, (0, 450), (1280, 450), (0, 0, 0xFF), 5)
 
                 # insert information text to video frame
                 cv2.rectangle(input_frame, (10, 275), (230, 337), (180, 132, 109), -1)
                 cv2.putText(
                     input_frame,
                     'ROI Line',
-                    (frame.shape[1], 440),   # made change here 190 to 440
+                    (545, 440),
                     font,
                     0.6,
                     (0, 0, 0xFF),
