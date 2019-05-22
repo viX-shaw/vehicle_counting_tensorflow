@@ -37,7 +37,7 @@ from utils.color_recognition_module import color_recognition_api
 
 # Variables
 is_vehicle_detected = [0]
-ROI_POSITION = 200
+ROI_POSITION = 450
 
 _TITLE_LEFT_MARGIN = 10
 _TITLE_TOP_MARGIN = 10
@@ -503,7 +503,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
     display_str_list=box_to_display_str_map[box]
     print(list(display_str_list))
     # we are interested just vehicles (i.e. cars and trucks)
-    if (("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
+    if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
             is_vehicle_detected, csv_line, update_csv = draw_bounding_box_on_image_array(current_frame_number,
                 image,
                 ymin,

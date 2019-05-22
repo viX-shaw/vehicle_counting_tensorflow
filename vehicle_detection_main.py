@@ -127,7 +127,9 @@ def object_detection_function():
                     print ('end of the video file...')
                     break
 
-                input_frame = frame
+                # input_frame = frame
+                im_width, im_height = image.size
+                input_frame = load_image_into_numpy_array(frame)
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                 image_np_expanded = np.expand_dims(input_frame, axis=0)
@@ -177,7 +179,7 @@ def object_detection_function():
                 cv2.putText(
                     input_frame,
                     'ROI Line',
-                    (545, 190),
+                    (im_width, 440),   # made change here 190 to 440
                     font,
                     0.6,
                     (0, 0, 0xFF),
