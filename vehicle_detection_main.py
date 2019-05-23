@@ -153,6 +153,8 @@ def object_detection_function():
                     line_thickness=4,
                     )
 
+                if(counter == 1):
+                    print("Detected vehicle in frame no", cap.get(1))
                 total_passed_vehicle = total_passed_vehicle + counter
 
                 # insert information text to video frame
@@ -170,9 +172,9 @@ def object_detection_function():
 
                 # when the vehicle passed over line and counted, make the color of ROI line green
                 if counter == 1:
-                    cv2.line(input_frame, (0, 450), (1280, 420), (0, 0xFF, 0), 5)
+                    cv2.line(input_frame, (0, 420), (1280, 420), (0, 0xFF, 0), 5)
                 else:
-                    cv2.line(input_frame, (0, 450), (1280, 420), (0, 0, 0xFF), 5)
+                    cv2.line(input_frame, (0, 420), (1280, 420), (0, 0, 0xFF), 5)
 
                 # insert information text to video frame
                 cv2.rectangle(input_frame, (10, 275), (230, 337), (180, 132, 109), -1)

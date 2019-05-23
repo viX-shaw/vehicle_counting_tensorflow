@@ -37,7 +37,7 @@ from utils.color_recognition_module import color_recognition_api
 
 # Variables
 is_vehicle_detected = [0]
-ROI_POSITION = 450
+ROI_POSITION = 420
 
 _TITLE_LEFT_MARGIN = 10
 _TITLE_TOP_MARGIN = 10
