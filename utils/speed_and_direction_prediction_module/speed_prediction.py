@@ -77,5 +77,7 @@ def predict_speed(
             speed = speed / 6 * 40  # use reference constant to get vehicle speed prediction in kilometer unit
             current_frame_number_list.insert(0, current_frame_number)
             bottom_position_of_detected_vehicle.insert(0, bottom)
+            print("Current Frame", current_frame_number,"bottom position of vehicle", 
+                        bottom_position_of_detected_vehicle[0])
 
     return (direction, speed, is_vehicle_detected, update_csv)
