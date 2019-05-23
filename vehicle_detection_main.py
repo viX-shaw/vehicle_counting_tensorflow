@@ -163,23 +163,23 @@ def object_detection_function():
                     (10, 35),
                     font,
                     0.8,
-                    (0, 0xFF, 0xFF),
+                    (255,0,0),
                     2,
                     cv2.FONT_HERSHEY_SIMPLEX,
                     )
 
                 # when the vehicle passed over line and counted, make the color of ROI line green
                 if counter == 1:
-                    cv2.line(input_frame, (0, 450), (1280, 450), (0, 0xFF, 0), 5)
+                    cv2.line(input_frame, (0, 450), (1280, 420), (0, 0xFF, 0), 5)
                 else:
-                    cv2.line(input_frame, (0, 450), (1280, 450), (0, 0, 0xFF), 5)
+                    cv2.line(input_frame, (0, 450), (1280, 420), (0, 0, 0xFF), 5)
 
                 # insert information text to video frame
                 cv2.rectangle(input_frame, (10, 275), (230, 337), (180, 132, 109), -1)
                 cv2.putText(
                     input_frame,
                     'ROI Line',
-                    (545, 440),
+                    (545, 410),
                     font,
                     0.6,
                     (0, 0, 0xFF),

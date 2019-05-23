@@ -27,17 +27,33 @@ def predict_speed(
     isInROI = True  # is the object that is inside Region Of Interest
     update_csv = False
 
-    if bottom < 250:
+    # if bottom < 250:
+    #     scale_constant = 1  # scale_constant is used for manual scaling because we did not performed camera calibration
+    # elif bottom > 250 and bottom < 320:
+    #     scale_constant = 2  # scale_constant is used for manual scaling because we did not performed camera calibration
+    # else:
+    #     isInROI = False
+
+    # if len(bottom_position_of_detected_vehicle) != 0 and bottom \
+    #     - bottom_position_of_detected_vehicle[0] > 0 and 205 \
+    #     < bottom_position_of_detected_vehicle[0] \
+    #     and bottom_position_of_detected_vehicle[0] < 210 \
+    #     and roi_position < bottom:
+    #     is_vehicle_detected.insert(0, 1)
+    #     update_csv = True
+    #     image_saver.save_image(crop_img)  # save detected vehicle image
+
+if bottom < 470:
         scale_constant = 1  # scale_constant is used for manual scaling because we did not performed camera calibration
-    elif bottom > 250 and bottom < 320:
+    elif bottom > 470 and bottom < 520:
         scale_constant = 2  # scale_constant is used for manual scaling because we did not performed camera calibration
     else:
         isInROI = False
 
     if len(bottom_position_of_detected_vehicle) != 0 and bottom \
-        - bottom_position_of_detected_vehicle[0] > 0 and 205 \
+        - bottom_position_of_detected_vehicle[0] > 0 and 425 \
         < bottom_position_of_detected_vehicle[0] \
-        and bottom_position_of_detected_vehicle[0] < 210 \
+        and bottom_position_of_detected_vehicle[0] < 430 \
         and roi_position < bottom:
         is_vehicle_detected.insert(0, 1)
         update_csv = True
