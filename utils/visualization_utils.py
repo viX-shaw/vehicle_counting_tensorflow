@@ -172,6 +172,8 @@ def draw_bounding_box_on_image(current_frame_number,image,
   draw.line([(left, top), (left, bottom), (right, bottom),
              (right, top), (left, top)], width=thickness, fill=color)
 
+  with open('detected_boxes_.txt', 'a') as f:
+      f.write("{} {} {} {}\n".format(left, right, top, bottom))
   predicted_speed = "n.a." # means not available, it is just initialization
   predicted_direction = "n.a." # means not available, it is just initialization
 
@@ -501,8 +503,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
       )
     
     display_str_list=box_to_display_str_map[box]
-    with open('detected_boxes_.txt', 'a') as f:
-      f.write("{} {} {} {}".format(xmin, ymin, xmax, ymax))
+    
     # print(list(display_str_list))
     # we are interested just vehicles (i.e. cars and trucks)
     if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
