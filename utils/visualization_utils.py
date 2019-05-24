@@ -31,6 +31,7 @@ from utils.image_utils import image_saver
 
 #  predicted_speed predicted_color module - import
 from utils.speed_and_direction_prediction_module import speed_prediction
+from utils.object_counting_module import object_counter
 
 # color recognition module - import
 from utils.color_recognition_module import color_recognition_api
@@ -180,9 +181,10 @@ def draw_bounding_box_on_image(current_frame_number,image,
   image_temp = numpy.array(image)
   detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
 
-  if(bottom > ROI_POSITION): # if the vehicle get in ROI area, vehicle predicted_speed predicted_color algorithms are called - 200 is an arbitrary value, for my case it looks very well to set position of ROI line at y pixel 200
-        predicted_direction, predicted_speed,  is_vehicle_detected, update_csv = speed_prediction.predict_speed(top, bottom, right, left, current_frame_number, detected_vehicle_image, ROI_POSITION)
-
+  # if(bottom > ROI_POSITION): # if the vehicle get in ROI area, vehicle predicted_speed predicted_color algorithms are called - 200 is an arbitrary value, for my case it looks very well to set position of ROI line at y pixel 200
+  #       predicted_direction, predicted_speed,  is_vehicle_detected, update_csv = speed_prediction.predict_speed(top, bottom, right, left, current_frame_number, detected_vehicle_image, ROI_POSITION)
+  predicted_direction,is_vehicle_detected, update_csv = object_counter.count_objects(top, bottom, right, left, detected_vehicle_image, ROI_POSITION, 0, 0, 3) # deviation = 3
+  predicted_speed = "n.a"
   predicted_color = color_recognition_api.color_recognition(detected_vehicle_image)
   
   try:
