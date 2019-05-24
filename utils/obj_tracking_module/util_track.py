@@ -12,10 +12,10 @@ def add_new_object(obj, image, counters, trackers):
     label = str(counters["person"]+ counters["car"])
 
     print(obj)
-    ymin = int(str(ymin))
-    xmin = int(str(xmin))
-    ymax = int(str(ymax))
-    xmax = int(str(xmax))
+    ymin = int(ymin)
+    xmin = int(xmin)
+    ymax = int(ymax)
+    xmax = int(xmax)
 
     xmid = int(round((xmin+xmax)/2))
     ymid = int(round((ymin+ymax)/2))
