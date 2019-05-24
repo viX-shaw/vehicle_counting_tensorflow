@@ -504,7 +504,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
 
   # Update all tracked boxes from previous frame
-  tracker_boxes, counters = util_track.update_trackers(image, trackers)
+  tracker_boxes, counters = util_track.update_trackers(image, counters, trackers)
 
   # Draw all boxes onto image.
   for box, color in box_to_color_map.items():

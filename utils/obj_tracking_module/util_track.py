@@ -55,7 +55,7 @@ def label_object(color, textcolor, fontface, image, car, textsize, thickness, xm
     cv2.putText(image, car, pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
 
 
-def update_trackers(image, counters):
+def update_trackers(image, counters, trackers):
     boxes = []
     color = (80, 220, 60)
     fontface = cv2.FONT_HERSHEY_SIMPLEX
