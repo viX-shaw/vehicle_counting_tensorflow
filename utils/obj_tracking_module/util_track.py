@@ -70,6 +70,7 @@ def update_trackers(image, counters, trackers):
 
         if not success:
             counters['lost_trackers'] += 1
+            print("Lost tracker")
             del trackers[n]
             continue
 
@@ -124,7 +125,7 @@ def update_trackers(image, counters, trackers):
 
     # counters['left_lane'] = left_lane
     # counters['right_lane'] = right_lane
-    return boxes, counters
+    return boxes
 
 def in_range(obj):
     ymin = obj['ymin']
