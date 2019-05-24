@@ -43,7 +43,7 @@ is_vehicle_detected = [0]
 trackers = []
 counters = {
   "person": 0,
-  "cars": 0,
+  "car": 0,
   "lost_trackers": 0
 }
 ROI_POSITION = 420

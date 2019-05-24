@@ -156,7 +156,7 @@ def object_detection_function():
 
                 # if(counter == 1):
                 #     print("Detected vehicle in frame no", cap.get(1))
-                total_passed_vehicle = total_passed_vehicle + counters["person"]+counters["cars"]
+                total_passed_vehicle = total_passed_vehicle + counters["person"]+counters["car"]
                 lost_trackers = counters["lost_trackers"]
 
                 # insert information text to video frame
