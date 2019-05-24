@@ -545,7 +545,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
             if util_track.not_tracked((top, left, bottom, right), tracker_boxes):
-    
+              
+              image_temp = numpy.array(image)              
               detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
               image_saver.save_image(crop_img) # save detected object image
 
