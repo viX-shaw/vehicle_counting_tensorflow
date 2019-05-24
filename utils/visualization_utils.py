@@ -33,11 +33,19 @@ from utils.image_utils import image_saver
 from utils.speed_and_direction_prediction_module import speed_prediction
 from utils.object_counting_module import object_counter
 
+from utils.obj_tracking_module import util_track
+
 # color recognition module - import
 from utils.color_recognition_module import color_recognition_api
 
 # Variables
 is_vehicle_detected = [0]
+trackers = []
+counters = {
+  "person": 0,
+  "cars": 0,
+  "lost_trackers": 0
+}
 ROI_POSITION = 420
 
 _TITLE_LEFT_MARGIN = 10
@@ -183,7 +191,7 @@ def draw_bounding_box_on_image(current_frame_number,image,
 
   # if(bottom > ROI_POSITION): # if the vehicle get in ROI area, vehicle predicted_speed predicted_color algorithms are called - 200 is an arbitrary value, for my case it looks very well to set position of ROI line at y pixel 200
   #       predicted_direction, predicted_speed,  is_vehicle_detected, update_csv = speed_prediction.predict_speed(top, bottom, right, left, current_frame_number, detected_vehicle_image, ROI_POSITION)
-  predicted_direction,is_vehicle_detected, update_csv = object_counter.count_objects(top, bottom, right, left, detected_vehicle_image, ROI_POSITION, 0, 0, 3) # deviation = 3
+  predicted_direction,is_vehicle_detected, update_csv = object_counter.count_objects(top, bottom, right, left, detected_vehicle_image, ROI_POSITION, 0, 0, 2) # deviation = 3
   predicted_speed = "n.a"
   predicted_color = color_recognition_api.color_recognition(detected_vehicle_image)
   
@@ -494,6 +502,10 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
           box_to_color_map[box] = STANDARD_COLORS[
               classes[i] % len(STANDARD_COLORS)]
 
+
+  # Update all tracked boxes from previous frame
+  tracker_boxes, counters = util_track.update_trackers(image, trackers)
+
   # Draw all boxes onto image.
   for box, color in box_to_color_map.items():
     ymin, xmin, ymax, xmax = box
@@ -509,34 +521,49 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
     # print(list(display_str_list))
     # we are interested just vehicles (i.e. cars and trucks)
     if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
-            is_vehicle_detected, csv_line, update_csv = draw_bounding_box_on_image_array(current_frame_number,
-                image,
-                ymin,
-                xmin,
-                ymax,
-                xmax,
-                color=color,
-                thickness=line_thickness,
-                display_str_list=box_to_display_str_map[box],
-                use_normalized_coordinates=use_normalized_coordinates) 
+            # is_vehicle_detected, csv_line, update_csv = draw_bounding_box_on_image_array(current_frame_number,
+            #     image,
+            #     ymin,
+            #     xmin,
+            #     ymax,
+            #     xmax,
+            #     color=color,
+            #     thickness=line_thickness,
+            #     display_str_list=box_to_display_str_map[box],
+            #     use_normalized_coordinates=use_normalized_coordinates) 
       
-            if keypoints is not None:
-              draw_keypoints_on_image_array(
-                  image,
-                  box_to_keypoints_map[box],
-                  color=color,
-                  radius=line_thickness / 2,
-                  use_normalized_coordinates=use_normalized_coordinates)
+            # if keypoints is not None:
+            #   draw_keypoints_on_image_array(
+            #       image,
+            #       box_to_keypoints_map[box],
+            #       color=color,
+            #       radius=line_thickness / 2,
+            #       use_normalized_coordinates=use_normalized_coordinates)
+            draw = ImageDraw.Draw(image)
+            im_width, im_height = image.size
+            if use_normalized_coordinates:
+              (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
+                                            ymin * im_height, ymax * im_height)
+            if util_track.not_tracked((top, left, bottom, right), tracker_boxes):
+    
+              detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
+              image_saver.save_image(crop_img) # save detected object image
 
-  if(1 in is_vehicle_detected):
-    counter = 1
-    del is_vehicle_detected[:]
-    is_vehicle_detected = []        
-    if(class_name == "boat"):
-      class_name = "truck"
-    csv_line_util = class_name + "," + csv_line
+              counters[display_str_list[0]]+=1
+              util_track.add_new_object(box, image, counters)
 
-  return counter, csv_line_util
+            
+  return counters
+ 
+  # if(1 in is_vehicle_detected):
+  #   counter = 1
+  #   del is_vehicle_detected[:]
+  #   is_vehicle_detected = []        
+  #   if(class_name == "boat"):
+  #     class_name = "truck"
+  #   csv_line_util = class_name + "," + csv_line
+
+  # return counter, csv_line_util
 
 
 def add_cdf_image_summary(values, name):

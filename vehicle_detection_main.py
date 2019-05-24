@@ -141,7 +141,8 @@ def object_detection_function():
                              feed_dict={image_tensor: image_np_expanded})
 
                 # Visualization of the results of a detection.
-                (counter, csv_line) = \
+                # (counter, csv_line) = \
+                counters = \
                     vis_util.visualize_boxes_and_labels_on_image_array(
                     cap.get(1),
                     input_frame,
@@ -153,15 +154,26 @@ def object_detection_function():
                     line_thickness=4,
                     )
 
-                if(counter == 1):
-                    print("Detected vehicle in frame no", cap.get(1))
-                total_passed_vehicle = total_passed_vehicle + counter
+                # if(counter == 1):
+                #     print("Detected vehicle in frame no", cap.get(1))
+                total_passed_vehicle = total_passed_vehicle + counters["person"]+counters["cars"]
+                lost_trackers = counters["lost_trackers"]
 
                 # insert information text to video frame
                 font = cv2.FONT_HERSHEY_SIMPLEX
                 cv2.putText(
                     input_frame,
                     'Detected Vehicles: ' + str(total_passed_vehicle),
+                    (10, 35),
+                    font,
+                    0.8,
+                    (255,0,0),
+                    2,
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    )
+                cv2.putText(
+                    input_frame,
+                    'Lost Trackers: ' + str(lost_trackers),
                     (10, 35),
                     font,
                     0.8,
