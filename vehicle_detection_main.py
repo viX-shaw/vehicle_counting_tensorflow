@@ -174,7 +174,7 @@ def object_detection_function():
                 cv2.putText(
                     input_frame,
                     'Lost Trackers: ' + str(lost_trackers),
-                    (10, 35),
+                    (400, 35),
                     font,
                     0.8,
                     (255,0,0),
@@ -190,16 +190,16 @@ def object_detection_function():
 
                 # insert information text to video frame
                 cv2.rectangle(input_frame, (10, 275), (230, 337), (180, 132, 109), -1)
-                cv2.putText(
-                    input_frame,
-                    'ROI Line',
-                    (545, 410),
-                    font,
-                    0.6,
-                    (0, 0, 0xFF),
-                    2,
-                    cv2.LINE_AA,
-                    )
+                # cv2.putText(
+                #     input_frame,
+                #     'ROI Line',
+                #     (545, 410),
+                #     font,
+                #     0.6,
+                #     (0, 0, 0xFF),
+                #     2,
+                #     cv2.LINE_AA,
+                #     )
                 cv2.putText(
                     input_frame,
                     'LAST PASSED VEHICLE INFO',

@@ -550,7 +550,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
               image_saver.save_image(detected_vehicle_image) # save detected object image
 
-              counters[display_str_list[0]]+=1
+              counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object(box, image, counters)
 
             
