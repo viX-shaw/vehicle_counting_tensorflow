@@ -59,7 +59,7 @@ def not_tracked(object_, boxes):
             # found existing, so break (do not add to new_objects)
             break
     else:
-        new_objects.append(obj)
+        new_objects.append(object_)
 
     return True if len(new_objects)>0 else False
 
