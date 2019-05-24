@@ -10,6 +10,8 @@ GRAY = (128, 128, 128)
 def add_new_object(obj, image, counters):
     ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"])
+
+    print(obj)
    
     xmid = int(round((xmin+xmax)/2))
     ymid = int(round((ymin+ymax)/2))
@@ -35,7 +37,7 @@ def not_tracked(object_, boxes):
         # return objects  # No existing boxes, return all objects
         return True
 
-    ymin, xmin, ymax, xmax = box
+    ymin, xmin, ymax, xmax = object_
     new_objects = []
     
     ymid = int(round((ymin+ymax)/2))
