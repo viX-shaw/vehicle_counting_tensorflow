@@ -539,16 +539,18 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             #       color=color,
             #       radius=line_thickness / 2,
             #       use_normalized_coordinates=use_normalized_coordinates)
-            # draw = ImageDraw.Draw(image)
-            im_width, im_height, _ = image.shape
+            image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
+            im_width, im_height = image.size
             if use_normalized_coordinates:
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
             if util_track.not_tracked((top, left, bottom, right), tracker_boxes):
               
-              image_temp = numpy.array(image)              
+              image_temp = numpy.array(image_pil)              
               detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
               image_saver.save_image(detected_vehicle_image) # save detected object image
+
+              np.copyto(image, np.array(image_pil))
 
               counters[display_str_list[0][:-5]]+=1
               print("Frame no.", current_frame_number)
