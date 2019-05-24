@@ -9,7 +9,7 @@ def add_new_object(obj, image, counters):
     fontscale = 1
     thickness = 1
     textsize, _baseline = cv2.getTextSize(
-        car, fontface, fontscale, thickness)
+        label, fontface, fontscale, thickness)
 
     # init tracker
     tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
