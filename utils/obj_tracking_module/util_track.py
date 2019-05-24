@@ -12,7 +12,11 @@ def add_new_object(obj, image, counters, trackers):
     label = str(counters["person"]+ counters["car"])
 
     print(obj)
-   
+    ymin = int(str(ymin))
+    xmin = int(str(xmin))
+    ymax = int(str(ymax))
+    xmax = int(str(xmax))
+
     xmid = int(round((xmin+xmax)/2))
     ymid = int(round((ymin+ymax)/2))
     fontface = cv2.FONT_HERSHEY_SIMPLEX
