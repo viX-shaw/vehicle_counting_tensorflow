@@ -7,7 +7,7 @@ LIGHT_CYAN = (255, 255, 224)
 DARK_BLUE = (139, 0, 0)
 GRAY = (128, 128, 128)
 
-def add_new_object(obj, image, counters):
+def add_new_object(obj, image, counters, trackers):
     ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"])
 
