@@ -551,6 +551,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               image_saver.save_image(detected_vehicle_image) # save detected object image
 
               counters[display_str_list[0][:-5]]+=1
+              print("Frame no.", current_frame_number)
               util_track.add_new_object(box, image, counters)
 
             

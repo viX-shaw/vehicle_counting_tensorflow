@@ -1,6 +1,6 @@
 import cv2
 def add_new_object(obj, image, counters):
-    ymin, xmin, ymax, xmax = box
+    ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"])
    
     xmid = int(round((xmin+xmax)/2))
