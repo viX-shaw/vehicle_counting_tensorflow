@@ -540,7 +540,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             #       radius=line_thickness / 2,
             #       use_normalized_coordinates=use_normalized_coordinates)
             image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
-            im_width, im_height, _ = image.shape
+            im_height, im_width, _ = image.shape
             if use_normalized_coordinates:
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
@@ -554,7 +554,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
               counters[display_str_list[0][:-5]]+=1
               print("Frame no.", current_frame_number)
-              util_track.add_new_object((top, left, bottom, right), image, counters)
+              util_track.add_new_object((top, left, bottom, right), image, counters, trackers)
 
             
   return counters
