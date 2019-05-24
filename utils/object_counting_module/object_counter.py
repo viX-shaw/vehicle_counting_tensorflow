@@ -20,4 +20,4 @@ def count_objects(top, bottom, right, left, crop_img, roi_position, y_min, y_max
 
         bottom_position_of_detected_vehicle.insert(0,(bottom))
 
-return direction, is_vehicle_detected, update_csv
+    return direction, is_vehicle_detected, update_csv
