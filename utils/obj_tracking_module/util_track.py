@@ -1,4 +1,12 @@
 import cv2
+
+WHITE = (255, 255, 255)
+YELLOW = (66, 244, 238)
+GREEN = (80, 220, 60)
+LIGHT_CYAN = (255, 255, 224)
+DARK_BLUE = (139, 0, 0)
+GRAY = (128, 128, 128)
+
 def add_new_object(obj, image, counters):
     ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"])
