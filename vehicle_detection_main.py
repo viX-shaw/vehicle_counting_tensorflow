@@ -28,17 +28,18 @@ from PIL import Image
 # Object detection imports
 from utils import label_map_util
 from utils import visualization_utils as vis_util
-
-try:
-    os.remove("output")
-    os.mkdir("output")
-except Exception as e:
-    os.mkdir("output")
-    pass
     
 parser = argparse.ArgumentParser(description='Supervised training')
 parser.add_argument("--file", type=str, default="sub-1504614469486.mp4", help="video file for inference")
-
+parser.add_argument("--tracker","-t", type = str, default = "kcf", help = "openCV trackers to use\
+        csrt: cv2.TrackerCSRT_create,\
+        kcf: cv2.TrackerKCF_create,\
+        boosting: cv2.TrackerBoosting_create,\
+        mil: cv2.TrackerMIL_create,\
+        tld: cv2.TrackerTLD_create,\
+        medianflow: cv2.TrackerMedianFlow_create,\
+        mosse: cv2.TrackerMOSSE_create")
+        
 params = parser.parse_args()
 # initialize .csv
 with open('traffic_measurement.csv', 'w') as f:
@@ -50,7 +51,12 @@ with open('traffic_measurement.csv', 'w') as f:
 # if tf.__version__ < '1.4.0':
 #     raise ImportError('Please upgrade your tensorflow installation to v1.4.* or later!'
 #                       )
-
+try:
+    if os.path.exists("output_"%params.tracker) and os.path.isdir("output_"%params.tracker):
+        shutil.rmtree("output_"%params.tracker)
+    os.mkdir("output_"%params.tracker)
+except Exception as e:
+    pass
 # input video
 cap = cv2.VideoCapture(params.file)
 
@@ -150,6 +156,7 @@ def object_detection_function():
                     np.squeeze(classes).astype(np.int32),
                     np.squeeze(scores),
                     category_index,
+                    params.tracker,
                     use_normalized_coordinates=True,
                     line_thickness=4,
                     )
@@ -252,7 +259,7 @@ def object_detection_function():
                     )
 
                 # cv2.imshow('vehicle detection', input_frame)
-                cv2.imwrite('output/{}.jpg'.format(cap.get(1)), input_frame)
+                cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, cap.get(1)), input_frame)
 
 
                 if cv2.waitKey(1) & 0xFF == ord('q'):

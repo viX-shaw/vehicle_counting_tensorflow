@@ -424,6 +424,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               classes,
                                               scores,
                                               category_index,
+                                              tracker_name,
                                               instance_masks=None,
                                               keypoints=None,
                                               use_normalized_coordinates=False,
@@ -554,7 +555,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
               counters[display_str_list[0][:-5]]+=1
               print("Frame no.", current_frame_number)
-              util_track.add_new_object((top, left, bottom, right), image, counters, trackers)
+              util_track.add_new_object((top, left, bottom, right), image, counters, trackers, tracker_name)
 
             
   return counters

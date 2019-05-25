@@ -8,7 +8,17 @@ LIGHT_CYAN = (255, 255, 224)
 DARK_BLUE = (139, 0, 0)
 GRAY = (128, 128, 128)
 
-def add_new_object(obj, image, counters, trackers):
+OPENCV_OBJECT_TRACKERS = {
+    "csrt": cv2.TrackerCSRT_create,
+    "kcf": cv2.TrackerKCF_create,
+    "boosting": cv2.TrackerBoosting_create,
+    "mil": cv2.TrackerMIL_create,
+    "tld": cv2.TrackerTLD_create,
+    "medianflow": cv2.TrackerMedianFlow_create,
+    "mosse": cv2.TrackerMOSSE_create
+	}
+
+def add_new_object(obj, image, counters, trackers, name):
     ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"])
 
@@ -27,7 +37,8 @@ def add_new_object(obj, image, counters, trackers):
         label, fontface, fontscale, thickness)
 
     # init tracker
-    tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
+    # tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
+    tracker = OPENCV_OBJECT_TRACKERS[name]()
     success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
     if success:
         trackers.append((tracker, label))
