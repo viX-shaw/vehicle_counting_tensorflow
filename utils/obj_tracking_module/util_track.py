@@ -117,9 +117,9 @@ def update_trackers(image, counters, trackers):
         p_xmid = int(round((p_xmin+p_xmax)/2))
         p_ymid = int(round((p_ymin+p_ymax)/2))
 
-        dist = math.sqrt((p_xmid - xmid)**2 + (p_ymid - y_mid)**2)
+        dist = math.sqrt((p_xmid - xmid)**2 + (p_ymid - ymid)**2)
         print("Tracker no", car, "moved", dist, "units")
-        prev_tracker_update[car] = (ymin, xmin, y_max, xmax)
+        prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
 
 
         # if ymid >= ROI_YMAX:
