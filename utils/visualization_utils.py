@@ -44,6 +44,8 @@ trackers = []
 counters = {
   "person": 0,
   "car": 0,
+  "truck":0,
+  "bus":0,
   "lost_trackers": 0
 }
 ROI_POSITION = 420
@@ -554,7 +556,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               np.copyto(image, np.array(image_pil))
 
               counters[display_str_list[0][:-5]]+=1
-              print("Frame no.", current_frame_number)
+              # print("Frame no.", current_frame_number)
               util_track.add_new_object((top, left, bottom, right), image, counters, trackers, tracker_name)
 
             

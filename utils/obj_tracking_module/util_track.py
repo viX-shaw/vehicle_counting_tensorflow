@@ -1,5 +1,6 @@
 import cv2
 import math
+from collections import defaultdict
 
 WHITE = (255, 255, 255)
 YELLOW = (66, 244, 238)
@@ -18,11 +19,13 @@ OPENCV_OBJECT_TRACKERS = {
     "mosse": cv2.TrackerMOSSE_create
 	}
 
+prev_tracker_update = defaultdict()
+
 def add_new_object(obj, image, counters, trackers, name):
     ymin, xmin, ymax, xmax = obj
-    label = str(counters["person"]+ counters["car"])
+    label = str(counters["person"]+ counters["car"]+counters["truck"]+ counters["bus"])
 
-    print(obj)
+    # print(obj)
     ymin = int(ymin)
     xmin = int(xmin)
     ymax = int(ymax)
@@ -40,6 +43,7 @@ def add_new_object(obj, image, counters, trackers, name):
     # tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
     tracker = OPENCV_OBJECT_TRACKERS[name]()
     success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+    prev_tracker_update[label] = (ymin, xmin, ymax, xmax)
     if success:
         trackers.append((tracker, label))
 
@@ -108,6 +112,15 @@ def update_trackers(image, counters, trackers):
         ymax = int(bbox[1] + bbox[3])
         xmid = int(round((xmin+xmax)/2))
         ymid = int(round((ymin+ymax)/2))
+
+        p_ymin, p_xmin, p_ymax, p_xmax = prev_tracker_update[car]
+        p_xmid = int(round((p_xmin+p_xmax)/2)
+        p_ymid = int(round((p_ymin+p_ymax)/2)
+
+        dist = math.sqrt((p_xmid - xmid)**2 + (p_ymid - y_mid)**2)
+        print("Tracker no", car, "moved", dist, "units")
+        prev_tracker_update[car] = (ymin, xmin, y_max, xmax)
+
 
         # if ymid >= ROI_YMAX:
         #     label_object(WHITE, WHITE, fontface, image, car, textsize, 1, xmax, xmid, xmin, ymax, ymid, ymin)
