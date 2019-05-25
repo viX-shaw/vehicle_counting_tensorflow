@@ -52,9 +52,9 @@ with open('traffic_measurement.csv', 'w') as f:
 #     raise ImportError('Please upgrade your tensorflow installation to v1.4.* or later!'
 #                       )
 try:
-    if os.path.exists("output_"%params.tracker) and os.path.isdir("output_"%params.tracker):
-        shutil.rmtree("output_"%params.tracker)
-    os.mkdir("output_"%params.tracker)
+    if os.path.exists("output_{}".format(params.tracker)) and os.path.isdir("output_{}".format(params.tracker)):
+        shutil.rmtree("output_{}".format(params.tracker))
+    os.mkdir("output_{}".format(params.tracker))
 except Exception as e:
     pass
 # input video
