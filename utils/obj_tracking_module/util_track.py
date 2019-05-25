@@ -118,7 +118,7 @@ def update_trackers(image, counters, trackers):
         p_ymid = int(round((p_ymin+p_ymax)/2))
 
         dist = math.sqrt((p_xmid - xmid)**2 + (p_ymid - ymid)**2)
-        print("Tracker no", car, "moved", dist, "units")
+        # print("Tracker no", car, "moved", dist, "units")
         prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
 
 
@@ -133,7 +133,8 @@ def update_trackers(image, counters, trackers):
         #     del trackers[n]
         # else:
             # Rectangle and number on the cars we are tracking
-        label_object(color, YELLOW, fontface, image, car, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
+        if dist > 1.0:
+            label_object(color, YELLOW, fontface, image, car, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
     # Add finish line overlay/line
     # overlay = image.copy()
