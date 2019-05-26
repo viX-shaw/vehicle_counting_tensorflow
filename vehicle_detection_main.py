@@ -28,6 +28,8 @@ from PIL import Image
 # Object detection imports
 from utils import label_map_util
 from utils import visualization_utils as vis_util
+from utils.obj_tracking_module import util_track
+
     
 parser = argparse.ArgumentParser(description='Supervised training')
 parser.add_argument("--file", type=str, default="sub-1504614469486.mp4", help="video file for inference")
