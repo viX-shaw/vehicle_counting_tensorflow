@@ -134,8 +134,7 @@ def update_trackers(image, counters, trackers):
         #     del trackers[n]
         # else:
             # Rectangle and number on the cars we are tracking
-        if dist > 2.0:
-            label_object(color, YELLOW, fontface, image, car, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
+        label_object(color, YELLOW, fontface, image, car, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
     # Add finish line overlay/line
     # overlay = image.copy()
