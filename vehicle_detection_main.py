@@ -148,18 +148,21 @@ def object_detection_function():
 
                 # Visualization of the results of a detection.
                 # (counter, csv_line) = \
-                counters = \
-                    vis_util.visualize_boxes_and_labels_on_image_array(
-                    cap.get(1),
-                    input_frame,
-                    np.squeeze(boxes),
-                    np.squeeze(classes).astype(np.int32),
-                    np.squeeze(scores),
-                    category_index,
-                    params.tracker,
-                    use_normalized_coordinates=True,
-                    line_thickness=4,
-                    )
+
+                # Smapling frames
+                if cap.get(1) % 5 == 0:
+                    counters = \
+                        vis_util.visualize_boxes_and_labels_on_image_array(
+                        cap.get(1),
+                        input_frame,
+                        np.squeeze(boxes),
+                        np.squeeze(classes).astype(np.int32),
+                        np.squeeze(scores),
+                        category_index,
+                        params.tracker,
+                        use_normalized_coordinates=True,
+                        line_thickness=4,
+                        )
 
                 # if(counter == 1):
                 #     print("Detected vehicle in frame no", cap.get(1))
