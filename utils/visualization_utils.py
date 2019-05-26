@@ -40,14 +40,6 @@ from utils.color_recognition_module import color_recognition_api
 
 # Variables
 is_vehicle_detected = [0]
-trackers = []
-counters = {
-  "person": 0,
-  "car": 0,
-  "truck":0,
-  "bus":0,
-  "lost_trackers": 0
-}
 ROI_POSITION = 420
 
 _TITLE_LEFT_MARGIN = 10
@@ -427,6 +419,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               scores,
                                               category_index,
                                               tracker_name,
+                                              tracker_boxes,
+                                              counters,
                                               instance_masks=None,
                                               keypoints=None,
                                               use_normalized_coordinates=False,
@@ -507,7 +501,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
 
   # Update all tracked boxes from previous frame
-  tracker_boxes = util_track.update_trackers(image, counters, trackers)
+  # tracker_boxes = util_track.update_trackers(image, counters, trackers)
 
   # Draw all boxes onto image.
   for box, color in box_to_color_map.items():
@@ -560,7 +554,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               util_track.add_new_object((top, left, bottom, right), image, counters, trackers, tracker_name)
 
             
-  return counters
+  # return counters
  
   # if(1 in is_vehicle_detected):
   #   counter = 1

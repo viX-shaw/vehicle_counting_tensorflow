@@ -108,6 +108,14 @@ def load_image_into_numpy_array(image):
 def object_detection_function():
     total_passed_vehicle = 0
     lost_trackers = 0
+    trackers = []
+    counters = {
+    "person": 0,
+    "car": 0,
+    "truck":0,
+    "bus":0,
+    "lost_trackers": 0
+    }
     speed = 'waiting...'
     direction = 'waiting...'
     size = 'waiting...'
@@ -137,6 +145,7 @@ def object_detection_function():
 
                 input_frame = frame
                 # input_frame = load_image_into_numpy_array(frame)
+                tracker_boxes = util_track.update_trackers(input_frame, counters, trackers)
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                 if cap.get(1) % 5 == 0:
@@ -152,18 +161,20 @@ def object_detection_function():
                 # (counter, csv_line) = \
 
                 # Smapling frames
-                    counters = \
-                        vis_util.visualize_boxes_and_labels_on_image_array(
-                        cap.get(1),
-                        input_frame,
-                        np.squeeze(boxes),
-                        np.squeeze(classes).astype(np.int32),
-                        np.squeeze(scores),
-                        category_index,
-                        params.tracker,
-                        use_normalized_coordinates=True,
-                        line_thickness=4,
-                        )
+                    # counters = \
+                    vis_util.visualize_boxes_and_labels_on_image_array(
+                    cap.get(1),
+                    input_frame,
+                    np.squeeze(boxes),
+                    np.squeeze(classes).astype(np.int32),
+                    np.squeeze(scores),
+                    category_index,
+                    params.tracker,
+                    tracker_boxes,
+                    counters,
+                    use_normalized_coordinates=True,
+                    line_thickness=4,
+                    )
 
                 # if(counter == 1):
                 #     print("Detected vehicle in frame no", cap.get(1))
