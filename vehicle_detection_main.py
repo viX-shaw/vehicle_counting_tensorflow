@@ -107,6 +107,7 @@ def load_image_into_numpy_array(image):
 # Detection
 def object_detection_function():
     total_passed_vehicle = 0
+    lost_trackers = 0
     speed = 'waiting...'
     direction = 'waiting...'
     size = 'waiting...'
@@ -168,9 +169,9 @@ def object_detection_function():
                 #     print("Detected vehicle in frame no", cap.get(1))
                 try:
                     total_passed_vehicle = counters["person"]+counters["car"]+counters["truck"]+counters["bus"]
+                    lost_trackers = counters["lost_trackers"]
                 except Exception as e:
                     pass
-                lost_trackers = counters["lost_trackers"]
 
                 # insert information text to video frame
                 font = cv2.FONT_HERSHEY_SIMPLEX
