@@ -139,19 +139,19 @@ def object_detection_function():
                 # input_frame = load_image_into_numpy_array(frame)
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-                image_np_expanded = np.expand_dims(input_frame, axis=0)
+                if cap.get(1) % 5 == 0:
+                    image_np_expanded = np.expand_dims(input_frame, axis=0)
 
-                # Actual detection.
-                (boxes, scores, classes, num) = \
-                    sess.run([detection_boxes, detection_scores,
-                             detection_classes, num_detections],
-                             feed_dict={image_tensor: image_np_expanded})
+                    # Actual detection.
+                    (boxes, scores, classes, num) = \
+                        sess.run([detection_boxes, detection_scores,
+                                detection_classes, num_detections],
+                                feed_dict={image_tensor: image_np_expanded})
 
                 # Visualization of the results of a detection.
                 # (counter, csv_line) = \
 
                 # Smapling frames
-                if cap.get(1) % 5 == 0:
                     counters = \
                         vis_util.visualize_boxes_and_labels_on_image_array(
                         cap.get(1),
