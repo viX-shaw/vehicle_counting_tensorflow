@@ -172,6 +172,7 @@ def object_detection_function():
                     np.squeeze(scores),
                     category_index,
                     params.tracker,
+                    trackers,
                     tracker_boxes,
                     counters,
                     use_normalized_coordinates=True,
