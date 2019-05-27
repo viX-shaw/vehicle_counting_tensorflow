@@ -41,7 +41,7 @@ parser.add_argument("--tracker","-t", type = str, default = "kcf", help = "openC
         tld: cv2.TrackerTLD_create,\
         medianflow: cv2.TrackerMedianFlow_create,\
         mosse: cv2.TrackerMOSSE_create")
-params.add_argument("--model-name", type = str, default = "ssd_mobilenet_v1_coco_2018_01_28")
+parser.add_argument("--model-name", type = str, default = "ssd_mobilenet_v1_coco_2018_01_28")
         
 params = parser.parse_args()
 # initialize .csv
