@@ -41,6 +41,7 @@ parser.add_argument("--tracker","-t", type = str, default = "kcf", help = "openC
         tld: cv2.TrackerTLD_create,\
         medianflow: cv2.TrackerMedianFlow_create,\
         mosse: cv2.TrackerMOSSE_create")
+params.add_argument("--model-name", type = str, default = "ssd_mobilenet_v1_coco_2018_01_28")
         
 params = parser.parse_args()
 # initialize .csv
@@ -67,7 +68,8 @@ total_passed_vehicle = 0  # using it to count vehicles
 
 # By default I use an "SSD with Mobilenet" model here. See the detection model zoo (https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for a list of other models that can be run out-of-the-box with varying speeds and accuracies.
 # What model to download.
-MODEL_NAME = 'ssd_mobilenet_v1_coco_2018_01_28'
+# MODEL_NAME = 'ssd_mobilenet_v1_coco_2018_01_28'
+MODEL_NAME = params.model-name
 MODEL_FILE = MODEL_NAME + '.tar.gz'
 DOWNLOAD_BASE = \
     'http://download.tensorflow.org/models/object_detection/'
