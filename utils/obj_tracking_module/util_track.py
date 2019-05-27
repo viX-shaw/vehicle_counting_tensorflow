@@ -121,7 +121,7 @@ def update_trackers(image, counters, trackers):
 
         dist = math.sqrt((p_xmid - xmid)**2 + (p_ymid - ymid)**2)
         with open('details.txt', 'a') as f:
-            f.write( "{} moved {} units".format(car, dist))
+            f.write( "{} moved {} units\n".format(car, dist))
         # print("Tracker no", car, "moved", dist, "units")
         prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
 
