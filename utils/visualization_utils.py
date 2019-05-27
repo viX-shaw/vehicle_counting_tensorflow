@@ -546,7 +546,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               
               # generating detections for deep-mot-sort
               with open('det.txt', 'a') as f:
-                f.write("{},-1,{},{},{},{},0.4,1,1\n".format(str(current_frame_number)[:-2], left, top, right-left, bottom-top)
+                f.write("{},-1,{},{},{},{},0.4,1,1\n".format(str(current_frame_number)[:-2], left, top, right-left, bottom-top))
               image_temp = numpy.array(image_pil)              
               detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
               image_saver.save_image(detected_vehicle_image) # save detected object image
