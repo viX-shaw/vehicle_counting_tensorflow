@@ -4,6 +4,7 @@ from collections import defaultdict
 
 WHITE = (255, 255, 255)
 YELLOW = (66, 244, 238)
+RED = (0, 10, 255)
 GREEN = (80, 220, 60)
 LIGHT_CYAN = (255, 255, 224)
 DARK_BLUE = (139, 0, 0)
@@ -48,7 +49,7 @@ def add_new_object(obj, image, counters, trackers, name):
     if success:
         trackers.append((tracker, label))
 
-    label_object(GREEN, YELLOW, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
+    label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(object_, boxes):
     if not object_:
