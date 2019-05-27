@@ -102,8 +102,9 @@ def update_trackers(image, counters, trackers):
 
         if not success:
             counters['lost_trackers'] += 1
-            print("Lost tracker")
+            print("Lost tracker no.", car)
             del trackers[n]
+            print("Total trackers ", trackers)
             continue
 
         boxes.append(bbox)  # Return updated box list
