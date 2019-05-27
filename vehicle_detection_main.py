@@ -150,6 +150,7 @@ def object_detection_function():
                 input_frame = frame
                 # input_frame = load_image_into_numpy_array(frame)
                 tracker_boxes = util_track.update_trackers(input_frame, counters, trackers)
+                print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                 if cap.get(1) % 3 == 0:
