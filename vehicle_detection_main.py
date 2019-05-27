@@ -153,7 +153,7 @@ def object_detection_function():
                 print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-                if cap.get(1) % 3 == 0:
+                if cap.get(1) % 1 == 0:
                     image_np_expanded = np.expand_dims(input_frame, axis=0)
 
                     # Actual detection.

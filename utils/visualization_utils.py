@@ -544,6 +544,9 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                             ymin * im_height, ymax * im_height)
             if util_track.not_tracked((top, left, bottom, right), tracker_boxes):
               
+              # generating detections for deep-mot-sort
+              with open('det.txt', 'a') as f:
+                f.write("{},-1,{},{},{},{},0.4,1,1\n")
               image_temp = numpy.array(image_pil)              
               detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
               image_saver.save_image(detected_vehicle_image) # save detected object image
