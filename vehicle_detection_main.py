@@ -41,6 +41,10 @@ parser.add_argument("--tracker","-t", type = str, default = "kcf", help = "openC
         tld: cv2.TrackerTLD_create,\
         medianflow: cv2.TrackerMedianFlow_create,\
         mosse: cv2.TrackerMOSSE_create")
+parser.add_argument("--center","-c", type = str, required = False)
+parser.add_argument("--radius", type = int, required =False)
+parser.add_argument("--sr", type = int, default = 3, required =False, help = "interval at frames are used for detection")
+
 parser.add_argument("--model_name", type = str, default = "ssd_mobilenet_v1_coco_2018_01_28")
         
 params = parser.parse_args()
@@ -153,7 +157,7 @@ def object_detection_function():
                 # print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-                if cap.get(1) % 1 == 0:
+                if cap.get(1) % params.sr == 0:
                     image_np_expanded = np.expand_dims(input_frame, axis=0)
 
                     # Actual detection.
@@ -220,7 +224,7 @@ def object_detection_function():
                 #     cv2.line(input_frame, (0, 420), (1280, 420), (0, 0, 0xFF), 5)
 
                 # insert information text to video frame
-                cv2.circle(input_frame, (610, 380), 288, (10,100,210), 2)
+                cv2.circle(input_frame, (450, 380), 288, (10,100,210), 2)
                 cv2.rectangle(input_frame, (10, 275), (230, 337), (180, 132, 109), -1)
                 # cv2.putText(
                 #     input_frame,

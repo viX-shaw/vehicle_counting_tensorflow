@@ -10,6 +10,9 @@ LIGHT_CYAN = (255, 255, 224)
 DARK_BLUE = (139, 0, 0)
 GRAY = (128, 128, 128)
 
+radius = 300
+center = (450, 380)
+
 OPENCV_OBJECT_TRACKERS = {
     "csrt": cv2.TrackerCSRT_create,
     "kcf": cv2.TrackerKCF_create,
@@ -41,12 +44,12 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     textsize, _baseline = cv2.getTextSize(
         label, fontface, fontscale, thickness)
 
-    dist = math.sqrt((610 - xmid)**2 + (380 - ymid)**2)
+    dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
 
     # init tracker
     # tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
 
-    if dist <= 0.8*360:
+    if dist <= radius:
         tracker = OPENCV_OBJECT_TRACKERS[name]()
         success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         prev_tracker_update[label] = (ymin, xmin, ymax, xmax)
@@ -65,8 +68,8 @@ def not_tracked(object_, boxes):
     ymid = int(round((ymin+ymax)/2))
     xmid = int(round((xmin+xmax)/2))
 
-    dist = math.sqrt((610 - xmid)**2 + (380 - ymid)**2)
-    if dist<=0.8*360:
+    dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
+    if dist<=radius:
         if not boxes:
             # return objects  # No existing boxes, return all objects
             return True
@@ -121,16 +124,17 @@ def update_trackers(image, counters, trackers, curr_frame):
         ymid = int(round((ymin+ymax)/2))
 
         # p_ymin, p_xmin, p_ymax, p_xmax = prev_tracker_update[car]
-        p_xmid = 610
-        p_ymid = 380
+        # p_xmid = 610
+        # p_ymid = 380
 
-        dist = math.sqrt((p_xmid - xmid)**2 + (p_ymid - ymid)**2)
+        dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
         with open('details.txt', 'a') as f:
             f.write( "{} moved {} units from centre\n".format(car, dist))
         # print("Tracker no", car, "moved", dist, "units")
         # prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
 
-        if dist > 0.8*360 and age > 60:
+        if dist > radius and age > 60:
+            print("Deleting tracker {} on AOI exit..".format(car))
             del trackers[n]
             continue
 
