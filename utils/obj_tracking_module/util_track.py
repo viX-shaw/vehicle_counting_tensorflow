@@ -99,7 +99,7 @@ def update_trackers(image, counters, trackers, curr_frame):
 
     for n, pair in enumerate(trackers):
         tracker, car, frame = pair
-        age = frame - curr_frame
+        age = int(frame) - int(curr_frame)
         textsize, _baseline = cv2.getTextSize(
             car, fontface, fontscale, thickness)
         success, bbox = tracker.update(image)
