@@ -58,9 +58,6 @@ def not_tracked(object_, boxes):
     if not object_:
         # return []  # No new classified objects to search for
         return False
-    if not boxes:
-        # return objects  # No existing boxes, return all objects
-        return True
 
     ymin, xmin, ymax, xmax = object_
     new_objects = []
@@ -70,6 +67,9 @@ def not_tracked(object_, boxes):
 
     dist = math.sqrt((610 - xmid)**2 + (380 - ymid)**2)
     if dist<=0.7*360:
+        if not boxes:
+            # return objects  # No existing boxes, return all objects
+            return True
         box_range = ((xmax - xmin) + (ymax - ymin)) / 2
         for bbox in boxes:
             bxmin = int(bbox[0])
