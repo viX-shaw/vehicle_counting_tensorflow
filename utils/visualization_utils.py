@@ -506,6 +506,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
   # Draw all boxes onto image.
   for box, color in box_to_color_map.items():
+    if int(current_frame_number) % 100 == 0:
+      print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
     ymin, xmin, ymax, xmax = box
     if instance_masks is not None:
       draw_mask_on_image_array(
@@ -555,8 +557,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
               counters[display_str_list[0][:-5]]+=1
               # print("Frame no.", current_frame_number)
-              # if "person" not in display_str_list[0]:
-              #   tracker_name = "kcf"
+              if "person" not in display_str_list[0]:
+                tracker_name = "kcf"
               util_track.add_new_object((top, left, bottom, right), image, counters, trackers, tracker_name, str(current_frame_number)[:-2])
 
             
