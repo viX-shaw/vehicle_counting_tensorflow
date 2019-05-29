@@ -220,7 +220,7 @@ def object_detection_function():
                 #     cv2.line(input_frame, (0, 420), (1280, 420), (0, 0, 0xFF), 5)
 
                 # insert information text to video frame
-                cv2.circle(input_frame, (610, 380), 0.8* 360, (10,100,210), 2)
+                cv2.circle(input_frame, (610, 380), 288, (10,100,210), 2)
                 cv2.rectangle(input_frame, (10, 275), (230, 337), (180, 132, 109), -1)
                 # cv2.putText(
                 #     input_frame,
