@@ -67,19 +67,22 @@ def not_tracked(object_, boxes):
     
     ymid = int(round((ymin+ymax)/2))
     xmid = int(round((xmin+xmax)/2))
-    box_range = ((xmax - xmin) + (ymax - ymin)) / 2
-    for bbox in boxes:
-        bxmin = int(bbox[0])
-        bymin = int(bbox[1])
-        bxmax = int(bbox[0] + bbox[2])
-        bymax = int(bbox[1] + bbox[3])
-        bxmid = int((bxmin + bxmax) / 2)
-        bymid = int((bymin + bymax) / 2)
-        if math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2) < box_range:
-            # found existing, so break (do not add to new_objects)
-            break
-    else:
-        new_objects.append(object_)
+
+    dist = math.sqrt((610 - xmid)**2 + (380 - ymid)**2)
+    if dist<0.7*360:
+        box_range = ((xmax - xmin) + (ymax - ymin)) / 2
+        for bbox in boxes:
+            bxmin = int(bbox[0])
+            bymin = int(bbox[1])
+            bxmax = int(bbox[0] + bbox[2])
+            bymax = int(bbox[1] + bbox[3])
+            bxmid = int((bxmin + bxmax) / 2)
+            bymid = int((bymin + bymax) / 2)
+            if math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2) < box_range:
+                # found existing, so break (do not add to new_objects)
+                break
+        else:
+            new_objects.append(object_)
 
     return True if len(new_objects)>0 else False
 
