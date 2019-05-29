@@ -542,11 +542,11 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             if use_normalized_coordinates:
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
+            with open('det.txt', 'a') as f:
+              f.write("{},-1,{},{},{},{},0.4,-1,-1,-1\n".format(str(current_frame_number)[:-2], left, top, right-left, bottom-top))
             if util_track.not_tracked((top, left, bottom, right), tracker_boxes):
               
               # generating detections for deep-mot-sort
-              with open('det.txt', 'a') as f:
-                f.write("{},-1,{},{},{},{},0.4,-1,-1,-1\n".format(str(current_frame_number)[:-2], left, top, right-left, bottom-top))
               image_temp = numpy.array(image_pil)              
               detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
               image_saver.save_image(detected_vehicle_image) # save detected object image
@@ -555,8 +555,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
               counters[display_str_list[0][:-5]]+=1
               # print("Frame no.", current_frame_number)
-              if "person" not in display_str_list[0]:
-                tracker_name = "kcf"
+              # if "person" not in display_str_list[0]:
+              #   tracker_name = "kcf"
               util_track.add_new_object((top, left, bottom, right), image, counters, trackers, tracker_name, str(current_frame_number)[:-2])
 
             

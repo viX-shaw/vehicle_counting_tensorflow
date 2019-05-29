@@ -150,7 +150,7 @@ def object_detection_function():
                 input_frame = frame
                 # input_frame = load_image_into_numpy_array(frame)
                 tracker_boxes = util_track.update_trackers(input_frame, counters, trackers,str(cap.get(1))[:-2])
-                print("Total trackers ", trackers,"in frame no.", cap.get(1))
+                # print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                 if cap.get(1) % 1 == 0:
@@ -220,6 +220,7 @@ def object_detection_function():
                 #     cv2.line(input_frame, (0, 420), (1280, 420), (0, 0, 0xFF), 5)
 
                 # insert information text to video frame
+                cv2.circle(input_frame, (610, 380), 0.8* 360, (10,100,210), 2)
                 cv2.rectangle(input_frame, (10, 275), (230, 337), (180, 132, 109), -1)
                 # cv2.putText(
                 #     input_frame,

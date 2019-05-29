@@ -46,7 +46,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     # init tracker
     # tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
 
-    if dist <= 0.7*360:
+    if dist <= 0.8*360:
         tracker = OPENCV_OBJECT_TRACKERS[name]()
         success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         prev_tracker_update[label] = (ymin, xmin, ymax, xmax)
@@ -66,7 +66,7 @@ def not_tracked(object_, boxes):
     xmid = int(round((xmin+xmax)/2))
 
     dist = math.sqrt((610 - xmid)**2 + (380 - ymid)**2)
-    if dist<=0.7*360:
+    if dist<=0.8*360:
         if not boxes:
             # return objects  # No existing boxes, return all objects
             return True
@@ -130,7 +130,7 @@ def update_trackers(image, counters, trackers, curr_frame):
         # print("Tracker no", car, "moved", dist, "units")
         # prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
 
-        if dist > 0.7*360 and age > 60:
+        if dist > 0.8*360 and age > 60:
             del trackers[n]
             continue
 
