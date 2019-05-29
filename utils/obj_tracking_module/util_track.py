@@ -69,7 +69,7 @@ def not_tracked(object_, boxes):
     xmid = int(round((xmin+xmax)/2))
 
     dist = math.sqrt((610 - xmid)**2 + (380 - ymid)**2)
-    if dist<0.7*360:
+    if dist<=0.7*360:
         box_range = ((xmax - xmin) + (ymax - ymin)) / 2
         for bbox in boxes:
             bxmin = int(bbox[0])
