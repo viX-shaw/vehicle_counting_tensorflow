@@ -110,8 +110,6 @@ def update_trackers(image, counters, trackers, curr_frame):
             del trackers[n]
             continue
 
-        boxes.append(bbox)  # Return updated box list
-
         xmin = int(bbox[0])
         ymin = int(bbox[1])
         xmax = int(bbox[0] + bbox[2])
@@ -133,6 +131,7 @@ def update_trackers(image, counters, trackers, curr_frame):
             del trackers[n]
             continue
 
+        boxes.append(bbox)  # Return updated box list        
 
         # if ymid >= ROI_YMAX:
         #     label_object(WHITE, WHITE, fontface, image, car, textsize, 1, xmax, xmid, xmin, ymax, ymid, ymin)
