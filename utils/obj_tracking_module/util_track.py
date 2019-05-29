@@ -23,7 +23,7 @@ OPENCV_OBJECT_TRACKERS = {
 
 prev_tracker_update = defaultdict()
 
-def add_new_object(obj, image, counters, trackers, name):
+def add_new_object(obj, image, counters, trackers, name, curr_frame):
     ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"]+counters["truck"]+ counters["bus"])
 
@@ -41,15 +41,18 @@ def add_new_object(obj, image, counters, trackers, name):
     textsize, _baseline = cv2.getTextSize(
         label, fontface, fontscale, thickness)
 
+    dist = math.sqrt((610 - xmid)**2 + (380 - ymid)**2)
+
     # init tracker
     # tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
-    tracker = OPENCV_OBJECT_TRACKERS[name]()
-    success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-    prev_tracker_update[label] = (ymin, xmin, ymax, xmax)
-    if success:
-        trackers.append((tracker, label))
 
-    label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
+    if dist <= 0.7*360:
+        tracker = OPENCV_OBJECT_TRACKERS[name]()
+        success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+        prev_tracker_update[label] = (ymin, xmin, ymax, xmax)
+        if success:
+            trackers.append((tracker, label, curr_frame))
+        label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(object_, boxes):
     if not object_:
@@ -87,7 +90,7 @@ def label_object(color, textcolor, fontface, image, car, textsize, thickness, xm
     cv2.putText(image, car, pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
 
 
-def update_trackers(image, counters, trackers):
+def update_trackers(image, counters, trackers, curr_frame):
     boxes = []
     color = (80, 220, 60)
     fontface = cv2.FONT_HERSHEY_SIMPLEX
@@ -95,7 +98,8 @@ def update_trackers(image, counters, trackers):
     thickness = 1
 
     for n, pair in enumerate(trackers):
-        tracker, car = pair
+        tracker, car, frame = pair
+        age = frame - curr_frame
         textsize, _baseline = cv2.getTextSize(
             car, fontface, fontscale, thickness)
         success, bbox = tracker.update(image)
@@ -115,15 +119,19 @@ def update_trackers(image, counters, trackers):
         xmid = int(round((xmin+xmax)/2))
         ymid = int(round((ymin+ymax)/2))
 
-        p_ymin, p_xmin, p_ymax, p_xmax = prev_tracker_update[car]
-        p_xmid = int(round((p_xmin+p_xmax)/2))
-        p_ymid = int(round((p_ymin+p_ymax)/2))
+        # p_ymin, p_xmin, p_ymax, p_xmax = prev_tracker_update[car]
+        p_xmid = 610
+        p_ymid = 380
 
         dist = math.sqrt((p_xmid - xmid)**2 + (p_ymid - ymid)**2)
         with open('details.txt', 'a') as f:
-            f.write( "{} moved {} units\n".format(car, dist))
+            f.write( "{} moved {} units from centre\n".format(car, dist))
         # print("Tracker no", car, "moved", dist, "units")
-        prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
+        # prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
+
+        if dist > 0.7*360 and age > 60:
+            del trackers[n]
+            continue
 
 
         # if ymid >= ROI_YMAX:
