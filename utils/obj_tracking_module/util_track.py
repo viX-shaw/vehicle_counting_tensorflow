@@ -10,8 +10,8 @@ LIGHT_CYAN = (255, 255, 224)
 DARK_BLUE = (139, 0, 0)
 GRAY = (128, 128, 128)
 
-radius = 300
-center = (450, 380)
+radius = 310
+center = (400, 380)
 
 OPENCV_OBJECT_TRACKERS = {
     "csrt": cv2.TrackerCSRT_create,
