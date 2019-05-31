@@ -134,7 +134,7 @@ def update_trackers(image, counters, trackers, curr_frame):
         # prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
 
         if dist > radius:
-            print("Deleting tracker {} on AOI exit..".format(car))
+            print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
             del trackers[n]
             continue
 
