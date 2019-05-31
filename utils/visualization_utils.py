@@ -31,7 +31,7 @@ from utils.image_utils import image_saver
 
 #  predicted_speed predicted_color module - import
 from utils.speed_and_direction_prediction_module import speed_prediction
-from utils.object_counting_module import object_counter
+# from utils.object_counting_module import object_counters
 
 from utils.obj_tracking_module import util_track
 
