@@ -285,7 +285,7 @@ def object_detection_function():
                 #     (0xFF, 0xFF, 0xFF),
                 #     1,
                 #     cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                    )
+                    # )
 
                 # cv2.imshow('vehicle detection', input_frame)
                 cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, cap.get(1)), input_frame)
