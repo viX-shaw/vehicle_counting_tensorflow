@@ -105,7 +105,7 @@ def update_trackers(image, counters, trackers, curr_frame):
 
     for n, pair in enumerate(trackers):
         tracker, car, frame = pair
-        age = int(frame) - int(curr_frame)
+        age = int(curr_frame) - int(frame) 
         textsize, _baseline = cv2.getTextSize(
             car, fontface, fontscale, thickness)
         success, bbox = tracker.update(image)
@@ -133,7 +133,7 @@ def update_trackers(image, counters, trackers, curr_frame):
         # print("Tracker no", car, "moved", dist, "units")
         # prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
 
-        if dist > radius:
+        if dist > radius or age >= 180:
             print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
             del trackers[n]
             continue
