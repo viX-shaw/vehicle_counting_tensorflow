@@ -69,7 +69,7 @@ def not_tracked(object_, boxes):
     xmid = int(round((xmin+xmax)/2))
 
     dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
-    if dist<=radius:
+    if dist<=radius*0.93:
         if not boxes:
             # return objects  # No existing boxes, return all objects
             return True
@@ -133,7 +133,7 @@ def update_trackers(image, counters, trackers, curr_frame):
         # print("Tracker no", car, "moved", dist, "units")
         # prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
 
-        if dist > radius or age >= 190:
+        if dist > radius or age >= 180:
             print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
             del trackers[n]
             continue
