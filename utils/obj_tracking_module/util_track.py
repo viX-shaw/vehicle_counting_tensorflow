@@ -49,7 +49,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     # init tracker
     # tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
 
-    if dist <= radius:
+    if dist <= radius*0.93:
         tracker = OPENCV_OBJECT_TRACKERS[name]()
         success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         prev_tracker_update[label] = (ymin, xmin, ymax, xmax)
