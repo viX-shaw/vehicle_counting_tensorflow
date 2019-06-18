@@ -1,8 +1,9 @@
 import cv2
 import math
 from collections import defaultdict
-from appearence_extractor import create_box_encoder
 import numpy as np
+
+from appearence_extractor import create_box_encoder
 
 WHITE = (255, 255, 255)
 YELLOW = (66, 244, 238)
