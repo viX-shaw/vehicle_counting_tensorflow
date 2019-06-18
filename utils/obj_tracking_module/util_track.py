@@ -260,5 +260,5 @@ def _nn_cosine_distance(x, y):
 
     """
     distances = _cosine_distance(x, y)
-    return distances.min(axis=0)
+    return distances.min(axis=0)[0][0]
 
