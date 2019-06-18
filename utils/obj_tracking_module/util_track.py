@@ -137,6 +137,7 @@ def update_trackers(image, counters, trackers, curr_frame):
             del trackers[n]
             continue
 
+        print("Age", age)
         xmin = int(bbox[0])
         ymin = int(bbox[1])
         xmax = int(bbox[0] + bbox[2])
@@ -151,6 +152,7 @@ def update_trackers(image, counters, trackers, curr_frame):
             f.write("Tracker no {} : {}\n".format(n, distance))
 
         if distance > 2.2:
+            print("Working")
             #needs the whole track object
             pair[2]+=1
 
