@@ -66,7 +66,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
         trackers.append((tracker, label, age, [feature]))
     label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-def not_tracked(object_, boxes):
+def not_tracked(image, object_, boxes):
     if not object_:
         # return []  # No new classified objects to search for
         return False
@@ -96,7 +96,7 @@ def not_tracked(object_, boxes):
 
             #in the parameters also pass features of all tracks
             dt_feature = feature_generator(image, [bbox])
-            print(np.asarray(dt_feature).shape)
+            print("Detection bbox feature shape", np.asarray(dt_feature).shape)
             distance = _nn_cosine_distance(np.asarray(feature), np.asarray(dt_feature))
             with open("Cosine-distances.txt", 'a') as f:
                 f.write("Cosine dist : {}\n".format(distance))
