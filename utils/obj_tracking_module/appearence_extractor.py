@@ -65,6 +65,7 @@ def extract_image_patch(image, bbox, patch_shape):
     sx, sy, ex, ey = bbox
     image = image[sy:ey, sx:ex]
     image = cv2.resize(image, tuple(patch_shape[::-1]))
+    cv2.imsave(image, "/content/sample_data/{}.jpg".format(''.join(random.choices(string.ascii_uppercase + string.digits, k=4))))
     return image
 
 
