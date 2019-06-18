@@ -62,7 +62,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
     if success:
         feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
-        print("Adding feature to new track object", np.asarray(feature).shape)
+        # print("Adding feature to new track object", np.asarray(feature).shape)
         trackers.append((tracker, label, age, [feature]))
     label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
@@ -95,15 +95,15 @@ def not_tracked(image, object_, boxes, trackers):
             #compute cosine distance b/w track feature and matched detection
 
             #in the parameters also pass features of all tracks
-            dt_feature = feature_generator(image, [bbox])
-            print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-            distance = _nn_cosine_distance(np.asarray(feature), np.asarray(dt_feature))
-            with open("Cosine-distances.txt", 'a') as f:
-                f.write("Tracker no {} : {}\n".format(i, distance))
+            # dt_feature = feature_generator(image, [bbox])
+            # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
+            # distance = _nn_cosine_distance(np.asarray(feature), np.asarray(dt_feature))
+            # with open("Cosine-distances.txt", 'a') as f:
+            #     f.write("Tracker no {} : {}\n".format(i, distance))
 
-            if distance > 2.2:
-                #needs the whole track object
-                del trackers[i]
+            # if distance > 2.2:
+            #     #needs the whole track object
+            #     del trackers[i]
             break
     else:
         new_objects.append(object_)
@@ -143,6 +143,16 @@ def update_trackers(image, counters, trackers, curr_frame):
         ymax = int(bbox[1] + bbox[3])
         xmid = int(round((xmin+xmax)/2))
         ymid = int(round((ymin+ymax)/2))
+
+        dt_feature = feature_generator(image, [bbox])
+        # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
+        distance = _nn_cosine_distance(np.asarray(_), np.asarray(dt_feature))
+        with open("Cosine-distances.txt", 'a') as f:
+            f.write("Tracker no {} : {}\n".format(n, distance))
+
+        if distance > 2.2:
+            #needs the whole track object
+            pair[2]+=1
 
         if age >= 30:
             print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
