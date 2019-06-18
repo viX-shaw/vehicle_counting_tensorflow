@@ -546,7 +546,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                             ymin * im_height, ymax * im_height)
             with open('det.txt', 'a') as f:
               f.write("{},-1,{},{},{},{},0.4,-1,-1,-1\n".format(str(current_frame_number)[:-2], left, top, right-left, bottom-top))
-            if util_track.not_tracked(image, (top, left, bottom, right), tracker_boxes):
+            if util_track.not_tracked(image, (top, left, bottom, right), tracker_boxes, trackers)
               
               # generating detections for deep-mot-sort
               image_temp = numpy.array(image_pil)              
