@@ -95,7 +95,7 @@ def not_tracked(image, object_, boxes, trackers):
             #compute cosine distance b/w track feature and matched detection
 
             #in the parameters also pass features of all tracks
-            # dt_feature = feature_generator(image, [bbox])
+            dt_feature = feature_generator(image, [bbox])
             # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
             # distance = _nn_cosine_distance(np.asarray(feature), np.asarray(dt_feature))
             # with open("Cosine-distances.txt", 'a') as f:
@@ -106,6 +106,7 @@ def not_tracked(image, object_, boxes, trackers):
             #     del trackers[i]
             t=trackers[i]
             t[2]=0 #Resetting age on detection
+            t[3].append(dt_feature)
             break
     else:
         new_objects.append(object_)
@@ -139,7 +140,8 @@ def update_trackers(image, counters, trackers, curr_frame):
             del trackers[n]
             continue
 
-        print("Age", age)
+        # print("Age", age)
+        print("length of feats", len(_))
         xmin = int(bbox[0])
         ymin = int(bbox[1])
         xmax = int(bbox[0] + bbox[2])
@@ -149,7 +151,7 @@ def update_trackers(image, counters, trackers, curr_frame):
 
         dt_feature = feature_generator(image, [bbox])
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-        distance = _nn_cosine_distance(np.asarray(_), np.asarray(dt_feature))
+        distance = _nn_cosine_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, age {}\n".format(car, distance, age))
 
