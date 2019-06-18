@@ -3,7 +3,8 @@ import math
 from collections import defaultdict
 import numpy as np
 
-from appearence_extractor import create_box_encoder
+import appearence_extractor.create_box_encoder as create_box_encoder
+appearence_extractor
 
 WHITE = (255, 255, 255)
 YELLOW = (66, 244, 238)
