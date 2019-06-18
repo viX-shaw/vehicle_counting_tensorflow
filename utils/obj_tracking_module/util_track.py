@@ -1,6 +1,8 @@
 import cv2
 import math
 from collections import defaultdict
+from appearence_extractor import create_box_encoder
+import numpy as np
 
 WHITE = (255, 255, 255)
 YELLOW = (66, 244, 238)
@@ -24,7 +26,11 @@ OPENCV_OBJECT_TRACKERS = {
     "goturn":cv2.TrackerGOTURN_create
 	}
 
-prev_tracker_update = defaultdict()
+feature_generator = None
+
+def load_appearence_model():
+    global feature_generator
+    feature_generator = create_box_encoder("/content/veri.pb", batch_size=1)
 
 def add_new_object(obj, image, counters, trackers, name, curr_frame):
     ymin, xmin, ymax, xmax = obj
@@ -49,13 +55,14 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     # init tracker
     # tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
 
-    if dist <= radius*0.93:
-        tracker = OPENCV_OBJECT_TRACKERS[name]()
-        success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-        prev_tracker_update[label] = (ymin, xmin, ymax, xmax)
-        if success:
-            trackers.append((tracker, label, curr_frame))
-        label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
+    # if dist <= radius*0.93:
+    tracker = OPENCV_OBJECT_TRACKERS[name]()
+    success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+    if success:
+        feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
+        print("Adding feature to new track object", np.asarray(feature).shape)
+        trackers.append((tracker, label, curr_frame, [feature]))
+    label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(object_, boxes):
     if not object_:
@@ -69,23 +76,35 @@ def not_tracked(object_, boxes):
     xmid = int(round((xmin+xmax)/2))
 
     dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
-    if dist<=radius*0.93:
-        if not boxes:
-            # return objects  # No existing boxes, return all objects
-            return True
-        box_range = ((xmax - xmin) + (ymax - ymin)) / 2
-        for bbox in boxes:
-            bxmin = int(bbox[0])
-            bymin = int(bbox[1])
-            bxmax = int(bbox[0] + bbox[2])
-            bymax = int(bbox[1] + bbox[3])
-            bxmid = int((bxmin + bxmax) / 2)
-            bymid = int((bymin + bymax) / 2)
-            if math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2) < box_range:
-                # found existing, so break (do not add to new_objects)
-                break
-        else:
-            new_objects.append(object_)
+    # if dist<=radius*0.93:
+    if not boxes:
+        # return objects  # No existing boxes, return all objects
+        return True
+    box_range = ((xmax - xmin) + (ymax - ymin)) / 2
+    for bbox, feature in boxes:
+        bxmin = int(bbox[0])
+        bymin = int(bbox[1])
+        bxmax = int(bbox[0] + bbox[2])
+        bymax = int(bbox[1] + bbox[3])
+        bxmid = int((bxmin + bxmax) / 2)
+        bymid = int((bymin + bymax) / 2)
+        if math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2) < box_range:
+            # found existing, so break (do not add to new_objects)
+            #compute cosine distance b/w track feature and matched detection
+
+            #in the parameters also pass features of all tracks
+            dt_feature = feature_generator(image, [bbox])
+            print(np.asarray(dt_feature).shape)
+            distance = _nn_cosine_distance(np.asarray(feature), np.asarray(dt_feature))
+            with open("Cosine-distances.txt", 'a') as f:
+                f.write("Cosine dist : {}\n".format(distance))
+
+            # if distance > threshold:
+            #     #needs the whole track object
+            #     track[2]+=1
+            break
+    else:
+        new_objects.append(object_)
 
     return True if len(new_objects)>0 else False
 
@@ -104,8 +123,7 @@ def update_trackers(image, counters, trackers, curr_frame):
     thickness = 1
 
     for n, pair in enumerate(trackers):
-        tracker, car, frame = pair
-        age = int(curr_frame) - int(frame) 
+        tracker, car, age, _ = pair
         textsize, _baseline = cv2.getTextSize(
             car, fontface, fontscale, thickness)
         # success, bbox = tracker.update(image)
@@ -124,22 +142,12 @@ def update_trackers(image, counters, trackers, curr_frame):
         xmid = int(round((xmin+xmax)/2))
         ymid = int(round((ymin+ymax)/2))
 
-        # p_ymin, p_xmin, p_ymax, p_xmax = prev_tracker_update[car]
-        # p_xmid = 610
-        # p_ymid = 380
-
-        dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
-        with open('details.txt', 'a') as f:
-            f.write( "{} moved {} units from centre\n".format(car, dist))
-        # print("Tracker no", car, "moved", dist, "units")
-        # prev_tracker_update[car] = (ymin, xmin, ymax, xmax)
-
-        if dist > radius or age >= 180:
+        if age >= 30:
             print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
             del trackers[n]
             continue
 
-        boxes.append(bbox)  # Return updated box list        
+        boxes.append((bbox, _))  # Return updated box list        
 
         # if ymid >= ROI_YMAX:
         #     label_object(WHITE, WHITE, fontface, image, car, textsize, 1, xmax, xmid, xmin, ymax, ymid, ymin)
@@ -194,3 +202,49 @@ def in_range(obj):
         # Finish line protection avoids counting the car twice.
         return False
     return True
+
+def _cosine_distance(a, b, data_is_normalized=False):
+    """Compute pair-wise cosine distance between points in `a` and `b`.
+
+    Parameters
+    ----------
+    a : array_like
+        An NxM matrix of N samples of dimensionality M.
+    b : array_like
+        An LxM matrix of L samples of dimensionality M.
+    data_is_normalized : Optional[bool]
+        If True, assumes rows in a and b are unit length vectors.
+        Otherwise, a and b are explicitly normalized to lenght 1.
+
+    Returns
+    -------
+    ndarray
+        Returns a matrix of size len(a), len(b) such that eleement (i, j)
+        contains the squared distance between `a[i]` and `b[j]`.
+
+    """
+    if not data_is_normalized:
+        a = np.asarray(a) / np.linalg.norm(a, axis=1, keepdims=True)
+        b = np.asarray(b) / np.linalg.norm(b, axis=1, keepdims=True)
+    return 1. - np.dot(a, b.T)
+
+def _nn_cosine_distance(x, y):
+    """ Helper function for nearest neighbor distance metric (cosine).
+
+    Parameters
+    ----------
+    x : ndarray
+        A matrix of N row-vectors (sample points).
+    y : ndarray
+        A matrix of M row-vectors (query points).
+
+    Returns
+    -------
+    ndarray
+        A vector of length M that contains for each entry in `y` the
+        smallest cosine distance to a sample in `x`.
+
+    """
+    distances = _cosine_distance(x, y)
+    return distances.min(axis=0)
+
