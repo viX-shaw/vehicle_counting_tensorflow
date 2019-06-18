@@ -36,7 +36,8 @@ def load_appearence_model():
 def add_new_object(obj, image, counters, trackers, name, curr_frame):
     ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"]+counters["truck"]+ counters["bus"])
-
+    #Age:time for which the tracker is allowed to deviate from its orignal feature 
+    age=0
     # print(obj)
     ymin = int(ymin)
     xmin = int(xmin)
@@ -62,7 +63,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     if success:
         feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         print("Adding feature to new track object", np.asarray(feature).shape)
-        trackers.append((tracker, label, curr_frame, [feature]))
+        trackers.append((tracker, label, age, [feature]))
     label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(object_, boxes):
