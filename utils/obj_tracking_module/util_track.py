@@ -83,7 +83,7 @@ def not_tracked(image, object_, boxes, trackers):
         # return objects  # No existing boxes, return all objects
         return True
     box_range = ((xmax - xmin) + (ymax - ymin)) / 2
-    for i, bbox, feature in enumerate(boxes):
+    for i, (bbox, feature) in enumerate(boxes):
         bxmin = int(bbox[0])
         bymin = int(bbox[1])
         bxmax = int(bbox[0] + bbox[2])
