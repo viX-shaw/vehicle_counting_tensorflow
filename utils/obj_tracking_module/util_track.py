@@ -126,8 +126,8 @@ def update_trackers(image, counters, trackers, curr_frame):
         tracker, car, age, _ = pair
         textsize, _baseline = cv2.getTextSize(
             car, fontface, fontscale, thickness)
-        # success, bbox = tracker.update(image)
-        print("Tracker object", tracker.update(image))
+        success, bbox = tracker.update(image)
+        # print("Tracker object", tracker.update(image))
 
         if not success:
             counters['lost_trackers'] += 1
