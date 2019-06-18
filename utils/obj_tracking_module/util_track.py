@@ -66,7 +66,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
         trackers.append((tracker, label, age, [feature]))
     label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-def not_tracked(image, object_, boxes):
+def not_tracked(image, object_, boxes, trackers):
     if not object_:
         # return []  # No new classified objects to search for
         return False
@@ -83,7 +83,7 @@ def not_tracked(image, object_, boxes):
         # return objects  # No existing boxes, return all objects
         return True
     box_range = ((xmax - xmin) + (ymax - ymin)) / 2
-    for bbox, feature in boxes:
+    for i, bbox, feature in enumerate(boxes):
         bxmin = int(bbox[0])
         bymin = int(bbox[1])
         bxmax = int(bbox[0] + bbox[2])
@@ -99,11 +99,11 @@ def not_tracked(image, object_, boxes):
             print("Detection bbox feature shape", np.asarray(dt_feature).shape)
             distance = _nn_cosine_distance(np.asarray(feature), np.asarray(dt_feature))
             with open("Cosine-distances.txt", 'a') as f:
-                f.write("Cosine dist : {}\n".format(distance))
+                f.write("Tracker no {} : {}\n".format(i, distance))
 
-            # if distance > threshold:
-            #     #needs the whole track object
-            #     track[2]+=1
+            if distance > 2.2:
+                #needs the whole track object
+                del trackers[i]
             break
     else:
         new_objects.append(object_)
