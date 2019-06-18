@@ -104,6 +104,8 @@ def not_tracked(image, object_, boxes, trackers):
             # if distance > 2.2:
             #     #needs the whole track object
             #     del trackers[i]
+            t=trackers[i]
+            t[2]=0 #Resetting age on detection
             break
     else:
         new_objects.append(object_)
@@ -149,9 +151,9 @@ def update_trackers(image, counters, trackers, curr_frame):
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         distance = _nn_cosine_distance(np.asarray(_), np.asarray(dt_feature))
         with open("Cosine-distances.txt", 'a') as f:
-            f.write("Tracker no {} : {}\n".format(n, distance))
+            f.write("Tracker no {} : {}, age {}\n".format(n, distance, age))
 
-        if distance > 2.2:
+        if abs(distance) > 2.2:
             print("Working")
             #needs the whole track object
             pair[2]+=1
