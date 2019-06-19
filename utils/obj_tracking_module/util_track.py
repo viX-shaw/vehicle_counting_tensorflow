@@ -1,6 +1,8 @@
 import cv2
 import math
 from collections import defaultdict
+import string
+import random
 import numpy as np
 
 from .appearence_extractor import create_box_encoder
@@ -64,12 +66,14 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
         feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         trackers.append([tracker, label, age, [feature]])
-    label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
+    # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(image, object_, boxes, trackers):
     if not object_:
         # return []  # No new classified objects to search for
         return False
+    cv2.imwrite("/content/data/{}.jpg".format((
+        ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
 
     ymin, xmin, ymax, xmax = object_
     new_objects = []
