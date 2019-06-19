@@ -65,11 +65,11 @@ def extract_image_patch(image, bbox, patch_shape):
     if np.any(bbox[:2] >= bbox[2:]):
         return None
     sx, sy, ex, ey = bbox
-    img = image[sy:ey, sx:ex]
-    img = cv2.resize(image, tuple(patch_shape[::-1]))
+    image = image[sy:ey, sx:ex]
+    image = cv2.resize(image, tuple(patch_shape[::-1]))
     cv2.imwrite("/content/sample_data/{}.jpg".format(
         ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
-    return img
+    return image
 
 
 class ImageEncoder(object):
