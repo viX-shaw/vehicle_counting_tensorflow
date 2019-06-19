@@ -178,7 +178,7 @@ def object_detection_function():
 
                 # Visualization of the results of a detection.
                 # (counter, csv_line) = \
-                cv2.imwrite("/content/data/{}.jpg".format(cap.get(1)), copy_frame)
+                    cv2.imwrite("/content/data/{}.jpg".format(cap.get(1)), copy_frame)
                 # Smapling frames
                     # counters = \
                     vis_util.visualize_boxes_and_labels_on_image_array(
