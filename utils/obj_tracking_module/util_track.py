@@ -156,7 +156,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         distance = _nn_cosine_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
         with open("Cosine-distances.txt", 'a') as f:
-            f.write("Tracker no {} : {}, age {}\n".format(car, distance, age))
+            f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
 
         if abs(distance) > 6.6:
             # print("Working")
