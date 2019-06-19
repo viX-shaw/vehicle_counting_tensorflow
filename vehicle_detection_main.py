@@ -19,6 +19,7 @@ import numpy as np
 import csv
 import time
 import argparse
+import copy
 
 from collections import defaultdict
 from io import StringIO
@@ -155,6 +156,7 @@ def object_detection_function():
                     break
 
                 input_frame = frame
+                copy_frame = copy.deepcopy(frame)
                 # input_frame = load_image_into_numpy_array(frame)
                 tracker_boxes = util_track.update_trackers(input_frame, counters, trackers,str(cap.get(1))[:-2])
                 # print("Total trackers ", trackers,"in frame no.", cap.get(1))
@@ -176,7 +178,7 @@ def object_detection_function():
                     # counters = \
                     vis_util.visualize_boxes_and_labels_on_image_array(
                     cap.get(1),
-                    input_frame,
+                    copy_frame,
                     np.squeeze(boxes),
                     np.squeeze(classes).astype(np.int32),
                     np.squeeze(scores),

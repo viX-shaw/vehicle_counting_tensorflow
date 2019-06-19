@@ -159,6 +159,8 @@ def update_trackers(image, counters, trackers, curr_frame):
             # print("Working")
             #needs the whole track object
             pair[2]+=1
+        else:
+            pair[3].append(dt_feature)
 
         if age >= 30:
             print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
