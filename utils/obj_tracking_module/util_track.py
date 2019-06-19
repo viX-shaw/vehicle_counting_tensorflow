@@ -154,11 +154,11 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-        distance = _nn_cosine_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
+        distance = _nn_euclidean_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
 
-        if abs(distance) > 8.0:
+        if abs(distance) > 2.0:
             # print("Working")
             #needs the whole track object
             pair[2]+=1
@@ -270,4 +270,49 @@ def _nn_cosine_distance(x, y):
     """
     distances = _cosine_distance(x, y)
     return distances.min(axis=0)[0][0]
+
+def _pdist(a, b):
+    """Compute pair-wise squared distance between points in `a` and `b`.
+
+    Parameters
+    ----------
+    a : array_like
+        An NxM matrix of N samples of dimensionality M.
+    b : array_like
+        An LxM matrix of L samples of dimensionality M.
+
+    Returns
+    -------
+    ndarray
+        Returns a matrix of size len(a), len(b) such that eleement (i, j)
+        contains the squared distance between `a[i]` and `b[j]`.
+
+    """
+    a, b = np.asarray(a), np.asarray(b)
+    if len(a) == 0 or len(b) == 0:
+        return np.zeros((len(a), len(b)))
+    a2, b2 = np.square(a).sum(axis=1), np.square(b).sum(axis=1)
+    r2 = -2. * np.dot(a, b.T) + a2[:, None] + b2[None, :]
+    r2 = np.clip(r2, 0., float(np.inf))
+    return r2
+
+def _nn_euclidean_distance(x, y):
+    """ Helper function for nearest neighbor distance metric (Euclidean).
+
+    Parameters
+    ----------
+    x : ndarray
+        A matrix of N row-vectors (sample points).
+    y : ndarray
+        A matrix of M row-vectors (query points).
+
+    Returns
+    -------
+    ndarray
+        A vector of length M that contains for each entry in `y` the
+        smallest Euclidean distance to a sample in `x`.
+
+    """
+    distances = _pdist(x, y)
+    return np.maximum(0.0, distances.min(axis=0))
 
