@@ -313,7 +313,7 @@ def _nn_euclidean_distance(x, y):
         smallest Euclidean distance to a sample in `x`.
 
     """
-    distances = _pdist(x, y)
+    distances = np.squeeze(_pdist(x, y))
     print(distances.shape)
     return np.maximum(0.0, distances.min(axis=0))
 
