@@ -168,7 +168,7 @@ def object_detection_function():
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                 if cap.get(1) % params.sr == 0:
-                    image_np_expanded = np.expand_dims(input_frame, axis=0)
+                    image_np_expanded = np.expand_dims(copy_frame, axis=0)
 
                     # Actual detection.
                     (boxes, scores, classes, num) = \
