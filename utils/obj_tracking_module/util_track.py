@@ -158,14 +158,14 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
 
-        if abs(distance) > 9.0:
+        if abs(distance) > 8.0:
             # print("Working")
             #needs the whole track object
             pair[2]+=1
         else:
             pair[3].append(dt_feature)
 
-        if age >= 72:
+        if age >= 30:
             print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
             del trackers[n]
             continue
