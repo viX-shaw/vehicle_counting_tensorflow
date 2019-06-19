@@ -154,7 +154,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-        distance = _nn_euclidean_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
+        distance = _nn_cosine_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
         print(distance.shape)
