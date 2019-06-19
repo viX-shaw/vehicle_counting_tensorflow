@@ -152,15 +152,13 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         ymid = int(round((ymin+ymax)/2))
 
         dt_feature = feature_generator(cp_image, [bbox])
-        # cv2.imwrite("/content/sample_data/{}.jpg".format(
-        # ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         distance = _nn_cosine_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, age {}\n".format(car, distance, age))
 
-        if abs(distance) > 2.2:
+        if abs(distance) > 5.6:
             # print("Working")
             #needs the whole track object
             pair[2]+=1
