@@ -158,7 +158,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
 
-        if abs(distance) > 6.6:
+        if abs(distance) > 8.0:
             # print("Working")
             #needs the whole track object
             pair[2]+=1
