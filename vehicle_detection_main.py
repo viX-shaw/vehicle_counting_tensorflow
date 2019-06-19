@@ -163,7 +163,7 @@ def object_detection_function():
                 else:
                     print("Diff objects")
                 # input_frame = load_image_into_numpy_array(frame)
-                tracker_boxes = util_track.update_trackers(input_frame, counters, trackers,str(cap.get(1))[:-2])
+                tracker_boxes = util_track.update_trackers(input_frame, copy_frame, counters, trackers,str(cap.get(1))[:-2])
                 # print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]

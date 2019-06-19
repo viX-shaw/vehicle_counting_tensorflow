@@ -62,8 +62,6 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     # if dist <= radius*0.93:
     tracker = OPENCV_OBJECT_TRACKERS[name]()
     success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-    cv2.imwrite("/content/data/{}.jpg".format(
-        ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
     if success:
         feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
@@ -124,7 +122,7 @@ def label_object(color, textcolor, fontface, image, car, textsize, thickness, xm
     cv2.putText(image, car, pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
 
 
-def update_trackers(image, counters, trackers, curr_frame):
+def update_trackers(image, cp_image, counters, trackers, curr_frame):
     boxes = []
     color = (80, 220, 60)
     fontface = cv2.FONT_HERSHEY_SIMPLEX
@@ -153,7 +151,10 @@ def update_trackers(image, counters, trackers, curr_frame):
         xmid = int(round((xmin+xmax)/2))
         ymid = int(round((ymin+ymax)/2))
 
-        dt_feature = feature_generator(image, [bbox])
+        dt_feature = feature_generator(cp_image, [bbox])
+        # cv2.imwrite("/content/sample_data/{}.jpg".format(
+        # ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
+    
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         distance = _nn_cosine_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
         with open("Cosine-distances.txt", 'a') as f:
