@@ -143,7 +143,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
             continue
 
         # print("Age", age)
-        print("length of feats", len(_))
+        # print("length of feats", len(_))
         xmin = int(bbox[0])
         ymin = int(bbox[1])
         xmax = int(bbox[0] + bbox[2])
@@ -158,7 +158,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, age {}\n".format(car, distance, age))
 
-        if abs(distance) > 5.6:
+        if abs(distance) > 1.5:
             # print("Working")
             #needs the whole track object
             pair[2]+=1
