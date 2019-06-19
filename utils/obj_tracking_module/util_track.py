@@ -72,8 +72,8 @@ def not_tracked(image, object_, boxes, trackers):
     if not object_:
         # return []  # No new classified objects to search for
         return False
-    cv2.imwrite("/content/data/{}.jpg".format((
-        ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image))
+    cv2.imwrite("/content/data/{}.jpg".format(
+        ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
 
     ymin, xmin, ymax, xmax = object_
     new_objects = []
