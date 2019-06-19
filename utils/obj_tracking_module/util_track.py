@@ -180,7 +180,7 @@ def update_trackers(image, counters, trackers, curr_frame):
         #     del trackers[n]
         # else:
             # Rectangle and number on the cars we are tracking
-        label_object(color, RED, fontface, image, car, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
+        label_object(color, RED, fontface, image, car, textsize, 2, xmax, xmid, xmin, ymax, ymid, ymin)
 
     # Add finish line overlay/line
     # overlay = image.copy()
