@@ -154,10 +154,10 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-        distance = _nn_euclidean_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
+        distance = _nn_cosine_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
-        print(distance.shape)
+        print(distance)
         if abs(distance) > 2.0:
             # print("Working")
             #needs the whole track object
@@ -269,6 +269,7 @@ def _nn_cosine_distance(x, y):
 
     """
     distances = _cosine_distance(x, y)
+    print(distances)
     return distances.min(axis=0)
 
 def _pdist(a, b):
