@@ -115,7 +115,7 @@ def not_tracked(image, object_, boxes, trackers):
             t[3].append(dt_feature)
             f=0
             break
-    if f=1:
+    if f==1:
         new_objects.append(object_)
 
     return True if len(new_objects)>0 else False
