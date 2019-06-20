@@ -135,8 +135,9 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
     fontscale = 1
     thickness = 1
 
-    for n, pair in enumerate(trackers):
-        tracker, car, age, _ = pair
+    # for n, pair in enumerate(trackers):
+    while n < len(trackers):
+        tracker, car, age, _ = trackers[n]
         textsize, _baseline = cv2.getTextSize(
             car, fontface, fontscale, thickness)
         success, bbox = tracker.update(image)
@@ -151,7 +152,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         # print("Age", age)
         # print("length of feats", len(_))
         xmin = int(bbox[0])
-        ymin = int(bbox[1])
+        ymin = int(bbox[1   ])
         xmax = int(bbox[0] + bbox[2])
         ymax = int(bbox[1] + bbox[3])
         xmid = int(round((xmin+xmax)/2))
@@ -192,7 +193,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         # else:
             # Rectangle and number on the cars we are tracking
         label_object(color, RED, fontface, image, car, textsize, 2, xmax, xmid, xmin, ymax, ymid, ymin)
-
+        n+ =1
     # Add finish line overlay/line
     # overlay = image.copy()
 
