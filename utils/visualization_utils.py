@@ -512,12 +512,12 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
     if int(current_frame_number) % 100 == 0:
       print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
     ymin, xmin, ymax, xmax = box
-    if instance_masks is not None:
-      draw_mask_on_image_array(
-          image,
-          box_to_instance_masks_map[box],
-          color=color
-      )
+    # if instance_masks is not None:
+    #   draw_mask_on_image_array(
+    #       image,
+    #       box_to_instance_masks_map[box],
+    #       color=color
+    #   )
     
     display_str_list=box_to_display_str_map[box]
     
@@ -578,7 +578,7 @@ def non_max_suppression(boxes, max_bbox_overlap, scores=None):
     if len(boxes) == 0:
         return []
 
-    boxes = boxes.astype(np.float)
+    # boxes = boxes.astype(np.float)s
     pick = []
 
     x1 = boxes[:, 0]
