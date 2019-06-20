@@ -156,7 +156,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         a = np.squeeze(np.asarray(_[-72:]), axis = 1)
         distance = _nn_euclidean_distance(a, np.asarray(dt_feature))
-        print(distance)
+        # print(distance)
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
         # print(distance)
@@ -318,6 +318,6 @@ def _nn_euclidean_distance(x, y):
 
     """
     distances = _pdist(x, y)
-    print(distances.shape)
+    # print(distances.shape)
     return np.maximum(0.0, distances.min(axis=0))
 
