@@ -157,7 +157,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         distance = _nn_cosine_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
-        print(distance)
+        # print(distance)
         if abs(distance) > 2.0:
             # print("Working")
             #needs the whole track object
@@ -246,6 +246,7 @@ def _cosine_distance(a, b, data_is_normalized=False):
         contains the squared distance between `a[i]` and `b[j]`.
 
     """
+    print(a.shape, b.shape)
     if not data_is_normalized:
         a = np.asarray(a) / np.linalg.norm(a, axis=1, keepdims=True)
         b = np.asarray(b) / np.linalg.norm(b, axis=1, keepdims=True)
@@ -269,7 +270,7 @@ def _nn_cosine_distance(x, y):
 
     """
     distances = _cosine_distance(x, y)
-    print(distances)
+    # print(distances)
     return distances.min(axis=0)
 
 def _pdist(a, b):
