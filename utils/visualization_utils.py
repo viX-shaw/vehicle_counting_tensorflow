@@ -505,8 +505,11 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # tracker_boxes = util_track.update_trackers(image, counters, trackers)
   nms_boxes = [(xmin, ymin, xmax-xmin, ymax-ymin) for (ymin, xmin, ymax, xmax), _ in box_to_color_map.items()]
   nms_indices = non_max_suppression(nms_boxes, 0.6)
-  nms_boxes = box_to_color_map.items()
-  dt_boxes = [nms_boxes[i] for i in nms_indices]
+  # nms_boxes = box_to_color_map.items()
+  dt_boxes = []
+  for i, (box, c) in enumerate(box_to_color_map.items()):
+    if i in nms_indices:
+      dt_boxes.append(box)
   # Draw all boxes onto image.
   for box, c in dt_boxes:
     if int(current_frame_number) % 100 == 0:
