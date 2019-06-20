@@ -85,14 +85,16 @@ def not_tracked(image, object_, boxes, trackers):
         # return objects  # No existing boxes, return all objects
         return True
     box_range = ((xmax - xmin) + (ymax - ymin)) / 2
-    for i, (bbox, feature) in enumerate(boxes):
+    for i, (bbox, car_no, feature) in enumerate(boxes):
         bxmin = int(bbox[0])
         bymin = int(bbox[1])
         bxmax = int(bbox[0] + bbox[2])
         bymax = int(bbox[1] + bbox[3])
         bxmid = int((bxmin + bxmax) / 2)
         bymid = int((bymin + bymax) / 2)
-        if math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2) <= box_range:
+        dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)
+        if dist <= box_range:
+            print("Car no {} is {}units, range is {}".format(car, dist, box_range))
             # found existing, so break (do not add to new_objects)
             #compute cosine distance b/w track feature and matched detection
 
@@ -172,7 +174,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
             del trackers[n]
             continue
 
-        boxes.append((bbox, _))  # Return updated box list        
+        boxes.append((bbox, car, _))  # Return updated box list        
 
         # if ymid >= ROI_YMAX:
         #     label_object(WHITE, WHITE, fontface, image, car, textsize, 1, xmax, xmid, xmin, ymax, ymid, ymin)
