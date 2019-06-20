@@ -92,7 +92,7 @@ def not_tracked(image, object_, boxes, trackers):
         bymax = int(bbox[1] + bbox[3])
         bxmid = int((bxmin + bxmax) / 2)
         bymid = int((bymin + bymax) / 2)
-        if math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2) < box_range:
+        if math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2) <= box_range:
             # found existing, so break (do not add to new_objects)
             #compute cosine distance b/w track feature and matched detection
 

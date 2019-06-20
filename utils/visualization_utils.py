@@ -475,7 +475,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   if not max_boxes_to_draw:
     max_boxes_to_draw = boxes.shape[0]
   for i in range(min(max_boxes_to_draw, boxes.shape[0])):
-    if scores is None or scores[i] > min_score_thresh:
+    if scores is None or scores[i] >= min_score_thresh:
       box = tuple(boxes[i].tolist())
       if instance_masks is not None:
         box_to_instance_masks_map[box] = instance_masks[i]
@@ -504,9 +504,9 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # Update all tracked boxes from previous frame
   # tracker_boxes = util_track.update_trackers(image, counters, trackers)
   nms_boxes = [(xmin, ymin, xmax-xmin, ymax-ymin) for (ymin, xmin, ymax, xmax), _ in box_to_color_map.items()]
-  nms_indices = non_max_suppression(nms_boxes, 1.0)
+  nms_indices = non_max_suppression(nms_boxes, 0.6)
 
-  print(len(nms_boxes), len(nms_indices))
+  # print(len(nms_boxes), len(nms_indices))
   # nms_boxes = box_to_color_map.items()
   dt_boxes = []
   for i, (box, c) in enumerate(box_to_color_map.items()):
