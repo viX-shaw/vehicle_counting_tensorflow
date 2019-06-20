@@ -472,11 +472,13 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   box_to_color_map = collections.defaultdict(str)
   box_to_instance_masks_map = {}
   box_to_keypoints_map = collections.defaultdict(list)
+  _scores = []
   if not max_boxes_to_draw:
     max_boxes_to_draw = boxes.shape[0]
   for i in range(min(max_boxes_to_draw, boxes.shape[0])):
     if scores is None or scores[i] > min_score_thresh:
       box = tuple(boxes[i].tolist())
+      _scores.append(scores[i])
       if instance_masks is not None:
         box_to_instance_masks_map[box] = instance_masks[i]
       if keypoints is not None:
@@ -509,12 +511,14 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # print(len(nms_boxes), len(nms_indices))
   # nms_boxes = box_to_color_map.items()
   dt_boxes = []
+  _scores = [i for i in _scores if i in nms_indices]
   for i, (box, c) in enumerate(box_to_color_map.items()):
     if i in nms_indices:
       dt_boxes.append(box)
   # Draw all boxes onto image.
-  for box in dt_boxes:
+  for box, sc in zip(dt_boxes, _scores):
     if int(current_frame_number) % 100 == 0:
+      print("Score", sc*100,"%")
       print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
     ymin, xmin, ymax, xmax = box
     # if instance_masks is not None:
