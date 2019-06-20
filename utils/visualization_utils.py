@@ -503,9 +503,12 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
   # Update all tracked boxes from previous frame
   # tracker_boxes = util_track.update_trackers(image, counters, trackers)
+  nms_boxes = [(xmin, ymin, xmax-xmin, ymax-ymin) for (ymin, xmin, ymax, xmax), _ in box_to_color_map.items()]
+  nms_indices = non_max_suppression(nms_boxes, 0.6)
 
+  dt_boxes = [box_to_color_map.items()[i][0] for i in nms_indices]
   # Draw all boxes onto image.
-  for box, color in box_to_color_map.items():
+  for box in dt_boxes:
     if int(current_frame_number) % 100 == 0:
       print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
     ymin, xmin, ymax, xmax = box
@@ -521,24 +524,6 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
     # print(list(display_str_list))
     # we are interested just vehicles (i.e. cars and trucks)
     if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
-            # is_vehicle_detected, csv_line, update_csv = draw_bounding_box_on_image_array(current_frame_number,
-            #     image,
-            #     ymin,
-            #     xmin,
-            #     ymax,
-            #     xmax,
-            #     color=color,
-            #     thickness=line_thickness,
-            #     display_str_list=box_to_display_str_map[box],
-            #     use_normalized_coordinates=use_normalized_coordinates) 
-      
-            # if keypoints is not None:
-            #   draw_keypoints_on_image_array(
-            #       image,
-            #       box_to_keypoints_map[box],
-            #       color=color,
-            #       radius=line_thickness / 2,
-            #       use_normalized_coordinates=use_normalized_coordinates)
             image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
             im_height, im_width, _ = image.shape
             if use_normalized_coordinates:
@@ -556,24 +541,77 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               np.copyto(image, np.array(image_pil))
 
               counters[display_str_list[0][:-5]]+=1
-              # print("Frame no.", current_frame_number)
-              # if "person" not in display_str_list[0]:
-              #   tracker_name = "kcf"
               util_track.add_new_object((top, left, bottom, right), image, counters, trackers, tracker_name, str(current_frame_number)[:-2])
 
-            
-  # return counters
- 
-  # if(1 in is_vehicle_detected):
-  #   counter = 1
-  #   del is_vehicle_detected[:]
-  #   is_vehicle_detected = []        
-  #   if(class_name == "boat"):
-  #     class_name = "truck"
-  #   csv_line_util = class_name + "," + csv_line
 
-  # return counter, csv_line_util
+def non_max_suppression(boxes, max_bbox_overlap, scores=None):
+    """Suppress overlapping detections.
 
+    Original code from [1]_ has been adapted to include confidence score.
+
+    .. [1] http://www.pyimagesearch.com/2015/02/16/
+           faster-non-maximum-suppression-python/
+
+    Examples
+    --------
+
+        >>> boxes = [d.roi for d in detections]
+        >>> scores = [d.confidence for d in detections]
+        >>> indices = non_max_suppression(boxes, max_bbox_overlap, scores)
+        >>> detections = [detections[i] for i in indices]
+
+    Parameters
+    ----------
+    boxes : ndarray
+        Array of ROIs (x, y, width, height).
+    max_bbox_overlap : float
+        ROIs that overlap more than this values are suppressed.
+    scores : Optional[array_like]
+        Detector confidence score.
+
+    Returns
+    -------
+    List[int]
+        Returns indices of detections that have survived non-maxima suppression.
+
+    """
+    if len(boxes) == 0:
+        return []
+
+    boxes = boxes.astype(np.float)
+    pick = []
+
+    x1 = boxes[:, 0]
+    y1 = boxes[:, 1]
+    x2 = boxes[:, 2] + boxes[:, 0]
+    y2 = boxes[:, 3] + boxes[:, 1]
+
+    area = (x2 - x1 + 1) * (y2 - y1 + 1)
+    if scores is not None:
+        idxs = np.argsort(scores)
+    else:
+        idxs = np.argsort(y2)
+
+    while len(idxs) > 0:
+        last = len(idxs) - 1
+        i = idxs[last]
+        pick.append(i)
+
+        xx1 = np.maximum(x1[i], x1[idxs[:last]])
+        yy1 = np.maximum(y1[i], y1[idxs[:last]])
+        xx2 = np.minimum(x2[i], x2[idxs[:last]])
+        yy2 = np.minimum(y2[i], y2[idxs[:last]])
+
+        w = np.maximum(0, xx2 - xx1 + 1)
+        h = np.maximum(0, yy2 - yy1 + 1)
+
+        overlap = (w * h) / area[idxs[:last]]
+
+        idxs = np.delete(
+            idxs, np.concatenate(
+                ([last], np.where(overlap > max_bbox_overlap)[0])))
+
+    return pick
 
 def add_cdf_image_summary(values, name):
   """Adds a tf.summary.image for a CDF plot of the values.

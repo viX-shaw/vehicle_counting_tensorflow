@@ -227,77 +227,7 @@ def object_detection_function():
                     cv2.FONT_HERSHEY_SIMPLEX,
                     )
 
-                # when the vehicle passed over line and counted, make the color of ROI line green
-                # if counter == 1:
-                #     cv2.line(input_frame, (0, 420), (1280, 420), (0, 0xFF, 0), 5)
-                # else:
-                #     cv2.line(input_frame, (0, 420), (1280, 420), (0, 0, 0xFF), 5)
-
-                # insert information text to video frame
-                # cv2.circle(input_frame, (400, 380), 310, (10,100,210), 2)
-                # cv2.rectangle(input_frame, (10, 275), (230, 337), (180, 132, 109), -1)
-                # # cv2.putText(
-                # #     input_frame,
-                # #     'ROI Line',
-                # #     (545, 410),
-                # #     font,
-                # #     0.6,
-                # #     (0, 0, 0xFF),
-                # #     2,
-                # #     cv2.LINE_AA,
-                # #     )
-                # cv2.putText(
-                #     input_frame,
-                #     'LAST PASSED VEHICLE INFO',
-                #     (11, 290),
-                #     font,
-                #     0.5,
-                #     (0xFF, 0xFF, 0xFF),
-                #     1,
-                #     cv2.FONT_HERSHEY_SIMPLEX,
-                #     )
-                # cv2.putText(
-                #     input_frame,
-                #     '-Movement Direction: ' + direction,
-                #     (14, 302),
-                #     font,
-                #     0.4,
-                #     (0xFF, 0xFF, 0xFF),
-                #     1,
-                #     cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                #     )
-                # cv2.putText(
-                #     input_frame,
-                #     '-Speed(km/h): ' + speed,
-                #     (14, 312),
-                #     font,
-                #     0.4,
-                #     (0xFF, 0xFF, 0xFF),
-                #     1,
-                #     cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                #     )
-                # cv2.putText(
-                #     input_frame,
-                #     '-Color: ' + color,
-                #     (14, 322),
-                #     font,
-                #     0.4,
-                #     (0xFF, 0xFF, 0xFF),
-                #     1,
-                #     cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                #     )
-                # cv2.putText(
-                #     input_frame,
-                #     '-Vehicle Size/Type: ' + size,
-                #     (14, 332),
-                #     font,
-                #     0.4,
-                #     (0xFF, 0xFF, 0xFF),
-                #     1,
-                #     cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                    # )
-
-                # cv2.imshow('vehicle detection', input_frame)
+               
                 cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, cap.get(1)), input_frame)
 
 
