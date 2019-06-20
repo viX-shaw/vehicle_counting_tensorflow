@@ -506,9 +506,9 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   nms_boxes = [(xmin, ymin, xmax-xmin, ymax-ymin) for (ymin, xmin, ymax, xmax), _ in box_to_color_map.items()]
   nms_indices = non_max_suppression(nms_boxes, 0.6)
 
-  dt_boxes = [box_to_color_map.items()[i][0] for i in nms_indices]
+  dt_boxes = [box_to_color_map.items()[i] for i in nms_indices]
   # Draw all boxes onto image.
-  for box in dt_boxes:
+  for box, c in dt_boxes:
     if int(current_frame_number) % 100 == 0:
       print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
     ymin, xmin, ymax, xmax = box
