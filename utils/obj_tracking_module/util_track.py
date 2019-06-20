@@ -134,10 +134,11 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
     fontface = cv2.FONT_HERSHEY_SIMPLEX
     fontscale = 1
     thickness = 1
+    idx = 0
 
     # for n, pair in enumerate(trackers):
-    while n < len(trackers):
-        tracker, car, age, _ = trackers[n]
+    while idx < len(trackers):
+        tracker, car, age, _ = trackers[idx]
         textsize, _baseline = cv2.getTextSize(
             car, fontface, fontscale, thickness)
         success, bbox = tracker.update(image)
@@ -193,7 +194,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         # else:
             # Rectangle and number on the cars we are tracking
         label_object(color, RED, fontface, image, car, textsize, 2, xmax, xmid, xmin, ymax, ymid, ymin)
-        n +=1
+        idx +=1
     # Add finish line overlay/line
     # overlay = image.copy()
 
