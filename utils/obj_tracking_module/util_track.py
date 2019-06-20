@@ -247,8 +247,8 @@ def _cosine_distance(a, b, data_is_normalized=False):
         contains the squared distance between `a[i]` and `b[j]`.
 
     """
-    a = np.squeeze(a)
-    b = np.squeeze(b)
+    a = np.squeeze(a, axis = 1)
+    # b = np.squeeze(b)
     print(a.shape, b.shape)
     if not data_is_normalized:
         a = np.asarray(a) / np.linalg.norm(a, axis=1, keepdims=True)
