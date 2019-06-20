@@ -100,7 +100,7 @@ class ImageEncoder(object):
         _run_in_batches(
             lambda x: self.session.run(self.output_var, feed_dict=x),
             {self.input_var: data_x}, out, batch_size)
-        return out
+        return np.squeeze(out).tolist()
 
 
 def create_box_encoder(model_filename, input_name="images",
