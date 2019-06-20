@@ -154,7 +154,8 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-        distance = _nn_cosine_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
+        a = np.squeeze(np.asarray(_[-72:]), axis = 1)
+        distance = _nn_euclidean_distance(a, np.asarray(dt_feature))
         print(distance)
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
@@ -247,9 +248,6 @@ def _cosine_distance(a, b, data_is_normalized=False):
         contains the squared distance between `a[i]` and `b[j]`.
 
     """
-    a = np.squeeze(a, axis = 1)
-    # b = np.squeeze(b)
-    print(a.shape, b.shape)
     if not data_is_normalized:
         a = np.asarray(a) / np.linalg.norm(a, axis=1, keepdims=True)
         b = np.asarray(b) / np.linalg.norm(b, axis=1, keepdims=True)
