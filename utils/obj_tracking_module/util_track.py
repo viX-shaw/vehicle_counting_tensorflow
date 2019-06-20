@@ -76,7 +76,7 @@ def not_tracked(image, object_, boxes, trackers):
 
     ymin, xmin, ymax, xmax = object_
     new_objects = []
-    
+    f = 1
     ymid = int(round((ymin+ymax)/2))
     xmid = int(round((xmin+xmax)/2))
 
@@ -113,8 +113,9 @@ def not_tracked(image, object_, boxes, trackers):
             t=trackers[i]
             t[2]=0 #Resetting age on detection
             t[3].append(dt_feature)
+            f=0
             break
-    else:
+    if f=1:
         new_objects.append(object_)
 
     return True if len(new_objects)>0 else False
