@@ -65,7 +65,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     if success:
         feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
-        trackers.append([tracker, label, age, [feature]])
+        trackers.append([tracker, label, age, feature])
     # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(image, object_, boxes, trackers):
@@ -155,6 +155,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         distance = _nn_cosine_distance(np.asarray(_[-72:]), np.asarray(dt_feature))
+        print(distance)
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
         # print(distance)
