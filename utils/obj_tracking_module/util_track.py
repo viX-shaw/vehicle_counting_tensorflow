@@ -143,7 +143,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
             car, fontface, fontscale, thickness)
         success, bbox = tracker.update(image)
         # print("Tracker object", tracker.update(image))
-
+        pair = trackers[idx]
         if not success:
             counters['lost_trackers'] += 1
             # print("Lost tracker no.", car)
@@ -153,7 +153,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         # print("Age", age)
         # print("length of feats", len(_))
         xmin = int(bbox[0])
-        ymin = int(bbox[1   ])
+        ymin = int(bbox[1])
         xmax = int(bbox[0] + bbox[2])
         ymax = int(bbox[1] + bbox[3])
         xmid = int(round((xmin+xmax)/2))
