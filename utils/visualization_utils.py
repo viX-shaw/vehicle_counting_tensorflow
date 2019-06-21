@@ -426,7 +426,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               keypoints=None,
                                               use_normalized_coordinates=False,
                                               max_boxes_to_draw=20,
-                                              min_score_thresh=.52,
+                                              min_score_thresh=.6,
                                               agnostic_mode=False,
                                               line_thickness=4):
   """Overlay labeled boxes on an image with formatted scores and label names.
@@ -504,7 +504,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # Update all tracked boxes from previous frame
   # tracker_boxes = util_track.update_trackers(image, counters, trackers)
   nms_boxes = [(xmin, ymin, xmax-xmin, ymax-ymin) for (ymin, xmin, ymax, xmax), _ in box_to_color_map.items()]
-  nms_indices = non_max_suppression(nms_boxes, 0.7)
+  nms_indices = non_max_suppression(nms_boxes, 1.0)
 
   # print(len(nms_boxes), len(nms_indices))
   # nms_boxes = box_to_color_map.items()
