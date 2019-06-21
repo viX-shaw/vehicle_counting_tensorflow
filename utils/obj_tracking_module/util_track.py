@@ -70,7 +70,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(image, object_, boxes, trackers, threshold):
-    print("Eu threshold", threshold)
+    # print("Eu threshold", threshold)
     if not object_:
         # return []  # No new classified objects to search for
         return False
@@ -150,7 +150,7 @@ def label_object(color, textcolor, fontface, image, car, textsize, thickness, xm
 
 
 def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72):
-    print("Max age", max_age)
+    # print("Max age", max_age)
     boxes = []
     color = (80, 220, 60)
     fontface = cv2.FONT_HERSHEY_SIMPLEX
