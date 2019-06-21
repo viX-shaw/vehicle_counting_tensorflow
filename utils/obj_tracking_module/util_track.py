@@ -123,7 +123,7 @@ def not_tracked(image, object_, boxes, trackers):
 
             eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
             if eu_dist < 0.2:
-                xmin, ymin, xmax, ymax = bx
+                # xmin, ymin, xmax, ymax = bx
                 t =trackers[x]
 
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
