@@ -131,6 +131,7 @@ def not_tracked(image, object_, boxes, trackers):
                 print((xmin, ymin, xmax-xmin, ymax-ymin))
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
                 if success:
+                    print("Re-initializing tracker ",cn, t[1])
                     t[0] = tr
                     t[2] = 0
                     break
