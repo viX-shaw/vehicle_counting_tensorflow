@@ -128,6 +128,7 @@ def not_tracked(image, object_, boxes, trackers):
 
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
                 cv2.imwrite("/content/img.jpg", image)
+                print((xmin, ymin, xmax-xmin, ymax-ymin))
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
                 if success:
                     t[0] = tr
