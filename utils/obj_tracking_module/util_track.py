@@ -69,7 +69,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
         print("Car - ", label, "is added")
     # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-def not_tracked(image, object_, boxes, trackers):
+def not_tracked(image, object_, boxes, trackers, threshold):
     if not object_:
         # return []  # No new classified objects to search for
         return False
@@ -123,7 +123,7 @@ def not_tracked(image, object_, boxes, trackers):
 
             eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
             print("dist -", eu_dist)
-            if eu_dist < 0.12:
+            if eu_dist < threshold:
                 # xmin, ymin, xmax, ymax = bx
                 t =trackers[x]
 

@@ -426,7 +426,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               keypoints=None,
                                               use_normalized_coordinates=False,
                                               max_boxes_to_draw=20,
-                                              min_score_thresh=.4,
+                                              min_score_thresh=.55,
+                                              eu_threshold=0.2,
                                               agnostic_mode=False,
                                               line_thickness=4):
   """Overlay labeled boxes on an image with formatted scores and label names.
@@ -536,7 +537,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                             ymin * im_height, ymax * im_height)
             # with open('det.txt', 'a') as f:
             #   f.write("{},-1,{},{},{},{},0.4,-1,-1,-1\n".format(str(current_frame_number)[:-2], left, top, right-left, bottom-top))
-            if util_track.not_tracked(image, (top, left, bottom, right), tracker_boxes, trackers):
+            if util_track.not_tracked(image, (top, left, bottom, right), tracker_boxes, trackers, eu_threshold):
               
               # generating detections for deep-mot-sort
               image_temp = numpy.array(image_pil)              

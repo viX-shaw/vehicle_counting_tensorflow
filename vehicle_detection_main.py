@@ -43,7 +43,8 @@ parser.add_argument("--tracker","-t", type = str, default = "kcf", help = "openC
         medianflow: cv2.TrackerMedianFlow_create,\
         mosse: cv2.TrackerMOSSE_create")
 parser.add_argument("--center","-c", type = str, required = False)
-parser.add_argument("--radius", type = int, required =False)
+parser.add_argument("--threshold", type = float, required =False)
+parser.add_argument("--eu_threshold", type = float, required =False)
 parser.add_argument("--sr", type = int, default = 3, required =False, help = "interval at frames are used for detection")
 
 parser.add_argument("--model_name", type = str, default = "ssd_mobilenet_v1_coco_2018_01_28")
@@ -193,6 +194,8 @@ def object_detection_function():
                     tracker_boxes,
                     counters,
                     use_normalized_coordinates=True,
+                    min_score_thresh = params.threshold,
+                    eu_threshold = params.eu_threshold,
                     line_thickness=4,
                     )
 
