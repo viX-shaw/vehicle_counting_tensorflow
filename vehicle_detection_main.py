@@ -44,7 +44,8 @@ parser.add_argument("--tracker","-t", type = str, default = "kcf", help = "openC
         mosse: cv2.TrackerMOSSE_create")
 parser.add_argument("--center","-c", type = str, required = False)
 parser.add_argument("--threshold", type = float, required =False)
-parser.add_argument("--eu_threshold", type = float, required =False)
+parser.add_argument("--eu_threshold", type = int, required =False)
+parser.add_argument("--age", type = int, required =False)
 parser.add_argument("--sr", type = int, default = 3, required =False, help = "interval at frames are used for detection")
 
 parser.add_argument("--model_name", type = str, default = "ssd_mobilenet_v1_coco_2018_01_28")
@@ -164,7 +165,7 @@ def object_detection_function():
                 # else:
                 #     print("Diff objects")
                 # input_frame = load_image_into_numpy_array(frame)
-                tracker_boxes = util_track.update_trackers(input_frame, copy_frame, counters, trackers,str(cap.get(1))[:-2])
+                tracker_boxes = util_track.update_trackers(input_frame, copy_frame, counters, trackers,str(cap.get(1))[:-2], params.age)
                 # print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
