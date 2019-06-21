@@ -115,6 +115,7 @@ def not_tracked(image, object_, boxes, trackers):
             t[3].append(dt_feature)
             break
     else:
+        ymin, xmin, ymax, xmax = int(object_)
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         for x, (bx, cn, ft) in enumerate(boxes):
 
