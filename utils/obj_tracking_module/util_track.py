@@ -115,29 +115,29 @@ def not_tracked(image, object_, boxes, trackers):
             t[3].append(dt_feature)
             break
     else:
-        # ymin, xmin, ymax, xmax = [int(en) for en in object_]
-        # dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
-        # for x, (bx, cn, ft) in enumerate(boxes):
+        ymin, xmin, ymax, xmax = [int(en) for en in object_]
+        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
+        for x, (bx, cn, ft) in enumerate(boxes):
 
-        #     a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
+            a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
 
-        #     eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
-        #     print("dist -", eu_dist)
-        #     if eu_dist < 0.2:
-        #         # xmin, ymin, xmax, ymax = bx
-        #         t =trackers[x]
+            eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
+            print("dist -", eu_dist)
+            if eu_dist < 0.2:
+                # xmin, ymin, xmax, ymax = bx
+                t =trackers[x]
 
-        #         tr = OPENCV_OBJECT_TRACKERS["csrt"]()
-        #         cv2.imwrite("/content/img.jpg", image)
-        #         print((xmin, ymin, xmax-xmin, ymax-ymin))
-        #         success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-        #         if success:
-        #             print("Re-initializing tracker ",cn, t[1])
-        #             t[0] = tr
-        #             t[2] = 0
-        #             break
-        # else:
-        new_objects.append(object_)
+                tr = OPENCV_OBJECT_TRACKERS["csrt"]()
+                cv2.imwrite("/content/img.jpg", image)
+                print((xmin, ymin, xmax-xmin, ymax-ymin))
+                success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+                if success:
+                    print("Re-initializing tracker ",cn, t[1])
+                    t[0] = tr
+                    t[2] = 0
+                    break
+        else:
+            new_objects.append(object_)
 
     return True if len(new_objects)>0 else False
 
@@ -195,7 +195,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame):
         # else:
         #     pair[3].append(dt_feature)
 
-        if age >= 48:
+        if age >= 72:
             print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
             del trackers[idx]
             continue
