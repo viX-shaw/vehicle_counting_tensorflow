@@ -43,9 +43,9 @@ parser.add_argument("--tracker","-t", type = str, default = "kcf", help = "openC
         medianflow: cv2.TrackerMedianFlow_create,\
         mosse: cv2.TrackerMOSSE_create")
 parser.add_argument("--center","-c", type = str, required = False)
-parser.add_argument("--threshold", type = float, required =False)
-parser.add_argument("--eu_threshold", type = int, required =False)
-parser.add_argument("--age", type = int, required =False)
+parser.add_argument("--threshold", type = float, default= 0.55, required =False)
+parser.add_argument("--eu_threshold", type = float, default=0.2, required =False)
+parser.add_argument("--age", type = int, default=72, required =False)
 parser.add_argument("--sr", type = int, default = 3, required =False, help = "interval at frames are used for detection")
 
 parser.add_argument("--model_name", type = str, default = "ssd_mobilenet_v1_coco_2018_01_28")
