@@ -123,7 +123,7 @@ def not_tracked(image, object_, boxes, trackers):
 
             eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
             print("dist -", eu_dist)
-            if eu_dist < 0.2:
+            if eu_dist < 0.12:
                 # xmin, ymin, xmax, ymax = bx
                 t =trackers[x]
 
