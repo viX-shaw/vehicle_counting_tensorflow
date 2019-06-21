@@ -76,7 +76,7 @@ def not_tracked(image, object_, boxes, trackers):
 
     ymin, xmin, ymax, xmax = object_
     new_objects = []
-    f = 1
+
     ymid = int(round((ymin+ymax)/2))
     xmid = int(round((xmin+xmax)/2))
 
@@ -113,10 +113,26 @@ def not_tracked(image, object_, boxes, trackers):
             t=trackers[i]
             t[2]=0 #Resetting age on detection
             t[3].append(dt_feature)
-            f=0
             break
-    if f==1:
-        new_objects.append(object_)
+    else:
+        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
+        for x, (bx, cn, ft) in enumerate(boxes):
+
+            a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
+
+            eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
+            if eu_dist < 0.2:
+                xmin, ymin, xmax, ymax = bx
+                t =trackers[x]
+
+                tr = OPENCV_OBJECT_TRACKERS["csrt"]()
+                success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+                if success:
+                    t[0] = tr
+                    t[2] = 0
+                    break
+        else:
+            new_objects.append(object_)
 
     return True if len(new_objects)>0 else False
 
