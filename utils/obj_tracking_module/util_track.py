@@ -95,7 +95,7 @@ def not_tracked(image, object_, boxes, trackers, threshold):
         bxmid = int((bxmin + bxmax) / 2)
         bymid = int((bymin + bymax) / 2)
         dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)
-        # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
+        print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
         if dist <= box_range:
             # print("car no ", car_no, "is in range")
             # found existing, so break (do not add to new_objects)
@@ -123,14 +123,13 @@ def not_tracked(image, object_, boxes, trackers, threshold):
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
 
             eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
-            print("dist -", eu_dist)
+            # print("dist -", eu_dist)
             if eu_dist < threshold:
                 # xmin, ymin, xmax, ymax = bx
                 t =trackers[x]
 
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
-                cv2.imwrite("/content/img.jpg", image)
-                print((xmin, ymin, xmax-xmin, ymax-ymin))
+                # print((xmin, ymin, xmax-xmin, ymax-ymin))
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
                 if success:
                     print("Re-initializing tracker ",cn, t[1])
