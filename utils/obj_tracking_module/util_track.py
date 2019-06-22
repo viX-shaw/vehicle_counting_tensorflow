@@ -112,8 +112,8 @@ def not_tracked(image, object_, trackers, threshold):
             #     #needs the whole track object
             #     del trackers[i]
             t=trackers[i]
-            t[2]=0 #Resetting age on detection
-            t[3].append(dt_feature)
+            t[3]=0 #Resetting age on detection
+            t[4].append(dt_feature)
             break
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
