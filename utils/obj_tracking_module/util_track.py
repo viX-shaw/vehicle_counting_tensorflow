@@ -69,7 +69,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
         print("Car - ", label, "is added")
     # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-def not_tracked(image, object_, boxes, trackers, threshold):
+def not_tracked(image, object_, trackers, threshold):
     # print("Eu threshold", threshold)
     if not object_:
         # return []  # No new classified objects to search for
@@ -83,11 +83,11 @@ def not_tracked(image, object_, boxes, trackers, threshold):
 
     dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
     # if dist<=radius*0.93:
-    if not boxes:
+    if not trackers:
         # return objects  # No existing boxes, return all objects
         return True
     box_range = ((xmax - xmin) + (ymax - ymin)) / 2
-    for i, (bbox, car_no, feature) in enumerate(boxes):
+    for i, (bbox, car_no, _, feature) in enumerate(trackers):
         bxmin = int(bbox[0])
         bymin = int(bbox[1])
         bxmax = int(bbox[0] + bbox[2])
@@ -150,7 +150,6 @@ def label_object(color, textcolor, fontface, image, car, textsize, thickness, xm
 
 def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72):
     # print("Max age", max_age)
-    boxes = []
     color = (80, 220, 60)
     fontface = cv2.FONT_HERSHEY_SIMPLEX
     fontscale = 1
@@ -202,7 +201,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
             del trackers[idx]
             continue
 
-        boxes.append((bbox, car, _))  # Return updated box list        
+        # boxes.append((bbox, car, _))  # Return updated box list        
 
         # if ymid >= ROI_YMAX:
         #     label_object(WHITE, WHITE, fontface, image, car, textsize, 1, xmax, xmid, xmin, ymax, ymid, ymin)
@@ -246,7 +245,6 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
 
     # counters['left_lane'] = left_lane
     # counters['right_lane'] = right_lane
-    return boxes
 
 def in_range(obj):
     ymin = obj['ymin']

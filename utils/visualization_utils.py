@@ -420,7 +420,6 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               category_index,
                                               tracker_name,
                                               trackers,
-                                              tracker_boxes,
                                               counters,
                                               instance_masks=None,
                                               keypoints=None,
@@ -537,8 +536,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                             ymin * im_height, ymax * im_height)
             # with open('det.txt', 'a') as f:
             #   f.write("{},-1,{},{},{},{},0.4,-1,-1,-1\n".format(str(current_frame_number)[:-2], left, top, right-left, bottom-top))
-            if util_track.not_tracked(image, (top, left, bottom, right), tracker_boxes, trackers, eu_threshold):
-              print("Trackers ",[t[1] for t in trackers])
+            if util_track.not_tracked(image, (top, left, bottom, right), trackers, eu_threshold):
               
               # generating detections for deep-mot-sort
               image_temp = numpy.array(image_pil)              
@@ -549,6 +547,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
               counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object((top, left, bottom, right), image, counters, trackers, tracker_name, str(current_frame_number)[:-2])
+              print("Trackers ",[t[1] for t in trackers])
 
 
 def non_max_suppression(boxes, max_bbox_overlap, scores=None):
