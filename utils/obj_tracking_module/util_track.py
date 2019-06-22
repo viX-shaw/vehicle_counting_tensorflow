@@ -158,6 +158,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
     idx = 0
 
     # for n, pair in enumerate(trackers):
+    print("Trackers ",[t[1] for t in trackers])
     while idx < len(trackers):
         tracker, car, age, _ = trackers[idx]
         textsize, _baseline = cv2.getTextSize(
