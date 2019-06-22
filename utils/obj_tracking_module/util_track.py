@@ -65,7 +65,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     if success:
         feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
-        trackers.append([tracker, label, age, [feature]])
+        trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature]])
         print("Car - ", label, "is added")
     # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
@@ -87,7 +87,7 @@ def not_tracked(image, object_, trackers, threshold):
         # return objects  # No existing boxes, return all objects
         return True
     box_range = ((xmax - xmin) + (ymax - ymin)) / 2
-    for i, (bbox, car_no, _, feature) in enumerate(trackers):
+    for i, (tracker, bbox, car_no, _, feature) in enumerate(trackers):
         bxmin = int(bbox[0])
         bymin = int(bbox[1])
         bxmax = int(bbox[0] + bbox[2])
@@ -118,7 +118,7 @@ def not_tracked(image, object_, trackers, threshold):
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
-        for x, (bx, cn, ft) in enumerate(boxes):
+        for x, (_, _, cn, _, ft) in enumerate(trackers):
 
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
 
@@ -132,9 +132,9 @@ def not_tracked(image, object_, trackers, threshold):
                 # print((xmin, ymin, xmax-xmin, ymax-ymin))
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
                 if success:
-                    print("Re-initializing tracker ",cn, t[1])
+                    print("Re-initializing tracker ",cn, t[2])
                     t[0] = tr
-                    t[2] = 0
+                    t[3] = 0
                     break
         else:
             new_objects.append(object_)
@@ -159,7 +159,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
     # for n, pair in enumerate(trackers):
     # print("Trackers ",[t[1] for t in trackers])
     while idx < len(trackers):
-        tracker, car, age, _ = trackers[idx]
+        tracker, bx, car, age, _ = trackers[idx]
         textsize, _baseline = cv2.getTextSize(
             car, fontface, fontscale, thickness)
         success, bbox = tracker.update(image)
@@ -171,6 +171,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
             del trackers[idx]
             continue
 
+        pair[1] = bbox  #Updating current bbox of tracker "car"
         # print("Age", age)
         # print("length of feats", len(_))
         xmin = int(bbox[0])
@@ -192,7 +193,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
         if abs(distance) > 0.2:
             # print("Working")
             #needs the whole track object
-            pair[2]+=1
+            pair[3]+=1
         # else:
         #     pair[3].append(dt_feature)
 
