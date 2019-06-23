@@ -229,6 +229,8 @@ def object_detection_function():
                     2,
                     cv2.FONT_HERSHEY_SIMPLEX,
                     )
+                cv2.putText(input_frame, "Frame -"+str(cap.get[1])[:-2], (1000, 35),
+                     font, 0.8, (0,0,255), 2, cv2.FONT_HERSHEY_SIMPLEX)
 
                
                 cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, cap.get(1)), input_frame)
