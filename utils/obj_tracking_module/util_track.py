@@ -69,7 +69,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
         print("Car - ", label, "is added")
     # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-def not_tracked(image, object_, trackers, threshold):
+def not_tracked(image, object_, trackers, threshold, curr_frame_no):
     # print("Eu threshold", threshold)
     if not object_:
         # return []  # No new classified objects to search for
@@ -95,14 +95,14 @@ def not_tracked(image, object_, trackers, threshold):
         bxmid = int((bxmin + bxmax) / 2)
         bymid = int((bymin + bymax) / 2)
         dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)
-        print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
+        # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
         if dist <= box_range:
             # print("car no ", car_no, "is in range")
             # found existing, so break (do not add to new_objects)
             #compute cosine distance b/w track feature and matched detection
 
             #in the parameters also pass features of all tracks
-            dt_feature = feature_generator(image, [bbox])
+            dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
             # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
             # distance = _nn_cosine_distance(np.asarray(feature), np.asarray(dt_feature))
             # with open("Cosine-distances.txt", 'a') as f:
@@ -112,9 +112,15 @@ def not_tracked(image, object_, trackers, threshold):
             #     #needs the whole track object
             #     del trackers[i]
             t=trackers[i]
-            t[3]=0 #Resetting age on detection
-            t[4].append(dt_feature)
-            break
+            tr = OPENCV_OBJECT_TRACKERS["csrt"]()
+            success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+            if success:
+                with('./Re-identification.txt', 'a') as f:
+                    f.write("Updating tracker {} in frame {}".format(car_no, curr_frame_no))
+                t[0] = tr
+                t[3]=0 #Resetting age on detection
+                t[4].append(dt_feature)
+                break
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
@@ -132,7 +138,9 @@ def not_tracked(image, object_, trackers, threshold):
                 # print((xmin, ymin, xmax-xmin, ymax-ymin))
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
                 if success:
-                    print("Re-initializing tracker ",cn, t[2])
+                    with('./Re-identification.txt', 'a') as f:
+                        f.write("Re-initializing tracker {} in frame {}".format(cn, curr_frame_no))
+                    # print("Re-initializing tracker ",cn, t[2])
                     t[0] = tr
                     t[3] = 0
                     break
