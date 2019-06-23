@@ -547,7 +547,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
               counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object((top, left, bottom, right), image, counters, trackers, tracker_name, str(current_frame_number)[:-2])
-              print("Trackers ",[t[1] for t in trackers])
+              print("Trackers ",[t[2] for t in trackers])
 
 
 def non_max_suppression(boxes, max_bbox_overlap, scores=None):
