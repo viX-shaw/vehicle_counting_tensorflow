@@ -96,7 +96,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
         bymax = int(bbox[1] + bbox[3])
         bxmid = int((bxmin + bxmax) / 2)
         bymid = int((bymin + bymax) / 2)
-        dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)
+        dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)/2
         print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
         if dist <= box_range:
             # print("car no ", car_no, "is in range")
@@ -204,7 +204,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
         # print(distance)
-        if abs(distance) > 0.2:
+        if abs(distance) > 0.23:
             # print("Working")
             #needs the whole track object
             pair[3]+=1
