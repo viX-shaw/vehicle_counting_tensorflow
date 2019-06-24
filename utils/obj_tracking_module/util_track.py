@@ -104,7 +104,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
             #compute cosine distance b/w track feature and matched detection
 
             #in the parameters also pass features of all tracks
-            dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
+            dt_feature = feature_generator(image, [bbox])
             # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
             # distance = _nn_cosine_distance(np.asarray(feature), np.asarray(dt_feature))
             # with open("Cosine-distances.txt", 'a') as f:
