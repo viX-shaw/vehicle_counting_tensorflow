@@ -86,11 +86,8 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
     if not trackers:
         # return objects  # No existing boxes, return all objects
         return True
-    box_range = 0.0
-    if (xmax - xmin) > (ymax - ymin):
-        box_range = (xmax - xmin) / 2
-    else:
-        box_range = (ymax - ymin) / 2
+
+    box_range = ((xmax - xmin)+(ymax - ymin)) / 2
 
     for i, (tracker, bbox, car_no, _, feature) in enumerate(trackers):
         bxmin = int(bbox[0])
@@ -117,15 +114,17 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
             #     #needs the whole track object
             #     del trackers[i]
             t=trackers[i]
-            tr = OPENCV_OBJECT_TRACKERS["csrt"]()
-            success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-            if success:
-                with open('./Re-identification.txt', 'a') as f:
-                    f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
-                t[0] = tr
-                t[3]=0 #Resetting age on detection
-                t[4].append(dt_feature)
-                break
+            t[3]=0 #Resetting age on detection
+            if dist <= 7.0:
+                tr = OPENCV_OBJECT_TRACKERS["csrt"]()
+                success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+                if success:
+                    with open('./Re-identification.txt', 'a') as f:
+                        f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
+                    del t[0]
+                    t[0] = tr
+                    t[4].append(dt_feature)
+            break
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
@@ -146,8 +145,10 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
                     with open('./Re-identification.txt', 'a') as f:
                         f.write("Re-initializing tracker {} in frame {}\n".format(cn, curr_frame_no))
                     # print("Re-initializing tracker ",cn, t[2])
+                    del t[0]
                     t[0] = tr
                     t[3] = 0
+                    t[4].append(dt_ft)
                     break
         else:
             new_objects.append(object_)
