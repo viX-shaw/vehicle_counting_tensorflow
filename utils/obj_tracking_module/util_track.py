@@ -81,13 +81,13 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
     ymid = int(round((ymin+ymax)/2))
     xmid = int(round((xmin+xmax)/2))
 
-    dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
+    # dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
     # if dist<=radius*0.93:
     if not trackers:
         # return objects  # No existing boxes, return all objects
         return True
 
-    box_range = ((xmax - xmin)+(ymax - ymin)) / 2
+    box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)
 
     for i, (tracker, bbox, car_no, _, feature) in enumerate(trackers):
         bxmin = int(bbox[0])
@@ -116,7 +116,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
             t=trackers[i]
             t[4].append(dt_feature)
             t[3]=0 #Resetting age on detection
-            if dist <= 7.0:
+            if dist <= 15.0:
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
                 if success:
