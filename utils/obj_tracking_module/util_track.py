@@ -121,7 +121,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
             success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
             if success:
                 with open('./Re-identification.txt', 'a') as f:
-                    f.write("Updating tracker {} in frame {}".format(car_no, curr_frame_no))
+                    f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
                 t[0] = tr
                 t[3]=0 #Resetting age on detection
                 t[4].append(dt_feature)
@@ -134,7 +134,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
 
             eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
-            # print("dist -", eu_dist)
+            print("car no ", cn, "eu-dist -", eu_dist)
             if eu_dist < threshold:
                 # xmin, ymin, xmax, ymax = bx
                 t =trackers[x]
@@ -144,7 +144,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
                 if success:
                     with open('./Re-identification.txt', 'a') as f:
-                        f.write("Re-initializing tracker {} in frame {}".format(cn, curr_frame_no))
+                        f.write("Re-initializing tracker {} in frame {}\n".format(cn, curr_frame_no))
                     # print("Re-initializing tracker ",cn, t[2])
                     t[0] = tr
                     t[3] = 0
