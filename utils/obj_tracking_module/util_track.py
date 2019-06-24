@@ -100,8 +100,8 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
         bxmid = int((bxmin + bxmax) / 2)
         bymid = int((bymin + bymax) / 2)
         dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)
+        print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
         if dist <= box_range:
-            print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
             # print("car no ", car_no, "is in range")
             # found existing, so break (do not add to new_objects)
             #compute cosine distance b/w track feature and matched detection
