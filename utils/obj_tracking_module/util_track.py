@@ -87,7 +87,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
         # return objects  # No existing boxes, return all objects
         return True
 
-    box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)
+    box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2
 
     for i, (tracker, bbox, car_no, _, feature) in enumerate(trackers):
         bxmin = int(bbox[0])
@@ -96,7 +96,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
         bymax = int(bbox[1] + bbox[3])
         bxmid = int((bxmin + bxmax) / 2)
         bymid = int((bymin + bymax) / 2)
-        dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)/2
+        dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)
         print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
         if dist <= box_range:
             # print("car no ", car_no, "is in range")
@@ -104,7 +104,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
             #compute cosine distance b/w track feature and matched detection
 
             #in the parameters also pass features of all tracks
-            dt_feature = feature_generator(image, [bbox])
+            dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
             # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
             # distance = _nn_cosine_distance(np.asarray(feature), np.asarray(dt_feature))
             # with open("Cosine-distances.txt", 'a') as f:
