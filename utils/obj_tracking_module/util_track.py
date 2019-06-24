@@ -121,7 +121,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
                 if success:
                     with open('./Re-identification.txt', 'a') as f:
                         f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
-                    del t[0]
+                    # del t[0]
                     t[0] = tr
                     t[4].append(dt_feature)
             break
@@ -145,7 +145,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
                     with open('./Re-identification.txt', 'a') as f:
                         f.write("Re-initializing tracker {} in frame {}\n".format(cn, curr_frame_no))
                     # print("Re-initializing tracker ",cn, t[2])
-                    del t[0]
+                    # del t[0]
                     t[0] = tr
                     t[3] = 0
                     t[4].append(dt_ft)
