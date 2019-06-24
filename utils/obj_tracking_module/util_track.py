@@ -87,7 +87,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
         # return objects  # No existing boxes, return all objects
         return True
     box_range = 0.0
-    if (xmax - xmin) < (ymax - ymin):
+    if (xmax - xmin) > (ymax - ymin):
         box_range = (xmax - xmin) / 2
     else:
         box_range = (ymax - ymin) / 2
