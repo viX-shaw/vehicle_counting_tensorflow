@@ -114,7 +114,6 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
             #     #needs the whole track object
             #     del trackers[i]
             t=trackers[i]
-            t[4].append(dt_feature)
             t[3]=0 #Resetting age on detection
             if dist <= 2.0: #15.0 
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
@@ -123,6 +122,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
                     with open('./Re-identification.txt', 'a') as f:
                         f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
                     # del t[0]
+                    t[4].append(dt_feature)
                     t[0] = tr
             break
     else:
