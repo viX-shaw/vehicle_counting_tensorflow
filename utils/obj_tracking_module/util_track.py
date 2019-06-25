@@ -116,7 +116,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
             t=trackers[i]
             t[4].append(dt_feature)
             t[3]=0 #Resetting age on detection
-            if dist <= 15.0:
+            if dist <= 2.0: #15.0 
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
                 if success:
@@ -204,7 +204,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
         # print(distance)
-        if abs(distance) > 0.23:
+        if abs(distance) > 0.2:
             # print("Working")
             #needs the whole track object
             pair[3]+=1
