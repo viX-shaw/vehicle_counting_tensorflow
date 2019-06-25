@@ -87,8 +87,8 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
         # return objects  # No existing boxes, return all objects
         return True
 
-    # box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    UNCOMMENT
-    box_range = 10.0
+    box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    UNCOMMENT
+    # box_range = 10.0
 
     for i, (tracker, bbox, car_no, _, feature) in enumerate(trackers):
         bxmin = int(bbox[0])
@@ -116,15 +116,15 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
             #     del trackers[i]
             t=trackers[i]
             t[3]=0 #Resetting age on detection
+            t[4].append(dt_feature) # at 118
             if dist <= 2.0: #15.0 
                 # tr = OPENCV_OBJECT_TRACKERS["csrt"]()
                 # success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-                # if success:
-                with open('./Re-identification.txt', 'a') as f:
-                    f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
-                # del t[0]
-                t[4].append(dt_feature) # at 118
-                    # t[0] = tr             #uncomment 
+                if success:
+                    with open('./Re-identification.txt', 'a') as f:
+                        f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
+                    # del t[0]
+                    t[0] = tr             #uncomment 
             break
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
