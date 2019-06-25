@@ -517,6 +517,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
     if int(current_frame_number) % 100 == 0:
       print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
     ymin, xmin, ymax, xmax = box
+    mask = None
     # if instance_masks is not None:
     #   draw_mask_on_image_array(
     #       image,
@@ -534,9 +535,13 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             if use_normalized_coordinates:
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
+            if instance_masks is not None:
+              mask = box_to_instance_masks_map[box]
+            
             # with open('det.txt', 'a') as f:
             #   f.write("{},-1,{},{},{},{},0.4,-1,-1,-1\n".format(str(current_frame_number)[:-2], left, top, right-left, bottom-top))
-            if util_track.not_tracked(image, (top, left, bottom, right), trackers, eu_threshold, str(current_frame_number)[:-2]):
+            if util_track.not_tracked(image, (top, left, bottom, right),
+                trackers, eu_threshold, str(current_frame_number)[:-2], mask):
               
               # generating detections for deep-mot-sort
               image_temp = numpy.array(image_pil)              
@@ -546,7 +551,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               np.copyto(image, np.array(image_pil))
 
               counters[display_str_list[0][:-5]]+=1
-              util_track.add_new_object((top, left, bottom, right), image, counters, trackers, tracker_name, str(current_frame_number)[:-2])
+              util_track.add_new_object((top, left, bottom, right), image, counters,
+                trackers, tracker_name, str(current_frame_number)[:-2], mask)
               # print("Trackers ",[t[2] for t in trackers])
 
 

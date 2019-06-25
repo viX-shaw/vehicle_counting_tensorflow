@@ -134,9 +134,10 @@ def object_detection_function():
     direction = 'waiting...'
     size = 'waiting...'
     color = 'waiting...'
+    masks = None
     with detection_graph.as_default():
         with tf.Session(graph=detection_graph) as sess:
-
+            all_tensor_names = detection_graph.get_operations()
             # Definite input and output Tensors for detection_graph
             image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
 
@@ -149,6 +150,10 @@ def object_detection_function():
             detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
             num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
+            if 'detection_masks:0' in all_tensor_names:
+                detection_masks = detection_graph.get_tensor_by_name('detection_masks:0')
+            detection_masks = tf.squeeze(detection_masks, [0])
+            detection_boxs = tf.squeeze(detection_boxes, [0])
             # for all the frames that are extracted from input video
             while cap.isOpened():
                 (ret, frame) = cap.read()
@@ -171,12 +176,25 @@ def object_detection_function():
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                 if cap.get(1) % params.sr == 0:
                     image_np_expanded = np.expand_dims(copy_frame, axis=0)
-
+                    detection_masks_reframed = util_track.reframe_box_masks_to_image_masks(
+                            detection_masks, detection_boxs, copy_frame.shape[0], copy_frame.shape[1])
+                    detection_masks_reframed = tf.cast(
+                        tf.greater(detection_masks_reframed, 0.5), tf.uint8)
+                    # Follow the convention by adding back the batch dimension
+                    detection_masks = tf.expand_dims(
+                        detection_masks_reframed, 0)
                     # Actual detection.
-                    (boxes, scores, classes, num) = \
-                        sess.run([detection_boxes, detection_scores,
-                                detection_classes, num_detections],
-                                feed_dict={image_tensor: image_np_expanded})
+                    if 'detection_masks:0' in all_tensor_names:
+                        (boxes, scores, classes, num, masks) = \
+                            sess.run([detection_boxes, detection_scores,
+                                    detection_classes, num_detections, detection_masks],
+                                    feed_dict={image_tensor: image_np_expanded})
+                    else:
+                        (boxes, scores, classes, num) = \
+                            sess.run([detection_boxes, detection_scores,
+                                    detection_classes, num_detections],
+                                    feed_dict={image_tensor: image_np_expanded})
+                        
 
                 # Visualization of the results of a detection.
                 # (counter, csv_line) = \
@@ -193,6 +211,7 @@ def object_detection_function():
                     params.tracker,
                     trackers,
                     counters,
+                    instance_masks=masks,
                     use_normalized_coordinates=True,
                     min_score_thresh = params.threshold,
                     eu_threshold = params.eu_threshold,

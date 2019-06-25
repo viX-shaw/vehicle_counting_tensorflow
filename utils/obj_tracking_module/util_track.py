@@ -35,7 +35,7 @@ def load_appearence_model():
     global feature_generator
     feature_generator = create_box_encoder("/content/veri.pb", batch_size=1)
 
-def add_new_object(obj, image, counters, trackers, name, curr_frame):
+def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
     ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"]+counters["truck"]+ counters["bus"])
     #Age:time for which the tracker is allowed to deviate from its orignal feature 
@@ -63,13 +63,15 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame):
     tracker = OPENCV_OBJECT_TRACKERS[name]()
     success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
     if success:
+        if mask is not None:
+            tracker.setInitialMask(mask)
         feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature]])
         print("Car - ", label, "is added")
     # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-def not_tracked(image, object_, trackers, threshold, curr_frame_no):
+def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
     # print("Eu threshold", threshold)
     if not object_:
         # return []  # No new classified objects to search for
@@ -98,7 +100,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
         bxmid = int((bxmin + bxmax) / 2)
         bymid = int((bymin + bymax) / 2)
         dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
-        print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
+        # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
         if dist <= box_range:
             # print("car no ", car_no, "is in range")
             # found existing, so break (do not add to new_objects)
@@ -142,6 +144,8 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
                 # print((xmin, ymin, xmax-xmin, ymax-ymin))
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+                if mask is not None:
+                    tr.setInitialMask(mask)
                 if success:
                     with open('./Re-identification.txt', 'a') as f:
                         f.write("Re-initializing tracker {} in frame {}\n".format(cn, curr_frame_no))
@@ -364,3 +368,50 @@ def _nn_euclidean_distance(x, y):
     # print(distances.shape)
     return np.maximum(0.0, distances.min(axis=0))
 
+def reframe_box_masks_to_image_masks(box_masks, boxes, image_height,
+                                     image_width):
+  """Transforms the box masks back to full image masks.
+
+  Embeds masks in bounding boxes of larger masks whose shapes correspond to
+  image shape.
+
+  Args:
+    box_masks: A tf.float32 tensor of size [num_masks, mask_height, mask_width].
+    boxes: A tf.float32 tensor of size [num_masks, 4] containing the box
+           corners. Row i contains [ymin, xmin, ymax, xmax] of the box
+           corresponding to mask i. Note that the box corners are in
+           normalized coordinates.
+    image_height: Image height. The output mask will have the same height as
+                  the image height.
+    image_width: Image width. The output mask will have the same width as the
+                 image width.
+
+  Returns:
+    A tf.float32 tensor of size [num_masks, image_height, image_width].
+  """
+  # TODO(rathodv): Make this a public function.
+  def reframe_box_masks_to_image_masks_default():
+    """The default function when there are more than 0 box masks."""
+    def transform_boxes_relative_to_boxes(boxes, reference_boxes):
+      boxes = tf.reshape(boxes, [-1, 2, 2])
+      min_corner = tf.expand_dims(reference_boxes[:, 0:2], 1)
+      max_corner = tf.expand_dims(reference_boxes[:, 2:4], 1)
+      transformed_boxes = (boxes - min_corner) / (max_corner - min_corner)
+      return tf.reshape(transformed_boxes, [-1, 4])
+
+    box_masks_expanded = tf.expand_dims(box_masks, axis=3)
+    num_boxes = tf.shape(box_masks_expanded)[0]
+    unit_boxes = tf.concat(
+        [tf.zeros([num_boxes, 2]), tf.ones([num_boxes, 2])], axis=1)
+    reverse_boxes = transform_boxes_relative_to_boxes(unit_boxes, boxes)
+    return tf.image.crop_and_resize(
+        image=box_masks_expanded,
+        boxes=reverse_boxes,
+        box_ind=tf.range(num_boxes),
+        crop_size=[image_height, image_width],
+        extrapolation_value=0.0)
+  image_masks = tf.cond(
+      tf.shape(box_masks)[0] > 0,
+      reframe_box_masks_to_image_masks_default,
+      lambda: tf.zeros([0, image_height, image_width, 1], dtype=tf.float32))
+  return tf.squeeze(image_masks, axis=3)
