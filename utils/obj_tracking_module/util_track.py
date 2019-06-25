@@ -124,7 +124,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no):
                 with open('./Re-identification.txt', 'a') as f:
                     f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
                 # del t[0]
-                t[0] = tr             #uncomment 
+                # t[0] = tr             #uncomment 
             break
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
