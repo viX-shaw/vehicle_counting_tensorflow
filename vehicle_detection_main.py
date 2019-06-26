@@ -153,7 +153,7 @@ def object_detection_function():
 
             if 'detection_masks:0' in all_tensor_names:
                 detection_masks = detection_graph.get_tensor_by_name('detection_masks:0')
-                detection_masks = tf.squeeze(detection_masks, [0])
+                detection_mks = tf.squeeze(detection_masks, [0])
                 detection_boxs = tf.squeeze(detection_boxes, [0])
             # for all the frames that are extracted from input video
             while cap.isOpened():
@@ -180,7 +180,7 @@ def object_detection_function():
                     if 'detection_masks:0' in all_tensor_names:
                         image_np_expanded = np.expand_dims(copy_frame, axis=0)
                         detection_masks_reframed = util_track.reframe_box_masks_to_image_masks(
-                                detection_masks, detection_boxs, copy_frame.shape[0], copy_frame.shape[1])
+                                detection_mks, detection_boxs, copy_frame.shape[0], copy_frame.shape[1])
                         
                         detection_masks_reframed = tf.cast(
                             tf.greater(detection_masks_reframed, 0.5), tf.uint8)
