@@ -214,7 +214,7 @@ def object_detection_function():
                     params.tracker,
                     trackers,
                     counters,
-                    instance_masks=masks,
+                    instance_masks=np.squeeze(masks),
                     use_normalized_coordinates=True,
                     min_score_thresh = params.threshold,
                     eu_threshold = params.eu_threshold,
