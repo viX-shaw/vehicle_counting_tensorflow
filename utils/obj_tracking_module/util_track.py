@@ -4,6 +4,7 @@ from collections import defaultdict
 import string
 import random
 import numpy as np
+import tensorflow as tf
 
 from .appearence_extractor import create_box_encoder
 
