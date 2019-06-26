@@ -256,7 +256,8 @@ def object_detection_function():
 
                
                 cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, cap.get(1)), input_frame)
-
+                del frame
+                del copy_frame
 
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
