@@ -135,6 +135,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
             break
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
+        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         for x, (_, _, cn, _, ft) in enumerate(trackers):
 
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
@@ -145,7 +146,6 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
                 # xmin, ymin, xmax, ymax = bx
                 t =trackers[x]
 
-                dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
                 # print((xmin, ymin, xmax-xmin, ymax-ymin))
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
