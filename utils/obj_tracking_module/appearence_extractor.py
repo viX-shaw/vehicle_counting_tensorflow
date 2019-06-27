@@ -127,7 +127,7 @@ def create_box_encoder(model_filename, input_name="images",
                 pil_solid_color = Image.fromarray(np.uint8(solid_color)).convert('RGBA')
                 pil_mask = Image.fromarray(np.uint8(255.0*(np.ones_like(mask)-mask))).convert('L')
                 p_image = Image.composite(pil_solid_color, pil_image, pil_mask)
-                np.copyto(image, np.array(p_image.convert('RGB')))
+                image = np.array(p_image.convert('RGB'))
                 # cv2.imwrite("/content/sample_data/{}.jpg".format(
                 #     ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
             patch = extract_image_patch(image, box, image_shape[:2])
