@@ -192,6 +192,7 @@ def object_detection_function():
                             sess.run([detection_boxes, detection_scores,
                                     detection_classes, num_detections, detection_masks],
                                     feed_dict={image_tensor: image_np_expanded})
+                        masks = np.squeeze(masks)
                     else:
                         (boxes, scores, classes, num) = \
                             sess.run([detection_boxes, detection_scores,
@@ -200,10 +201,7 @@ def object_detection_function():
                         
 
                 # Visualization of the results of a detection.
-                # (counter, csv_line) = \
-                    # cv2.imwrite("/content/data/{}.jpg".format(cap.get(1)), copy_frame)
-                # Smapling frames
-                    # counters = \
+                
                     vis_util.visualize_boxes_and_labels_on_image_array(
                     cap.get(1),
                     copy_frame,
@@ -214,7 +212,7 @@ def object_detection_function():
                     params.tracker,
                     trackers,
                     counters,
-                    instance_masks=np.squeeze(masks),
+                    instance_masks=masks,
                     use_normalized_coordinates=True,
                     min_score_thresh = params.threshold,
                     eu_threshold = params.eu_threshold,
