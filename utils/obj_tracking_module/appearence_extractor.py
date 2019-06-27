@@ -68,6 +68,7 @@ def extract_image_patch(image, bbox, patch_shape):
     sx, sy, ex, ey = bbox
     image = image[sy:ey, sx:ex]
     cv2.imwrite("/content/sample_data/thisone.jpg", image)
+    print(image.shape)
     image = cv2.resize(image, tuple(patch_shape[::-1]))
     return image
 
@@ -120,17 +121,15 @@ def create_box_encoder(model_filename, input_name="images",
             patch = None
             if mask is not None:
                 rgb = ImageColor.getrgb('gray')
-                pil_image = Image.fromarray(image).copy()
-                image = np.array(pil_image.getdata()).reshape(
-                             (pil_image.size[1], pil_image.size[0], 3))
+                image = np.copy(image).astype(np.uint8)
+                pil_image = Image.fromarray(image)
                 solid_color = np.expand_dims(np.ones_like(mask), axis=2) * np.reshape(list(rgb), [1, 1, 3])
                 pil_solid_color = Image.fromarray(np.uint8(solid_color)).convert('RGBA')
                 pil_mask = Image.fromarray(np.uint8(255.0*(np.ones_like(mask)-mask))).convert('L')
                 p_image = Image.composite(pil_solid_color, pil_image, pil_mask)
                 np.copyto(image, np.array(p_image.convert('RGB')))
-                cv2.imwrite("/content/sample_data/{}.jpg".format(
-                    ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
-            
+                # cv2.imwrite("/content/sample_data/{}.jpg".format(
+                #     ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
             patch = extract_image_patch(image, box, image_shape[:2])
             if patch is None:
             # else:
