@@ -68,7 +68,7 @@ def extract_image_patch(image, bbox, patch_shape):
     sx, sy, ex, ey = bbox
     image = image[sy:ey, sx:ex]
     cv2.imwrite("/content/sample_data/thisone.jpg", image)
-    print(image.shape)
+    # print(image.shape)
     image = cv2.resize(image, tuple(patch_shape[::-1]))
     return image
 
