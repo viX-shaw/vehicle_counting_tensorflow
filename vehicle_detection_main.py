@@ -177,8 +177,8 @@ def object_detection_function():
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                 if cap.get(1) % params.sr == 0:
                     # Actual detection.
+                    image_np_expanded = np.expand_dims(copy_frame, axis=0)
                     if 'detection_masks:0' in all_tensor_names:
-                        image_np_expanded = np.expand_dims(copy_frame, axis=0)
                         detection_masks_reframed = util_track.reframe_box_masks_to_image_masks(
                                 detection_mks, detection_boxs, copy_frame.shape[0], copy_frame.shape[1])
                         

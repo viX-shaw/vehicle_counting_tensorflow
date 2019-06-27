@@ -66,7 +66,9 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
     if success:
         if mask is not None:
             tracker.setInitialMask(mask)
-        feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
+            feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+        else:
+            feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature]])
         print("Car - ", label, "is added")
@@ -108,7 +110,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
             #compute cosine distance b/w track feature and matched detection
 
             #in the parameters also pass features of all tracks
-            dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
+            dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
             # distance = _nn_cosine_distance(np.asarray(feature), np.asarray(dt_feature))
             # with open("Cosine-distances.txt", 'a') as f:
@@ -133,7 +135,6 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
             break
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
-        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         for x, (_, _, cn, _, ft) in enumerate(trackers):
 
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
@@ -144,6 +145,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
                 # xmin, ymin, xmax, ymax = bx
                 t =trackers[x]
 
+                dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
                 # print((xmin, ymin, xmax-xmin, ymax-ymin))
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
