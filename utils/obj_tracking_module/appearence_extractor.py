@@ -7,6 +7,7 @@ import cv2
 import random
 import string
 import tensorflow as tf
+from PIL import ImageColor
 
 
 def _run_in_batches(f, data_dict, out, batch_size):
