@@ -67,9 +67,8 @@ def extract_image_patch(image, bbox, patch_shape):
         return None
     sx, sy, ex, ey = bbox
     image = image[sy:ey, sx:ex]
+    cv2.imwrite("/content/sample_data/thisone.jpg", image)
     image = cv2.resize(image, tuple(patch_shape[::-1]))
-    cv2.imwrite("/content/sample_data/{}.jpg".format(
-        ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
     return image
 
 
@@ -129,8 +128,8 @@ def create_box_encoder(model_filename, input_name="images",
                 pil_mask = Image.fromarray(np.uint8(255.0*(np.ones_like(mask)-mask))).convert('L')
                 p_image = Image.composite(pil_solid_color, pil_image, pil_mask)
                 np.copyto(image, np.array(p_image.convert('RGB')))
-                # cv2.imwrite("/content/sample_data/{}.jpg".format(
-                #     ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
+                cv2.imwrite("/content/sample_data/{}.jpg".format(
+                    ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))), image)
             
             patch = extract_image_patch(image, box, image_shape[:2])
             if patch is None:
