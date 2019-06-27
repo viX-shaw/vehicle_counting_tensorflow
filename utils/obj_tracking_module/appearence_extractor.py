@@ -108,14 +108,23 @@ def create_box_encoder(model_filename, input_name="images",
     image_encoder = ImageEncoder(model_filename, input_name, output_name)
     image_shape = image_encoder.image_shape
 
-    def encoder(image, boxes):
+    def encoder(image, boxes, mask=None):
         # print(image.shape)
         image_patches = []
         #adding dummy images to make batch_size 10 permanently because of googlenet
         # i = len(boxes)//10
+
+        #This loop is not required since we are generating feature for only one bbox at
+        #a time, but left for future if we intend to use for all boxes at once. 
         for box in boxes:
-        # for box in range(0,(i+1)*10):
-            # if box < len(boxes):
+            patch = None
+            if mask is not None:
+                rgb = ImageColor.getrgb('gray')
+                solid_color = np.expand_dims(np.ones_like(mask), axis=2) * np.reshape(list(rgb), [1, 1, 3])
+                pil_solid_color = Image.fromarray(np.uint8(solid_color)).convert('RGBA')
+                pil_mask = Image.fromarray(np.uint8(255.0*alpha*(np.ones_like(mask)-mask))).convert('L')
+                image = Image.composite(pil_solid_color, pil_image, pil_mask)
+            
             patch = extract_image_patch(image, box, image_shape[:2])
             if patch is None:
             # else:
