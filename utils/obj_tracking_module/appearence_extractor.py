@@ -7,7 +7,7 @@ import cv2
 import random
 import string
 import tensorflow as tf
-from PIL import ImageColor
+from PIL import ImageColor, Image
 
 
 def _run_in_batches(f, data_dict, out, batch_size):
@@ -125,6 +125,7 @@ def create_box_encoder(model_filename, input_name="images",
                 pil_solid_color = Image.fromarray(np.uint8(solid_color)).convert('RGBA')
                 pil_mask = Image.fromarray(np.uint8(255.0*alpha*(np.ones_like(mask)-mask))).convert('L')
                 image = Image.composite(pil_solid_color, pil_image, pil_mask)
+                image = np.array(image.getdata()).reshape((image.size[0], image.size[1], 3))
             
             patch = extract_image_patch(image, box, image_shape[:2])
             if patch is None:
