@@ -155,6 +155,11 @@ def object_detection_function():
                 detection_masks = detection_graph.get_tensor_by_name('detection_masks:0')
                 detection_mks = tf.squeeze(detection_masks, [0])
                 detection_boxs = tf.squeeze(detection_boxes, [0])
+
+                real_num_detection = tf.cast(num_detections[0], tf.int32)
+
+                detection_boxs = tf.slice(detection_boxs, [0, 0], [real_num_detection, -1])
+                detection_mks = tf.slice(detection_mks, [0, 0, 0], [real_num_detection, -1, -1])
             # for all the frames that are extracted from input video
             while cap.isOpened():
                 (ret, frame) = cap.read()

@@ -537,7 +537,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                             ymin * im_height, ymax * im_height)
             if instance_masks is not None:
               mask = box_to_instance_masks_map[box]
-              print("MASK SHAPE --", mask.shape)
+              # print("MASK SHAPE --", mask.shape)
             
             # with open('det.txt', 'a') as f:
             #   f.write("{},-1,{},{},{},{},0.4,-1,-1,-1\n".format(str(current_frame_number)[:-2], left, top, right-left, bottom-top))
