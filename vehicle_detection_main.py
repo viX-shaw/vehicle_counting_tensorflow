@@ -201,7 +201,9 @@ def object_detection_function():
                         
 
                 # Visualization of the results of a detection.
-                
+
+                    if masks is not None:
+                        print(masks.shape, "boxes_shape", boxes.shape)
                     vis_util.visualize_boxes_and_labels_on_image_array(
                     cap.get(1),
                     copy_frame,

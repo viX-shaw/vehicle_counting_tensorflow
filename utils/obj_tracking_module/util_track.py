@@ -71,7 +71,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature]])
-        print("Car - ", label, "is added")
+        # print("Car - ", label, "is added")
     # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
