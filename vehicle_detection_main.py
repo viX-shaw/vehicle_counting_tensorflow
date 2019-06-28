@@ -226,6 +226,7 @@ def object_detection_function():
                     line_thickness=4,
                     )
 
+                    del masks
                 # if(counter == 1):
                 #     print("Detected vehicle in frame no", cap.get(1))
                 try:
