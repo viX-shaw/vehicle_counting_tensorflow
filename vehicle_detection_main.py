@@ -150,7 +150,7 @@ def object_detection_function():
             detection_scores = detection_graph.get_tensor_by_name('detection_scores:0')
             detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
             num_detections = detection_graph.get_tensor_by_name('num_detections:0')
-            detection_masks = None
+            # detection_masks = None
             if 'detection_masks:0' in all_tensor_names:
                 detection_masks = detection_graph.get_tensor_by_name('detection_masks:0')
                 detection_mks = tf.squeeze(detection_masks, [0])
@@ -261,7 +261,7 @@ def object_detection_function():
 
                
                 cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, cap.get(1)), input_frame)
-                del detection_masks
+                # del detection_masks
 
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
