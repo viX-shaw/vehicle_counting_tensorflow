@@ -47,6 +47,8 @@ parser.add_argument("--threshold", type = float, default= 0.55, required =False)
 parser.add_argument("--eu_threshold", type = float, default=0.2, required =False)
 parser.add_argument("--age", type = int, default=72, required =False)
 parser.add_argument("--sr", type = int, default = 3, required =False, help = "interval at frames are used for detection")
+parser.add_argument("--use_masks", type = int, default=0, required =False)
+
 
 parser.add_argument("--model_name", type = str, default = "ssd_mobilenet_v1_coco_2018_01_28")
         
@@ -151,7 +153,7 @@ def object_detection_function():
             detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
             num_detections = detection_graph.get_tensor_by_name('num_detections:0')
             # detection_masks = None
-            if 'detection_masks:0' in all_tensor_names:
+            if params.use_masks == 1 and 'detection_masks:0' in all_tensor_names:
                 detection_masks = detection_graph.get_tensor_by_name('detection_masks:0')
                 detection_mks = tf.squeeze(detection_masks, [0])
                 detection_boxs = tf.squeeze(detection_boxes, [0])
@@ -191,7 +193,7 @@ def object_detection_function():
                 if cap.get(1) % params.sr == 0:
                     # Actual detection.
                     image_np_expanded = np.expand_dims(copy_frame, axis=0)
-                    if 'detection_masks:0' in all_tensor_names:
+                    if params.use_masks == 1 and 'detection_masks:0' in all_tensor_names:
 
                         (boxes, scores, classes, num, masks) = \
                             sess.run([detection_boxes, detection_scores,
