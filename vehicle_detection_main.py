@@ -20,6 +20,7 @@ import csv
 import time
 import argparse
 import copy
+import time
 
 from collections import defaultdict
 from io import StringIO
@@ -172,6 +173,7 @@ def object_detection_function():
                     detection_masks_reframed, 0)
             # for all the frames that are extracted from input video
             while cap.isOpened():
+                t1 = time.time()
                 (ret, frame) = cap.read()
 
                 if not ret:
@@ -210,7 +212,7 @@ def object_detection_function():
                 # Visualization of the results of a detection.
 
                     if masks is not None:
-                        print(masks.shape, "boxes_shape", boxes.shape)
+                        # print(masks.shape, "boxes_shape", boxes.shape)
                     vis_util.visualize_boxes_and_labels_on_image_array(
                     cap.get(1),
                     copy_frame,
@@ -261,19 +263,21 @@ def object_detection_function():
                 cv2.putText(input_frame, "Frame -"+str(cap.get(1))[:-2], (1000, 35),
                      font, 0.8, (0,0,255), 2, cv2.FONT_HERSHEY_SIMPLEX)
 
-               
+                t2 = time.time()
+                time_taken = int(str(t2 - t1))
                 cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, cap.get(1)), input_frame)
+                print("FPS -"+ 1/time_taken , end = '\r')
                 # del detection_masks
 
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
+                # if cv2.waitKey(1) & 0xFF == ord('q'):
+                #     break
 
-                if csv_line != 'not_available':
-                    with open('traffic_measurement.csv', 'a') as f:
-                        writer = csv.writer(f)
-                        (size, color, direction, speed) = \
-                            csv_line.split(',')
-                        writer.writerows([csv_line.split(',')])
+                # if csv_line != 'not_available':
+                #     with open('traffic_measurement.csv', 'a') as f:
+                #         writer = csv.writer(f)
+                #         (size, color, direction, speed) = \
+                #             csv_line.split(',')
+                #         writer.writerows([csv_line.split(',')])
             cap.release()
             cv2.destroyAllWindows()
 
