@@ -163,8 +163,12 @@ def object_detection_function():
 
                 detection_boxs = tf.slice(detection_boxs, [0, 0], [real_num_detection, -1])
                 detection_mks = tf.slice(detection_mks, [0, 0, 0], [real_num_detection, -1, -1])
+                
+                width = cap.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)   # float
+                height = cap.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT) # float
+
                 detection_masks_reframed = util_track.reframe_box_masks_to_image_masks(
-                        detection_mks, detection_boxs, 576, 768)
+                        detection_mks, detection_boxs, height, width)
                 
                 detection_masks_reframed = tf.cast(
                     tf.greater(detection_masks_reframed, 0.5), tf.uint8)
