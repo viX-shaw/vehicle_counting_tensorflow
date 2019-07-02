@@ -72,6 +72,9 @@ except Exception as e:
     pass
 # input video
 cap = cv2.VideoCapture(params.file)
+print(cap.get(cv2.CV_CAP_PROP_FRAME_WIDTH), cap.get(cv2.CV_CAP_PROP_FRAME_HEIGHT))
+
+
 
 # Variables
 total_passed_vehicle = 0  # using it to count vehicles
@@ -164,8 +167,8 @@ def object_detection_function():
                 detection_boxs = tf.slice(detection_boxs, [0, 0], [real_num_detection, -1])
                 detection_mks = tf.slice(detection_mks, [0, 0, 0], [real_num_detection, -1, -1])
                 
-                width = cap.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)   # float
-                height = cap.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT) # float
+                width = cap.get(cv2.CV_CAP_PROP_FRAME_WIDTH)   # float
+                height = cap.get(cv2.CV_CAP_PROP_FRAME_HEIGHT) # float
 
                 detection_masks_reframed = util_track.reframe_box_masks_to_image_masks(
                         detection_mks, detection_boxs, height, width)
@@ -233,9 +236,9 @@ def object_detection_function():
                     eu_threshold = params.eu_threshold,
                     line_thickness=4,
                     )
-                    t2 = time.time()
-                    time_taken = float(t2 -t1)
-                    print("FPS -"+ str(1.0/time_taken))
+                    # t2 = time.time()
+                    # time_taken = float(t2 -t1)
+                    # print("FPS -"+ str(1.0/time_taken))
 
                 # if(counter == 1):
                 #     print("Detected vehicle in frame no", cap.get(1))
