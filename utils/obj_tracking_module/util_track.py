@@ -140,7 +140,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
 
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
 
-            eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
+            eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
             print("car no ", cn, "eu-dist -", eu_dist)
             if eu_dist < threshold:
                 # xmin, ymin, xmax, ymax = bx
@@ -210,7 +210,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         a = np.squeeze(np.asarray(_[-72:]), axis = 1)
-        distance = _nn_euclidean_distance(a, np.asarray(dt_feature))
+        distance = _nn_cosine_distance(a, np.asarray(dt_feature))
         # print(distance)
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
