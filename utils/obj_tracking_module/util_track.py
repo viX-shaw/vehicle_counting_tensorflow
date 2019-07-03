@@ -107,7 +107,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
         x1 = np.maximum(xmin, bxmin)
         y1 = np.maximum(ymin, bymin)
         x2 = np.minimum(xmax, bxmax)
-        y2 = np.minimum(ymin, bymax)
+        y2 = np.minimum(ymax, bymax)
 
         w = np.maximum(0, x2 - x1 + 1)
         h = np.maximum(0, y2 - y1 + 1)
