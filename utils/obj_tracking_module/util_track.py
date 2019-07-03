@@ -116,21 +116,21 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
 
         dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
         # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
-        if overlap >= 0.7: #if dist <= box_range:
+        if dist <= box_range:
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             t=trackers[i]
             t[3]=0 #Resetting age on detection
             t[4].append(dt_feature) # at 118
-            # if dist <= 7.0: #15.0 
-            tr = OPENCV_OBJECT_TRACKERS["csrt"]()
-            success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-            if mask is not None:
-                tr.setInitialMask(mask)
-            if success:
-                with open('./Re-identification.txt', 'a') as f:
-                    f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
-            # del t[0]
-            t[0] = tr             #uncomment 
+            if overlap >= 0.7: #15.0 
+                tr = OPENCV_OBJECT_TRACKERS["csrt"]()
+                success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+                if mask is not None:
+                    tr.setInitialMask(mask)
+                if success:
+                    with open('./Re-identification.txt', 'a') as f:
+                        f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
+                # del t[0]
+                t[0] = tr             #uncomment 
             break
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
