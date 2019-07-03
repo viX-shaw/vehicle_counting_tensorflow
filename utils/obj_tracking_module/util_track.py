@@ -121,6 +121,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
             t=trackers[i]
             t[3]=0 #Resetting age on detection
             t[4].append(dt_feature) # at 118
+            print("Overlap :", overlap)
             if overlap >= 0.7: #15.0 
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
                 success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
