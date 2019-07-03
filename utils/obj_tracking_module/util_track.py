@@ -92,8 +92,8 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
         # return objects  # No existing boxes, return all objects
         return True
 
-    box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
-    # box_range = 10.0
+    # box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
+    box_range = 7.0
 
     for i, (tracker, bbox, car_no, _, feature) in enumerate(trackers):
         bxmin = int(bbox[0])
