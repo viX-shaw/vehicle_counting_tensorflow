@@ -116,7 +116,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
 
         dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
         # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
-        if overlap >= 0.9: #if dist <= box_range:
+        if overlap >= 0.7: #if dist <= box_range:
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             t=trackers[i]
             t[3]=0 #Resetting age on detection
