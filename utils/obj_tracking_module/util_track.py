@@ -138,7 +138,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         for x, (_, _, cn, _, ft) in enumerate(trackers):
 
-            a = np.squeeze(np.asarray(ft[-30:]), axis = 1)
+            a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
 
             eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
             print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
@@ -209,7 +209,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-        a = np.squeeze(np.asarray(_[-30:]), axis = 1)
+        a = np.squeeze(np.asarray(_[-72:]), axis = 1)
         distance = _nn_cosine_distance(a, np.asarray(dt_feature))
         # print(distance)
         with open("Cosine-distances.txt", 'a') as f:
