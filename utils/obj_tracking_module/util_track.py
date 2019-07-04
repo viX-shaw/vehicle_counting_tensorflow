@@ -120,7 +120,6 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             t=trackers[i]
             t[3]=0 #Resetting age on detection
-            t[4].append(dt_feature) # at 118
             # print("Overlap :", overlap)
             if overlap >= 0.7: #15.0 
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
@@ -132,6 +131,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
                         f.write("Updating tracker {} in frame {}\n".format(car_no, curr_frame_no))
                 # del t[0]
                 t[0] = tr             #uncomment 
+                t[4].append(dt_feature)
             break
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
