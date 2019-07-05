@@ -120,7 +120,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             # print("Overlap :", overlap)
             if overlap >= iou_threshold: #15.0 
-                print("IOU_Threshold", iou_threshold)
+                # print("IOU_Threshold", iou_threshold)
                 t=trackers[i]
                 t[3]=0 #Resetting age on detection
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
