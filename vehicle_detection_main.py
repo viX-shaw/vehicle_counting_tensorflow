@@ -49,6 +49,8 @@ parser.add_argument("--eu_threshold", type = float, default=0.2, required =False
 parser.add_argument("--age", type = int, default=72, required =False)
 parser.add_argument("--sr", type = int, default = 3, required =False, help = "interval at frames are used for detection")
 parser.add_argument("--use_masks", type = int, default=0, required =False)
+parser.add_argument("--iou_threshold", type = float, default=0.7, required =False)
+
 
 
 parser.add_argument("--model_name", type = str, default = "ssd_mobilenet_v1_coco_2018_01_28")
@@ -234,6 +236,7 @@ def object_detection_function():
                     use_normalized_coordinates=True,
                     min_score_thresh = params.threshold,
                     eu_threshold = params.eu_threshold,
+                    iou_threshold = params.iou_threshold,
                     line_thickness=4,
                     )
                     # t2 = time.time()

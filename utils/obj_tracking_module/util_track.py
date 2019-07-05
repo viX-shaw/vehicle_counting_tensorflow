@@ -74,7 +74,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
         print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
+def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshold, mask=None):
     # print("Eu threshold", threshold)
     if not object_:
         # return []  # No new classified objects to search for
@@ -119,7 +119,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
         if dist <= box_range:
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             # print("Overlap :", overlap)
-            if overlap >= 0.55: #15.0 
+            if overlap >= iou_threshold: #15.0 
                 t=trackers[i]
                 t[3]=0 #Resetting age on detection
                 tr = OPENCV_OBJECT_TRACKERS["csrt"]()
@@ -136,13 +136,13 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, mask=None):
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-        for x, (_, _, cn, _, ft) in enumerate(trackers):
+        for x, (_, _, cn, age, ft) in enumerate(trackers):
 
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
 
             eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
             print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
-            if eu_dist < threshold:
+            if eu_dist < threshold and age > 0:
                 # xmin, ymin, xmax, ymax = bx
                 t =trackers[x]
 
