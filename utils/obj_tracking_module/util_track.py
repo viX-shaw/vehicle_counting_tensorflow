@@ -93,7 +93,11 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
         return True
     
     area = (xmax - xmin + 1) * (ymax - ymin + 1)
-    box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/4    #UNCOMMENT
+    # box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/4    #UNCOMMENT
+    if xmax-xmin < ymax-ymin :
+        box_range = (xmax-xmin)/2
+    else:
+        box_range = (ymax-ymin)/2
     # box_range = 7.0
 
     for i, (tracker, bbox, car_no, _, feature) in enumerate(trackers):
@@ -137,6 +141,8 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+        min_idx = -1
+        min_thres = 2.0 # Since cosine is going up slightly more than 1
         for x, (_, _, cn, age, ft) in enumerate(trackers):
 
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
@@ -145,22 +151,26 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
             print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
             if eu_dist < threshold and age > 0:
                 # xmin, ymin, xmax, ymax = bx
-                t =trackers[x]
+                if(min_thres > eu_dist):
+                    min_thres = eu_dist
+                    min_idx = x
+        if min_idx != -1:
+            t =trackers[min_idx]
 
-                tr = OPENCV_OBJECT_TRACKERS["csrt"]()
-                # print((xmin, ymin, xmax-xmin, ymax-ymin))
-                success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-                if mask is not None:
-                    tr.setInitialMask(mask)
-                if success:
-                    with open('./Re-identification.txt', 'a') as f:
-                        f.write("Re-initializing tracker {} in frame {}\n".format(cn, curr_frame_no))
-                    # print("Re-initializing tracker ",cn, t[2])
-                    # del t[0]
-                    t[0] = tr
-                    t[3] = 0
-                    t[4].append(dt_ft)
-                    break
+            tr = OPENCV_OBJECT_TRACKERS["csrt"]()
+            # print((xmin, ymin, xmax-xmin, ymax-ymin))
+            success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+            if mask is not None:
+                tr.setInitialMask(mask)
+            if success:
+                with open('./Re-identification.txt', 'a') as f:
+                    f.write("Re-initializing tracker {} in frame {}\n".format(cn, curr_frame_no))
+                # print("Re-initializing tracker ",cn, t[2])
+                # del t[0]
+                t[0] = tr
+                t[3] = 0
+                t[4].append(dt_ft)
+                # break
         else:
             new_objects.append(object_)
 
