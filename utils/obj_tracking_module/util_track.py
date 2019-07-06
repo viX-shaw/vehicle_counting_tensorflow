@@ -93,11 +93,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
         return True
     
     area = (xmax - xmin + 1) * (ymax - ymin + 1)
-    # box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/4    #UNCOMMENT
-    if xmax-xmin < ymax-ymin :
-        box_range = (xmax-xmin)/2
-    else:
-        box_range = (ymax-ymin)/2
+    box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
     # box_range = 7.0
 
     for i, (tracker, bbox, car_no, _, feature) in enumerate(trackers):
@@ -137,7 +133,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
                 # del t[0]
                 t[0] = tr             #uncomment 
                 t[4].append(dt_feature)
-            break
+                break
     else:
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
@@ -164,7 +160,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
                 tr.setInitialMask(mask)
             if success:
                 with open('./Re-identification.txt', 'a') as f:
-                    f.write("Re-initializing tracker {} in frame {}\n".format(cn, curr_frame_no))
+                    f.write("Re-initializing tracker {} in frame {}\n".format(t[2], curr_frame_no))
                 # print("Re-initializing tracker ",cn, t[2])
                 # del t[0]
                 t[0] = tr
