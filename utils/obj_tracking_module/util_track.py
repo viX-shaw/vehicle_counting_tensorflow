@@ -119,7 +119,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
         # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
         if dist <= box_range:
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-            print("Overlap with Car :",car_no," is", overlap)
+            # print("Overlap with Car :",car_no," is", overlap)
             if overlap >= iou_threshold: #15.0 
                 # print("IOU_Threshold", iou_threshold)
                 if overlap > min_thres:
@@ -149,7 +149,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
 
             eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
-            print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
+            # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
             if eu_dist < threshold and age > 0:
                 # xmin, ymin, xmax, ymax = bx
                 if(min_thres > eu_dist):
