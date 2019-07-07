@@ -50,6 +50,8 @@ parser.add_argument("--age", type = int, default=72, required =False)
 parser.add_argument("--sr", type = int, default = 3, required =False, help = "interval at frames are used for detection")
 parser.add_argument("--use_masks", type = int, default=0, required =False)
 parser.add_argument("--iou_threshold", type = float, default=0.7, required =False)
+parser.add_argument("--boundary", type = float, default=80.0, required =False)
+
 
 
 
@@ -232,6 +234,7 @@ def object_detection_function():
                     params.tracker,
                     trackers,
                     counters,
+                    params.boundary,
                     instance_masks=masks,
                     use_normalized_coordinates=True,
                     min_score_thresh = params.threshold,

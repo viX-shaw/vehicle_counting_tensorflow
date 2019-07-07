@@ -421,6 +421,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               tracker_name,
                                               trackers,
                                               counters,
+                                              boundary,
                                               instance_masks=None,
                                               keypoints=None,
                                               use_normalized_coordinates=False,
@@ -537,7 +538,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
             #ROI
-            if top + 100 > im_height or top < 100:
+            if top + boundary > im_height or top < boundary:
               continue
             if instance_masks is not None:
               mask = box_to_instance_masks_map[box]
