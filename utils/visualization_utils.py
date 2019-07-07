@@ -537,8 +537,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
             #ROI
-            # if top + 100 > im_height or top < 100:
-            #   continue
+            if top + 100 > im_height or top < 100:
+              continue
             if instance_masks is not None:
               mask = box_to_instance_masks_map[box]
               # print("MASK SHAPE --", mask.shape)

@@ -96,7 +96,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
     v_axis = (ymax-ymin)/2
 
     area = (xmax - xmin + 1) * (ymax - ymin + 1)
-    # box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
+    box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
     # box_range = 7.0
     min_id = -1
     min_thres = 0.0
@@ -118,11 +118,11 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
 
         overlap = (w * h)/area
         #Ellipse
-        dist = ((bxmid/h_axis)**2 + (bymid/v_axis)**2)
+        # dist = ((bxmid/h_axis)**2 + (bymid/v_axis)**2)
 
-        # dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
+        dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
         # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
-        if dist <= 1.0:
+        if dist <= box_range:
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             # print("Overlap with Car :",car_no," is", overlap)
             if overlap >= iou_threshold: #15.0 
