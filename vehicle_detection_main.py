@@ -242,9 +242,9 @@ def object_detection_function():
                     iou_threshold = params.iou_threshold,
                     line_thickness=4,
                     )
-                    # t2 = time.time()
-                    # time_taken = float(t2 -t1)
-                    # print("FPS -"+ str(1.0/time_taken))
+                    t2 = time.time()
+                    time_taken = float(t2 -t1)
+                    print("FPS -"+ str(1.0/time_taken, end='\r'))
 
                 # if(counter == 1):
                 #     print("Detected vehicle in frame no", cap.get(1))
