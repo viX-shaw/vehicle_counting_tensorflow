@@ -74,7 +74,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
         print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshold, mask=None):
+def not_tracked(image, object_, trackers, name, threshold, curr_frame_no, iou_threshold, mask=None):
     # print("Eu threshold", threshold)
     if not object_:
         # return []  # No new classified objects to search for
@@ -99,7 +99,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
     box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
     # box_range = 7.0
     min_id = -1
-    min_thres = 0.0
+    max_overlap = 0.0
     for i, (tracker, bbox, car_no, _, feature) in enumerate(trackers):
         bxmin = int(bbox[0])
         bymin = int(bbox[1])
@@ -127,13 +127,13 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
             # print("Overlap with Car :",car_no," is", overlap)
             if overlap >= iou_threshold: #15.0 
                 # print("IOU_Threshold", iou_threshold)
-                if overlap > min_thres:
-                    min_thres = overlap
+                if overlap > max_overlap:
+                    min_thres = max_overlap
                     min_id = i
     if min_id != -1:
         t=trackers[min_id]
         t[3]=0 #Resetting age on detection
-        tr = OPENCV_OBJECT_TRACKERS["csrt"]()
+        tr = OPENCV_OBJECT_TRACKERS[name]()
         success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         if mask is not None:
             tr.setInitialMask(mask)
@@ -148,7 +148,7 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         min_idx = -1
-        min_thres = 2.0 # Since cosine is going up slightly more than 1
+        max_dist = 2.0 # Since cosine is going up slightly more than 1
         for x, (_, _, cn, age, ft) in enumerate(trackers):
 
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
@@ -157,13 +157,13 @@ def not_tracked(image, object_, trackers, threshold, curr_frame_no, iou_threshol
             # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
             if eu_dist < threshold and age > 0:
                 # xmin, ymin, xmax, ymax = bx
-                if(min_thres > eu_dist):
-                    min_thres = eu_dist
+                if(max_dist > eu_dist):
+                    max_dist = eu_dist
                     min_idx = x
         if min_idx != -1:
             t =trackers[min_idx]
 
-            tr = OPENCV_OBJECT_TRACKERS["csrt"]()
+            tr = OPENCV_OBJECT_TRACKERS[name]()
             # print((xmin, ymin, xmax-xmin, ymax-ymin))
             success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
             if mask is not None:
