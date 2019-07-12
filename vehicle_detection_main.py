@@ -246,7 +246,7 @@ def object_detection_function():
                     time_taken = float(t2 -t1)
                     sys.stdout.flush()
                     # print("\rFPS -", str(1.0/time_taken), end='')
-                    print("\rFPS - {}".format(str(1.0/time_taken)))
+                    print("\rFPS - {}".format(str(1.0/time_taken)), end = '')
 
 
                 # if(counter == 1):

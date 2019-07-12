@@ -207,7 +207,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
         # print("Tracker object", tracker.update(image))
         pair = trackers[idx]
         if not success:
-            print("Deleting tracker", car,"on update failure")
+            # print("Deleting tracker", car,"on update failure")
             counters['lost_trackers'] += 1
             # print("Lost tracker no.", car)
             # del trackers[idx]
