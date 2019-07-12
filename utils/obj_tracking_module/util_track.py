@@ -71,7 +71,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature]])
-        # print("Car - ", label, "is added")
+        print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(image, object_, trackers, name, threshold, curr_frame_no, iou_threshold, mask=None):
@@ -207,7 +207,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
         # print("Tracker object", tracker.update(image))
         pair = trackers[idx]
         if not success:
-            # print("Deleting tracker", car,"on update failure")
+            print("Deleting tracker", car,"on update failure")
             counters['lost_trackers'] += 1
             # print("Lost tracker no.", car)
             # del trackers[idx]
@@ -241,7 +241,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
         #     pair[3].append(dt_feature)
 
         if age >= max_age:
-            # print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
+            print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
             del trackers[idx]
             continue
 
