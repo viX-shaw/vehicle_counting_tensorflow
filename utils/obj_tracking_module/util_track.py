@@ -148,17 +148,17 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no, iou_th
         ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         min_idx = -1
-        max_dist = 2.0 # Since cosine is going up slightly more than 1
+        min_dist = 2.0 # Since cosine is going up slightly more than 1
         for x, (_, _, cn, age, ft) in enumerate(trackers):
 
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
 
             eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
-            print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
+            # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
             if eu_dist < threshold and age > 0:
                 # xmin, ymin, xmax, ymax = bx
-                if(max_dist > eu_dist):
-                    max_dist = eu_dist
+                if(min_dist > eu_dist):
+                    min_dist = eu_dist
                     min_idx = x
         if min_idx != -1:
             t =trackers[min_idx]
@@ -207,15 +207,12 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
         # print("Tracker object", tracker.update(image))
         pair = trackers[idx]
         if not success:
-            # print("Deleting tracker", car,"on update failure")
+            print("Deleting tracker", car,"on update failure")
             # print("Lost tracker no.", car)
-            if age > max_age:
-                counters['lost_trackers'] += 1
-                del trackers[idx]
-                continue
-            pair[3]+=1
-            idx +=1
+            counters['lost_trackers'] += 1
+            del trackers[idx]
             continue
+            
 
         pair[1] = bbox  #Updating current bbox of tracker "car"
         # print("Age", age)
