@@ -159,7 +159,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             else:
                 eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
 
-            # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
+            print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
             if eu_dist < threshold and age > 0:
                 # xmin, ymin, xmax, ymax = bx
                 if(min_dist > eu_dist):
