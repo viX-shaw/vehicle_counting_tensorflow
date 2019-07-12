@@ -51,6 +51,8 @@ parser.add_argument("--sr", type = int, default = 3, required =False, help = "in
 parser.add_argument("--use_masks", type = int, default=0, required =False)
 parser.add_argument("--iou_threshold", type = float, default=0.7, required =False)
 parser.add_argument("--boundary", type = float, default=80.0, required =False)
+parser.add_argument("--metric", type = str, default="cosine", required =False)
+
 
 
 
@@ -198,7 +200,7 @@ def object_detection_function():
                 # else:
                 #     print("Diff objects")
                 # input_frame = load_image_into_numpy_array(frame)
-                util_track.update_trackers(input_frame, copy_frame, counters, trackers,str(cap.get(1))[:-2], params.age)
+                util_track.update_trackers(input_frame, copy_frame, counters, trackers,str(cap.get(1))[:-2], params.eu_threshold, params.metric, params.age)
                 # print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
@@ -235,6 +237,7 @@ def object_detection_function():
                     trackers,
                     counters,
                     params.boundary,
+                    params.metric,
                     instance_masks=masks,
                     use_normalized_coordinates=True,
                     min_score_thresh = params.threshold,

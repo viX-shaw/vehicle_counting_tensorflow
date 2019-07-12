@@ -70,11 +70,12 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
         else:
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
-        trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature]])
+        trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature], success])
         print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-def not_tracked(image, object_, trackers, name, threshold, curr_frame_no, iou_threshold, mask=None):
+def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
+                 dist_metric, iou_threshold, mask=None):
     # print("Eu threshold", threshold)
     if not object_:
         # return []  # No new classified objects to search for
@@ -100,36 +101,37 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no, iou_th
     # box_range = 7.0
     min_id = -1
     max_overlap = 0.0
-    for i, (tracker, bbox, car_no, _, feature) in enumerate(trackers):
-        bxmin = int(bbox[0])
-        bymin = int(bbox[1])
-        bxmax = int(bbox[0] + bbox[2])
-        bymax = int(bbox[1] + bbox[3])
-        bxmid = int((bxmin + bxmax) / 2)
-        bymid = int((bymin + bymax) / 2)
-        #IOU-dist
-        x1 = np.maximum(xmin, bxmin)
-        y1 = np.maximum(ymin, bymin)
-        x2 = np.minimum(xmax, bxmax)
-        y2 = np.minimum(ymax, bymax)
+    for i, (tracker, bbox, car_no, _, feature, active) in enumerate(trackers):
+        if active:
+            bxmin = int(bbox[0])
+            bymin = int(bbox[1])
+            bxmax = int(bbox[0] + bbox[2])
+            bymax = int(bbox[1] + bbox[3])
+            bxmid = int((bxmin + bxmax) / 2)
+            bymid = int((bymin + bymax) / 2)
+            #IOU-dist
+            x1 = np.maximum(xmin, bxmin)
+            y1 = np.maximum(ymin, bymin)
+            x2 = np.minimum(xmax, bxmax)
+            y2 = np.minimum(ymax, bymax)
 
-        w = np.maximum(0, x2 - x1 + 1)
-        h = np.maximum(0, y2 - y1 + 1)
+            w = np.maximum(0, x2 - x1 + 1)
+            h = np.maximum(0, y2 - y1 + 1)
 
-        overlap = (w * h)/area
-        #Ellipse
-        # dist = (((bxmid - xmid)/h_axis)**2 + ((bymid - ymid)/v_axis)**2)
+            overlap = (w * h)/area
+            #Ellipse
+            # dist = (((bxmid - xmid)/h_axis)**2 + ((bymid - ymid)/v_axis)**2)
 
-        dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
-        # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
-        if dist <= box_range:
-            dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-            # print("Overlap with Car :",car_no," is", overlap)
-            if overlap >= iou_threshold: #15.0 
-                # print("IOU_Threshold", iou_threshold)
-                if overlap > max_overlap:
-                    min_thres = max_overlap
-                    min_id = i
+            dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
+            # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
+            if dist <= box_range:
+                dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+                # print("Overlap with Car :",car_no," is", overlap)
+                if overlap >= iou_threshold: #15.0 
+                    # print("IOU_Threshold", iou_threshold)
+                    if overlap > max_overlap:
+                        min_thres = max_overlap
+                        min_id = i
     if min_id != -1:
         t=trackers[min_id]
         t[3]=0 #Resetting age on detection
@@ -149,11 +151,14 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no, iou_th
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         min_idx = -1
         min_dist = 2.0 # Since cosine is going up slightly more than 1
-        for x, (_, _, cn, age, ft) in enumerate(trackers):
+        for x, (_, _, cn, age, ft, _) in enumerate(trackers):
 
             a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
+            if dist_metric == "cosine":
+                eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
+            else:
+                eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
 
-            eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
             # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no)
             if eu_dist < threshold and age > 0:
                 # xmin, ymin, xmax, ymax = bx
@@ -176,6 +181,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no, iou_th
                 t[0] = tr
                 t[3] = 0
                 t[4].append(dt_ft)
+                t[-1] = True
                 # break
         else:
             new_objects.append(object_)
@@ -189,7 +195,7 @@ def label_object(color, textcolor, fontface, image, car, textsize, thickness, xm
     cv2.putText(image, car, pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
 
 
-def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72):
+def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, dist_metric, max_age=72):
     # print("Max age", max_age)
     color = (80, 220, 60)
     fontface = cv2.FONT_HERSHEY_SIMPLEX
@@ -200,17 +206,29 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
     # for n, pair in enumerate(trackers):
     # print("Trackers ",[t[1] for t in trackers])
     while idx < len(trackers):
-        tracker, bx, car, age, _ = trackers[idx]
+        tracker, bx, car, age, _, active = trackers[idx]
         textsize, _baseline = cv2.getTextSize(
             car, fontface, fontscale, thickness)
-        success, bbox = tracker.update(image)
-        # print("Tracker object", tracker.update(image))
+        
         pair = trackers[idx]
+        if active:
+            success, bbox = tracker.update(image)
+        else:
+            if age > max_age:
+                counters['lost_trackers']+=1
+                del trackers[idx]
+                continue
+            idx+=1
+            pair[3]+=1
+            continue
+        # print("Tracker object", tracker.update(image))
         if not success:
+            pair[-1] = False
             print("Deleting tracker", car,"on update failure")
             # print("Lost tracker no.", car)
-            counters['lost_trackers'] += 1
-            del trackers[idx]
+            # counters['lost_trackers'] += 1
+            # del trackers[idx]
+            idx+=1
             continue
             
 
@@ -228,12 +246,15 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         a = np.squeeze(np.asarray(_[-72:]), axis = 1)
-        distance = _nn_cosine_distance(a, np.asarray(dt_feature))
+        if dist_metric == "cosine":
+            distance = _nn_cosine_distance(a, np.asarray(dt_feature))
+        else:
+            distance = _nn_euclidean_distance(a, np.asarray(dt_feature))
         # print(distance)
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
         # print(distance)
-        if abs(distance) > 0.2:
+        if abs(distance) > threshold:
             # print("Working")
             #needs the whole track object
             pair[3]+=1
@@ -241,6 +262,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
         #     pair[3].append(dt_feature)
 
         if age >= max_age:
+            counters['lost_trackers']+=1
             print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
             del trackers[idx]
             continue
