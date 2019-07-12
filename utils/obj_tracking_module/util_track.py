@@ -212,6 +212,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, max_age=72)
             # print("Lost tracker no.", car)
             # del trackers[idx]
             pair[3]+=1
+            idx +=1
             continue
 
         pair[1] = bbox  #Updating current bbox of tracker "car"
