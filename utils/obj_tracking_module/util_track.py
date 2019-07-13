@@ -130,7 +130,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 if overlap >= iou_threshold: #15.0 
                     # print("IOU_Threshold", iou_threshold)
                     if overlap > max_overlap:
-                        min_thres = max_overlap
+                        max_overlap = overlap 
                         min_id = i
     if min_id != -1:
         t=trackers[min_id]
