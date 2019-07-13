@@ -153,7 +153,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         min_dist = 2.0 # Since cosine is going up slightly more than 1
         for x, (_, _, cn, age, ft, _) in enumerate(trackers):
 
-            a = np.squeeze(np.asarray(ft[-72:]), axis = 1)
+            a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
             if dist_metric == "cosine":
                 eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
             else:
@@ -246,7 +246,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-        a = np.squeeze(np.asarray(_[-72:]), axis = 1)
+        a = np.squeeze(np.asarray(_[-200:]), axis = 1)
         if dist_metric == "cosine":
             distance = _nn_cosine_distance(a, np.asarray(dt_feature))
         else:
