@@ -102,36 +102,36 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
     min_id = -1
     max_overlap = 0.0
     for i, (tracker, bbox, car_no, _, feature, active) in enumerate(trackers):
-        if active:
-            bxmin = int(bbox[0])
-            bymin = int(bbox[1])
-            bxmax = int(bbox[0] + bbox[2])
-            bymax = int(bbox[1] + bbox[3])
-            bxmid = int((bxmin + bxmax) / 2)
-            bymid = int((bymin + bymax) / 2)
-            #IOU-dist
-            x1 = np.maximum(xmin, bxmin)
-            y1 = np.maximum(ymin, bymin)
-            x2 = np.minimum(xmax, bxmax)
-            y2 = np.minimum(ymax, bymax)
+        # if active:
+        bxmin = int(bbox[0])
+        bymin = int(bbox[1])
+        bxmax = int(bbox[0] + bbox[2])
+        bymax = int(bbox[1] + bbox[3])
+        bxmid = int((bxmin + bxmax) / 2)
+        bymid = int((bymin + bymax) / 2)
+        #IOU-dist
+        x1 = np.maximum(xmin, bxmin)
+        y1 = np.maximum(ymin, bymin)
+        x2 = np.minimum(xmax, bxmax)
+        y2 = np.minimum(ymax, bymax)
 
-            w = np.maximum(0, x2 - x1 + 1)
-            h = np.maximum(0, y2 - y1 + 1)
+        w = np.maximum(0, x2 - x1 + 1)
+        h = np.maximum(0, y2 - y1 + 1)
 
-            overlap = (w * h)/area
-            #Ellipse
-            # dist = (((bxmid - xmid)/h_axis)**2 + ((bymid - ymid)/v_axis)**2)
+        overlap = (w * h)/area
+        #Ellipse
+        # dist = (((bxmid - xmid)/h_axis)**2 + ((bymid - ymid)/v_axis)**2)
 
-            dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
-            # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
-            if dist <= box_range:
-                dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-                # print("Overlap with Car :",car_no," is", overlap)
-                if overlap >= iou_threshold: #15.0 
-                    # print("IOU_Threshold", iou_threshold)
-                    if overlap > max_overlap:
-                        max_overlap = overlap 
-                        min_id = i
+        dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
+        # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
+        if dist <= box_range:
+            dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+            # print("Overlap with Car :",car_no," is", overlap)
+            if overlap >= iou_threshold: #15.0 
+                # print("IOU_Threshold", iou_threshold)
+                if overlap > max_overlap:
+                    max_overlap = overlap 
+                    min_id = i
     if min_id != -1:
         t=trackers[min_id]
         t[3]=0 #Resetting age on detection
