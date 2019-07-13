@@ -216,6 +216,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
         else:
             if age > max_age:
                 counters['lost_trackers']+=1
+                print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
                 del trackers[idx]
                 continue
             idx+=1
