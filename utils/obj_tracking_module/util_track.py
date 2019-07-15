@@ -123,7 +123,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         # dist = (((bxmid - xmid)/h_axis)**2 + ((bymid - ymid)/v_axis)**2)
 
         dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
-        # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
+        print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
         print("Overlap with Car :",car_no," is", overlap, "Frame", curr_frame_no)
         if dist <= box_range:
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
