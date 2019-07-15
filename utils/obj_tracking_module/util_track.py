@@ -5,6 +5,7 @@ import string
 import random
 import numpy as np
 import tensorflow as tf
+import warnings
 
 from .appearence_extractor import create_box_encoder
 
@@ -65,7 +66,10 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
     success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
     if success:
         if mask is not None:
-            tracker.setInitialMask(mask)
+            try:
+                tracker.setInitialMask(mask)
+            except Exception as e:
+                warnings.warn(str(e))
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         else:
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
@@ -138,7 +142,10 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         tr = OPENCV_OBJECT_TRACKERS[name]()
         success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         if mask is not None:
-            tr.setInitialMask(mask)
+            try:
+                tr.setInitialMask(mask)
+            except Exception as e:
+                warnings.warn(str(e))
         if success:
             with open('./Re-identification.txt', 'a') as f:
                 f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
@@ -172,7 +179,10 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             # print((xmin, ymin, xmax-xmin, ymax-ymin))
             success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
             if mask is not None:
-                tr.setInitialMask(mask)
+                try:
+                    tracker.setInitialMask(mask)
+                except Exception as e:
+                    warnings.warn(str(e))
             if success:
                 with open('./Re-identification.txt', 'a') as f:
                     f.write("Re-initializing tracker {} in frame {}\n".format(t[2], curr_frame_no))
