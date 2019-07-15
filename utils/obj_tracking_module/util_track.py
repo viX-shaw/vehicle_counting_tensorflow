@@ -84,8 +84,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
     ymin, xmin, ymax, xmax = object_
     new_objects = []
 
-    ymid = int(round((ymin+ymax)/2))
-    xmid = int(round((xmin+xmax)/2))
+    ymid = (ymin+ymax)/2
+    xmid = (xmin+xmax)/2
 
     # dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
     # if dist<=radius*0.93:
@@ -107,8 +107,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         bymin = int(bbox[1])
         bxmax = int(bbox[0] + bbox[2])
         bymax = int(bbox[1] + bbox[3])
-        bxmid = int((bxmin + bxmax) / 2)
-        bymid = int((bymin + bymax) / 2)
+        bxmid = (bxmin + bxmax) / 2
+        bymid = (bymin + bymax) / 2
         #IOU-dist
         x1 = np.maximum(xmin, bxmin)
         y1 = np.maximum(ymin, bymin)
