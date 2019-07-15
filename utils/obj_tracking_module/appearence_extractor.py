@@ -122,7 +122,7 @@ def create_box_encoder(model_filename, input_name="images",
             patch = None
             if mask is not None:
                 if mask.shape != image.shape:
-                    mask = np.zeros_like(np.arange(image.shape[0]*image.shape[1]).reshape(image.shape))
+                    mask = np.zeros_like(np.arange(image.shape[0]*image.shape[1]).reshape((image.shape[0], image.shape[1])))
                 rgb = ImageColor.getrgb('gray')
                 image = np.copy(image).astype(np.uint8)
                 pil_image = Image.fromarray(image)
