@@ -517,7 +517,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   #     dt_boxes.append(box)
   # Draw all boxes onto image.
   for box, m in box_to_instance_masks_map.items():
-    print(m.shape)
+    print(m.shape, np.count_nonzero(m))
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
