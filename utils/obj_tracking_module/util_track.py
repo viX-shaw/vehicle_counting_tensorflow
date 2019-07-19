@@ -130,7 +130,6 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
             # print("Overlap with Car :",car_no," is", overlap, "Frame", curr_frame_no)
             if dist <= box_range:
-                dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
                 if overlap >= iou_threshold: #15.0 
                     # print("IOU_Threshold", iou_threshold)
                     if overlap > max_overlap:
@@ -151,6 +150,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
         # del t[0]
         t[0] = tr             #uncomment 
+        dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         t[4].append(dt_feature)
         # t[-1] = True
 
