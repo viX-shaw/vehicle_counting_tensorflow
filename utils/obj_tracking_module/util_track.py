@@ -34,6 +34,7 @@ OPENCV_OBJECT_TRACKERS = {
 feature_generator = None
 
 def load_appearence_model(path_to_model):
+    print(path_to_model)
     global feature_generator
     if 'veri' in path_to_model:
         feature_generator = create_box_encoder(path_to_model, batch_size=1)

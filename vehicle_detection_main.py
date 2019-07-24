@@ -52,7 +52,7 @@ parser.add_argument("--use_masks", type = int, default=0, required =False)
 parser.add_argument("--iou_threshold", type = float, default=0.7, required =False)
 parser.add_argument("--boundary", type = float, default=80.0, required =False)
 parser.add_argument("--metric", type = str, default="cosine", required =False)
-parser.add_argument("-feat_model", type = str, default="/content/veri.pb", required = False)
+parser.add_argument("--feat_model", type = str, default="/content/veri.pb", required = False)
 
 
 
