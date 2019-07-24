@@ -95,12 +95,11 @@ class ImageEncoder(object):
         # assert len(self.output_var.get_shape()) == 2
         assert len(self.input_var.get_shape()) == 4
         self.image_shape = self.input_var.get_shape().as_list()[1:]
-        try:
-            self.feature_dim = self.output_var.get_shape().as_list()[-1]
-        except Exception as e:
+        self.feature_dim = self.output_var.get_shape().as_list()[-1]
+        if not self.feature_dim:
             #the new feature model uses flattten layer which provides layer dimension at runtime
             test_in = np.reshape(np.arange(0, np.prod(np.asarray(self.image_shape)), 1),
-                                         self.image_shape)[np.newaxis, ...]
+                                            self.image_shape)[np.newaxis, ...]
             output = sess.run(output_var, feed_dict={input_var: test_in})
             self.feature_dim = np.asarray(output).shape[1]
     
