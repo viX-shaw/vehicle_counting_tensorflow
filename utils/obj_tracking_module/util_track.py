@@ -33,9 +33,14 @@ OPENCV_OBJECT_TRACKERS = {
 
 feature_generator = None
 
-def load_appearence_model():
+def load_appearence_model(path_to_model):
     global feature_generator
-    feature_generator = create_box_encoder("/content/veri.pb", batch_size=1)
+    if 'veri' in path_to_model:
+        feature_generator = create_box_encoder(path_to_model, batch_size=1)
+    else:
+        feature_generator = create_box_encoder(path_to_model, input_name = "input_1",
+                                output_name = "flatten/Reshape", batch_size=1)
+
 
 def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
     ymin, xmin, ymax, xmax = obj

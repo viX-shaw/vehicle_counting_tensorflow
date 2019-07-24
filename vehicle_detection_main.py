@@ -52,6 +52,7 @@ parser.add_argument("--use_masks", type = int, default=0, required =False)
 parser.add_argument("--iou_threshold", type = float, default=0.7, required =False)
 parser.add_argument("--boundary", type = float, default=80.0, required =False)
 parser.add_argument("--metric", type = str, default="cosine", required =False)
+parser.add_argument("-feat_model", type = str, default="/content/veri.pb", required = False)
 
 
 
@@ -113,7 +114,7 @@ with detection_graph.as_default():
         tf.import_graph_def(od_graph_def, name='')
 
 #Initialize the appearence model
-util_track.load_appearence_model()
+util_track.load_appearence_model(params.feat_model)
 
 # Loading label map
 # Label maps map indices to category names, so that when our convolution network predicts 5, we know that this corresponds to airplane. Here I use internal utility functions, but anything that returns a dictionary mapping integers to appropriate string labels would be fine
