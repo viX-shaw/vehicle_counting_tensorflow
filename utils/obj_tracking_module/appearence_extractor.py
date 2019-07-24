@@ -100,7 +100,7 @@ class ImageEncoder(object):
             #the new feature model uses flattten layer which provides layer dimension at runtime
             test_in = np.reshape(np.arange(0, np.prod(np.asarray(self.image_shape)), 1),
                                             self.image_shape)[np.newaxis, ...]
-            output = self.session.run(output_var, feed_dict={input_var: test_in})
+            output = self.session.run(self.output_var, feed_dict={self.input_var: test_in})
             self.feature_dim = np.asarray(output).shape[1]
     
 
