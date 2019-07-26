@@ -112,7 +112,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
     min_id = -1
     max_overlap = 0.0
     for i, (tracker, bbox, car_no, age, feature, active) in enumerate(trackers):
-        if age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
+        if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = int(bbox[0])
             bymin = int(bbox[1])
             bxmax = int(bbox[0] + bbox[2])
