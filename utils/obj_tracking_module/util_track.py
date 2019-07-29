@@ -75,13 +75,14 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
             try:
                 tracker.setInitialMask(mask)
             except Exception as e:
-                warnings.warn(str(e))
+                # warnings.warn(str(e))
+                pass
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         else:
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature], success])
-        print("Car - ", label, "is added")
+        # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
@@ -150,7 +151,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             try:
                 tr.setInitialMask(mask)
             except Exception as e:
-                warnings.warn(str(e))
+                pass
+                # warnings.warn(str(e))
         if success:
             with open('./Re-identification.txt', 'a') as f:
                 f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
@@ -166,20 +168,20 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         min_idx = -1
         min_dist = 2.0 # Since cosine is going up slightly more than 1
-        for x, (_, _, cn, age, ft, active) in enumerate(trackers):
-            if not active:
-                a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
-                if dist_metric == "cosine":
-                    eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
-                else:
-                    eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
+        for x, (_, _, cn, age, ft, _) in enumerate(trackers):
 
-                print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
-                if eu_dist < threshold and age > 0:
-                    # xmin, ymin, xmax, ymax = bx
-                    if(min_dist > eu_dist):
-                        min_dist = eu_dist
-                        min_idx = x
+            a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
+            if dist_metric == "cosine":
+                eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
+            else:
+                eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
+
+            # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
+            if eu_dist < threshold and age > 0:
+                # xmin, ymin, xmax, ymax = bx
+                if(min_dist > eu_dist):
+                    min_dist = eu_dist
+                    min_idx = x
         if min_idx != -1:
             t =trackers[min_idx]
 
@@ -190,7 +192,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 try:
                     tracker.setInitialMask(mask)
                 except Exception as e:
-                    warnings.warn(str(e))
+                    pass
+                    # warnings.warn(str(e))
             if success:
                 with open('./Re-identification.txt', 'a') as f:
                     f.write("Re-initializing tracker {} in frame {}\n".format(t[2], curr_frame_no))
