@@ -247,7 +247,6 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
             # print("Lost tracker no.", car)
             # counters['lost_trackers'] += 1
             # del trackers[idx]
-            pair[3]+=1
             idx+=1
             continue
             
