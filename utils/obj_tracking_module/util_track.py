@@ -188,7 +188,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             tr = OPENCV_OBJECT_TRACKERS[name]()
             # print((xmin, ymin, xmax-xmin, ymax-ymin))
             success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-            if mask is not None:
+            # if mask is not None:
                 # try:
                 #     tracker.setInitialMask(mask)
                 # except Exception as e:
