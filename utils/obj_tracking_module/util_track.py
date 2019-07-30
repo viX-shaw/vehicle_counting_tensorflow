@@ -147,7 +147,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         t[3]=0 #Resetting age on detection
         tr = OPENCV_OBJECT_TRACKERS[name]()
         success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-        if mask is not None:
+        # if mask is not None:
             # try:
             #     tr.setInitialMask(mask)
             # except Exception as e:
