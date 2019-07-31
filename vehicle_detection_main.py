@@ -186,6 +186,7 @@ def object_detection_function():
                 detection_masks = tf.expand_dims(
                     detection_masks_reframed, 0)
             # for all the frames that are extracted from input video
+            start_time = time.time()
             while cap.isOpened():
                 (ret, frame) = cap.read()
 
@@ -298,6 +299,8 @@ def object_detection_function():
                 #         (size, color, direction, speed) = \
                 #             csv_line.split(',')
                 #         writer.writerows([csv_line.split(',')])
+            end_time = time.time()
+            print("Total time --", float(start_time - end_time))
             cap.release()
             cv2.destroyAllWindows()
 
