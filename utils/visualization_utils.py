@@ -520,6 +520,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # for box, m in box_to_instance_masks_map.items():
   #   print(m.shape, np.count_nonzero(m))
   # trackers = deepcopy(trackers)
+  mapped_tracker_indices = []
+  unmapped_trackers = trackers
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
@@ -532,7 +534,6 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
     #       color=color
     #   )
     display_str_list=box_to_display_str_map[box]
-    
     # print(list(display_str_list))
     # we are interested just vehicles (i.e. cars and trucks)
     if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
@@ -550,7 +551,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
             tr_id = util_track.not_tracked(image, (top, left, bottom, right),
-                trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2], metric, iou_threshold, mask)
+                unmapped_trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2], metric, iou_threshold, mask)
             if tr_id or tr_id == -1:  
               # generating detections for deep-mot-sort
               # image_temp = numpy.array(image_pil)              
@@ -563,7 +564,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               util_track.add_new_object((top, left, bottom, right), image, counters,
                 trackers, tracker_name, str(current_frame_number)[:-2], mask)
             else:
-              trackers = [t for i, t in enumerate(trackers) if i != tr_id]
+              mapped_tracker_indices.append(tr_id)
+              unmapped_trackers = [t for i, t in enumerate(trackers) if i not in mapped_tracker_indices]
             #   pass
               # del trackers[tr_id]
               # print("Trackers ",[t[2] for t in trackers])
