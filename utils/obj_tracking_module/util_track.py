@@ -85,7 +85,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
+def not_tracked(image, object_, mapped_ids, trackers, name, threshold, curr_frame_no,
                  dist_metric, iou_threshold, mask=None):
     # print("Eu threshold", threshold)
     if not object_:
@@ -113,7 +113,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
     min_id = -1
     max_overlap = 0.0
     for i, (tracker, bbox, car_no, age, feature, active) in enumerate(trackers):
-        if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
+        if i not in mapped_ids and (active or age < 3): #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = int(bbox[0])
             bymin = int(bbox[1])
             bxmax = int(bbox[0] + bbox[2])
@@ -163,18 +163,18 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         min_dist = 2.0 # Since cosine is going up slightly more than 1
         for x, (_, _, cn, age, ft, _) in enumerate(trackers):
+            if x not in mapped_ids:
+                a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
+                if dist_metric == "cosine":
+                    eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
+                else:
+                    eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
 
-            a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
-            if dist_metric == "cosine":
-                eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
-            else:
-                eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
-
-            # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
-            if eu_dist < threshold and age > 0 and min_dist > eu_dist:
-                # xmin, ymin, xmax, ymax = bx
-                min_dist = eu_dist
-                min_id = x
+                # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
+                if eu_dist < threshold and age > 0 and min_dist > eu_dist:
+                    # xmin, ymin, xmax, ymax = bx
+                    min_dist = eu_dist
+                    min_id = x
         if min_id != -1:
             t =trackers[min_id]
 
@@ -200,7 +200,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         else:
             new_objects.append(object_)
 
-    return True if len(new_objects) > 0 else False
+    return min_id
 
 
 def label_object(color, textcolor, fontface, image, car, textsize, thickness, xmax, xmid, xmin, ymax, ymid, ymin):
