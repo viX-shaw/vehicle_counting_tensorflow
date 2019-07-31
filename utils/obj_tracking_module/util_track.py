@@ -160,6 +160,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
+        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         min_idx = -1
         min_dist = 2.0 # Since cosine is going up slightly more than 1
         for x, (_, _, cn, age, ft, _) in enumerate(trackers):
@@ -194,7 +195,6 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 # del t[0]
                 t[0] = tr
                 t[3] = 0
-                dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
                 t[4].append(dt_ft)
                 t[-1] = True
                 # break
