@@ -552,7 +552,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             not_tracked, tr_id = util_track.not_tracked(image, (top, left, bottom, right),
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2], metric, iou_threshold, mask)
 
-            if not_tracked:  
+            if not_tracked == "True":  
               # generating detections for deep-mot-sort
               # image_temp = numpy.array(image_pil)              
               # detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
