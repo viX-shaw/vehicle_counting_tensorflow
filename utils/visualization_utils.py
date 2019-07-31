@@ -547,21 +547,23 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               mask = box_to_instance_masks_map[box]
               # print("MASK SHAPE --", mask.shape)
             
-            # with open('det.txt', 'a') as f:
-            #   f.write("{},-1,{},{},{},{},0.4,-1,-1,-1\n".format(str(current_frame_number)[:-2], left, top, right-left, bottom-top))
-            if util_track.not_tracked(image, (top, left, bottom, right),
+            #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
+            not_tracked, tr_id = util_track.not_tracked(image, (top, left, bottom, right),
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2], metric, iou_threshold, mask):
-              
-              # generating detections for deep-mot-sort
-              image_temp = numpy.array(image_pil)              
-              detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
-              image_saver.save_image(detected_vehicle_image) # save detected object image
 
-              np.copyto(image, np.array(image_pil))
+            if not_tracked:  
+              # generating detections for deep-mot-sort
+              # image_temp = numpy.array(image_pil)              
+              # detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
+              # image_saver.save_image(detected_vehicle_image) # save detected object image
+
+              # np.copyto(image, np.array(image_pil))
 
               counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object((top, left, bottom, right), image, counters,
                 trackers, tracker_name, str(current_frame_number)[:-2], mask)
+            else:
+              del trackers[tr_id]
               # print("Trackers ",[t[2] for t in trackers])
 
 

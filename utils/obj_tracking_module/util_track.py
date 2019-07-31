@@ -161,7 +161,6 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-        min_idx = -1
         min_dist = 2.0 # Since cosine is going up slightly more than 1
         for x, (_, _, cn, age, ft, _) in enumerate(trackers):
 
@@ -175,9 +174,9 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             if eu_dist < threshold and age > 0 and min_dist > eu_dist:
                 # xmin, ymin, xmax, ymax = bx
                 min_dist = eu_dist
-                min_idx = x
-        if min_idx != -1:
-            t =trackers[min_idx]
+                min_id = x
+        if min_id != -1:
+            t =trackers[min_id]
 
             tr = OPENCV_OBJECT_TRACKERS[name]()
             # print((xmin, ymin, xmax-xmin, ymax-ymin))
@@ -201,7 +200,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         else:
             new_objects.append(object_)
 
-    return True if len(new_objects)>0 else False
+    return True, min_id if len(new_objects)>0 else False, min_id
 
 
 def label_object(color, textcolor, fontface, image, car, textsize, thickness, xmax, xmid, xmin, ymax, ymid, ymin):
