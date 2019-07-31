@@ -420,7 +420,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               scores,
                                               category_index,
                                               tracker_name,
-                                              _trackers,
+                                              trackers,
                                               counters,
                                               boundary,
                                               metric,
@@ -519,7 +519,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # Draw all boxes onto image.
   # for box, m in box_to_instance_masks_map.items():
   #   print(m.shape, np.count_nonzero(m))
-  trackers = deepcopy(_trackers)
+  # trackers = deepcopy(trackers)
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
@@ -563,7 +563,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               util_track.add_new_object((top, left, bottom, right), image, counters,
                 trackers, tracker_name, str(current_frame_number)[:-2], mask)
             else:
-              del trackers[tr_id]
+              pass
+              # del trackers[tr_id]
               # print("Trackers ",[t[2] for t in trackers])
 
 
