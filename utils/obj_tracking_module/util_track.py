@@ -113,7 +113,7 @@ def not_tracked(image, object_, mapped_ids, trackers, name, threshold, curr_fram
     min_id = -1
     max_overlap = 0.0
     for i, (tracker, bbox, car_no, age, feature, active) in enumerate(trackers):
-        if i not in mapped_ids and (active or age < 3): #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
+        if car_no not in mapped_ids and (active or age < 3): #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = int(bbox[0])
             bymin = int(bbox[1])
             bxmax = int(bbox[0] + bbox[2])
@@ -163,7 +163,7 @@ def not_tracked(image, object_, mapped_ids, trackers, name, threshold, curr_fram
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         min_dist = 2.0 # Since cosine is going up slightly more than 1
         for x, (_, _, cn, age, ft, _) in enumerate(trackers):
-            if x not in mapped_ids:
+            if cn not in mapped_ids:
                 a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
                 if dist_metric == "cosine":
                     eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
@@ -199,8 +199,11 @@ def not_tracked(image, object_, mapped_ids, trackers, name, threshold, curr_fram
                 # break
         else:
             new_objects.append(object_)
-
-    return min_id
+    if min_id == -1:
+        return min_id
+    else:
+        t = trackers[min_id]
+        return t[2]
 
 
 def label_object(color, textcolor, fontface, image, car, textsize, thickness, xmax, xmid, xmin, ymax, ymid, ymin):
