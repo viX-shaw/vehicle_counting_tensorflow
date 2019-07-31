@@ -200,7 +200,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         else:
             new_objects.append(object_)
 
-    return ("True", min_id) if len(new_objects)>0 else ("False", min_id)
+    return min_id
 
 
 def label_object(color, textcolor, fontface, image, car, textsize, thickness, xmax, xmid, xmin, ymax, ymid, ymin):
