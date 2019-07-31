@@ -551,7 +551,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
             tr_id = util_track.not_tracked(image, (top, left, bottom, right),
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2], metric, iou_threshold, mask)
-
+            print("trid", tr_id)
             if tr_id == -1:  
               # generating detections for deep-mot-sort
               # image_temp = numpy.array(image_pil)              
