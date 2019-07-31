@@ -136,12 +136,9 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
             # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
             # print("Overlap with Car :",car_no," is", overlap, "Frame", curr_frame_no)
-            if dist <= box_range:
-                if overlap >= iou_threshold: #15.0 
-                    # print("IOU_Threshold", iou_threshold)
-                    if overlap > max_overlap:
-                        max_overlap = overlap 
-                        min_id = i
+            if dist <= box_range and overlap >= iou_threshold and overlap > max_overlap:
+                max_overlap = overlap 
+                min_id = i
     if min_id != -1:
         t=trackers[min_id]
         t[3]=0 #Resetting age on detection
@@ -156,16 +153,13 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         if success:
             with open('./Re-identification.txt', 'a') as f:
                 f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
-        # del t[0]
-        t[0] = tr             #uncomment 
-        dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-        t[4].append(dt_feature)
-        # t[-1] = True
-
-        # break
+            # del t[0]
+            t[0] = tr             #uncomment 
+            dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+            t[4].append(dt_feature)
+            # t[-1] = True
     else:
-        ymin, xmin, ymax, xmax = [int(en) for en in object_]
-        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+        # ymin, xmin, ymax, xmax = [int(en) for en in object_]
         min_idx = -1
         min_dist = 2.0 # Since cosine is going up slightly more than 1
         for x, (_, _, cn, age, ft, _) in enumerate(trackers):
@@ -177,11 +171,10 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
 
             # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
-            if eu_dist < threshold and age > 0:
+            if eu_dist < threshold and age > 0 and min_dist > eu_dist:
                 # xmin, ymin, xmax, ymax = bx
-                if(min_dist > eu_dist):
-                    min_dist = eu_dist
-                    min_idx = x
+                min_dist = eu_dist
+                min_idx = x
         if min_idx != -1:
             t =trackers[min_idx]
 
@@ -201,6 +194,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 # del t[0]
                 t[0] = tr
                 t[3] = 0
+                dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
                 t[4].append(dt_ft)
                 t[-1] = True
                 # break
