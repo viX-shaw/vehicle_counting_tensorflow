@@ -25,7 +25,7 @@ import tensorflow as tf
 import cv2
 import numpy
 import os
-from copy import copy
+from copy import deepcopy
 
 # image utils - image saver import
 from utils.image_utils import image_saver
@@ -420,7 +420,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               scores,
                                               category_index,
                                               tracker_name,
-                                              trackers,
+                                              _trackers,
                                               counters,
                                               boundary,
                                               metric,
@@ -519,7 +519,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # Draw all boxes onto image.
   # for box, m in box_to_instance_masks_map.items():
   #   print(m.shape, np.count_nonzero(m))
-  trackers = copy(trackers)
+  trackers = deepcopy(_trackers)
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
