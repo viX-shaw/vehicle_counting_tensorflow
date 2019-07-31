@@ -62,7 +62,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
     textsize, _baseline = cv2.getTextSize(
         label, fontface, fontscale, thickness)
 
-    dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
+    # dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
 
     # init tracker
     # tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
@@ -104,8 +104,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         # return objects  # No existing boxes, return all objects
         return True
     #For ellipse
-    h_axis = (xmax-xmin)/2
-    v_axis = (ymax-ymin)/2
+    # h_axis = (xmax-xmin)/2
+    # v_axis = (ymax-ymin)/2
 
     area = (xmax - xmin + 1) * (ymax - ymin + 1)
     box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
