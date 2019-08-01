@@ -520,7 +520,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # for box, m in box_to_instance_masks_map.items():
   #   print(m.shape, np.count_nonzero(m))
   # trackers = deepcopy(trackers)
-  mapped_tr_ids = []
+  # mapped_tr_ids = []
   # for box in dt_boxes:
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
@@ -551,10 +551,10 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               # print("MASK SHAPE --", mask.shape)
             
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
-            tr_id = util_track.not_tracked(image, (top, left, bottom, right), mapped_tr_ids,
+            if util_track.not_tracked(image, (top, left, bottom, right),
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2],
-                 metric, iou_threshold, mask)
-            if tr_id == -1:  
+                 metric, iou_threshold, mask):
+            # if tr_id == -1:  
               # generating detections for deep-mot-sort
               # image_temp = numpy.array(image_pil)              
               # detected_vehicle_image = image_temp[int(top):int(bottom), int(left):int(right)]
@@ -565,8 +565,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object((top, left, bottom, right), image, counters,
                 trackers, tracker_name, str(current_frame_number)[:-2], mask)
-            else:
-              mapped_tr_ids.append(tr_id)
+            # else:
+            #   mapped_tr_ids.append(tr_id)
             #   pass
               # del trackers[tr_id]
               # print("Trackers ",[t[2] for t in trackers])
