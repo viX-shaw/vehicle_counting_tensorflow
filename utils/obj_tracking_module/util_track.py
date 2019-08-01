@@ -154,7 +154,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             # with open('./Re-identification.txt', 'a') as f:
             #     f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
             # del t[0]
-        t[0] = tr             #uncomment 
+        # t[0] = tr             #uncomment 
         dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         t[4].append(dt_feature)
             # t[-1] = True
