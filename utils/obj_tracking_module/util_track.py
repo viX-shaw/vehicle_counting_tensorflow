@@ -151,8 +151,8 @@ def not_tracked(image, object_, mapped_ids, trackers, name, threshold, curr_fram
             #     pass
                 # warnings.warn(str(e))
         if success:
-            with open('./Re-identification.txt', 'a') as f:
-                f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
+            # with open('./Re-identification.txt', 'a') as f:
+            #     f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
             # del t[0]
             t[0] = tr             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
@@ -188,8 +188,8 @@ def not_tracked(image, object_, mapped_ids, trackers, name, threshold, curr_fram
                 #     pass
                     # warnings.warn(str(e))
             if success:
-                with open('./Re-identification.txt', 'a') as f:
-                    f.write("Re-initializing tracker {} in frame {}\n".format(t[2], curr_frame_no))
+                # with open('./Re-identification.txt', 'a') as f:
+                #     f.write("Re-initializing tracker {} in frame {}\n".format(t[2], curr_frame_no))
                 # print("Re-initializing tracker ",cn, t[2])
                 # del t[0]
                 t[0] = tr
@@ -269,8 +269,8 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
         else:
             distance = _nn_euclidean_distance(a, np.asarray(dt_feature))
         # print(distance)
-        with open("Cosine-distances.txt", 'a') as f:
-            f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
+        # with open("Cosine-distances.txt", 'a') as f:
+        #     f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
         # print(distance)
         if abs(distance) > threshold:
             # print("Working")
