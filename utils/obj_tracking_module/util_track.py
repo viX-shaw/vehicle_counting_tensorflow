@@ -102,7 +102,7 @@ def not_tracked(image, object_, mapped_ids, trackers, name, threshold, curr_fram
     # if dist<=radius*0.93:
     if not trackers:
         # return objects  # No existing boxes, return all objects
-        return True
+        return -1
     #For ellipse
     # h_axis = (xmax-xmin)/2
     # v_axis = (ymax-ymin)/2
