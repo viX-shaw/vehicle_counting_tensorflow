@@ -142,21 +142,21 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
     if min_id != -1:
         t=trackers[min_id]
         t[3]=0 #Resetting age on detection
-        tr = OPENCV_OBJECT_TRACKERS[name]()
-        success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+        # tr = OPENCV_OBJECT_TRACKERS[name]()
+        # success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         # if mask is not None:
             # try:
             #     tr.setInitialMask(mask)
             # except Exception as e:
             #     pass
                 # warnings.warn(str(e))
-        if success:
+        # if success:
             # with open('./Re-identification.txt', 'a') as f:
             #     f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
             # del t[0]
-            t[0] = tr             #uncomment 
-            dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-            t[4].append(dt_feature)
+        t[0] = tr             #uncomment 
+        dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+        t[4].append(dt_feature)
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
