@@ -540,7 +540,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     for i, en in enumerate(boxes):
         for j, tr in enumerate(allowed_trackers_2):
             mask = None if len(masks) == 0 else masks[i]
-            dist = distance_metric_value(en , trackers[tr], dist_metric, mask)
+            dist = distance_metric_value(image, en ,trackers[tr], dist_metric, mask)
             if dist < threshold:
                 CT_2[i][j] = INFY_COST
             else:
