@@ -228,8 +228,8 @@ def object_detection_function():
 
                     # if masks is not None:
                         # print(masks.shape, "boxes_shape", boxes.shape)
-                    # vis_util.visualize_boxes_and_labels_on_image_array(
-                    vis_util.add_or_match_detections_to_trackers(    
+                    # vis_util.add_or_match_detections_to_trackers(    
+                    vis_util.visualize_boxes_and_labels_on_image_array(
                     cap.get(1),
                     copy_frame,
                     np.squeeze(boxes),
