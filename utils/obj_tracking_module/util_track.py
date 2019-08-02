@@ -559,14 +559,14 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     for idx, en in enumerate(c2):
         t = trackers[allowed_trackers_2[idx]]
         tr = OPENCV_OBJECT_TRACKERS[name]()
-            ymin, xmin, ymax, xmax = boxes[r2[idx]]
-            dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-            success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-            if success:
-                t[0] = tr
-                t[3] = 0
-                t[4].append(dt_ft)
-                t[-1] = True
+        ymin, xmin, ymax, xmax = boxes[r2[idx]]
+        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+        success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+        if success:
+            t[0] = tr
+            t[3] = 0
+            t[4].append(dt_ft)
+            t[-1] = True
     return [(box, masks[i]) for i, box in enumerate(boxes) if box not in set(r1.extend(r2))]
 
 
