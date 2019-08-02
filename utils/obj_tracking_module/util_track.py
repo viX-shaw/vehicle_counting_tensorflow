@@ -529,11 +529,11 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
 
     for i, en in enumerate(boxes):
         for j, tr in enumerate(allowed_trackers_1):
-        iv = iou_value(en, trackers[tr])
-        if iv < iou_threshold:
-            CT_1[i][j] = INFY_COST
-        else:
-            CT_1[i][j] = 1 / iv
+            iv = iou_value(en, trackers[tr])
+            if iv < iou_threshold:
+                CT_1[i][j] = INFY_COST
+            else:
+                CT_1[i][j] = 1 / iv
 
     allowed_trackers_2 = [i for i, en in enumerate(trackers) if en[3] > 0]
     CT_2 = np.zeros(len(boxes), len(allowed_trackers_2))
