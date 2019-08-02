@@ -567,7 +567,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
             t[3] = 0
             t[4].append(dt_ft)
             t[-1] = True
-    return [(box, masks[i]) for i, box in enumerate(boxes) if box not in set(r1.extend(r2))]
+    return [(box, masks[i]) for i, box in enumerate(boxes) if i not in np.concatenate([r1, r2])]
 
 
 
