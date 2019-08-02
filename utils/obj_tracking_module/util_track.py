@@ -525,7 +525,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     INFY_COST = 100
     #Trackers allowed to match detections based on iou
     allowed_trackers_1 = [i for i, en in enumerate(trackers) if en[-1] or en[3] < 3]
-    CT_1 = np.zeros(len(boxes), len(allowed_trackers_1))
+    CT_1 = np.zeros((len(boxes), len(allowed_trackers_1)))
 
     for i, en in enumerate(boxes):
         for j, tr in enumerate(allowed_trackers_1):
@@ -536,7 +536,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
                 CT_1[i][j] = 1 / iv
 
     allowed_trackers_2 = [i for i, en in enumerate(trackers) if en[3] > 0]
-    CT_2 = np.zeros(len(boxes), len(allowed_trackers_2))
+    CT_2 = np.zeros((len(boxes), len(allowed_trackers_2)))
     for i, en in enumerate(boxes):
         for j, tr in enumerate(allowed_trackers_2):
             mask = None if len(masks) == 0 else masks[i]
