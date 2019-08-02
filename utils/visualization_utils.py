@@ -626,7 +626,7 @@ def add_or_match_detections_to_trackers(current_frame_number,image,boxes,classes
         continue
       _boxes.append((top, left, bottom, right))
       if instance_masks is not None:
-        _boxes.append(box_to_instance_masks_map[box])
+        _masks.append(box_to_instance_masks_map[box])
 
   add_to_trackers = util_track.untracked_detections(image, trackers, _boxes, tracker_name, current_frame_number, metric,
                          iou_threshold, eu_threshold, masks = _masks)
