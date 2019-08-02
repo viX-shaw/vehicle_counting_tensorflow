@@ -563,7 +563,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               # np.copyto(image, np.array(image_pil))
 
               counters[display_str_list[0][:-5]]+=1
-              util_track.add_new_object([(top, left, bottom, right)], image, counters,
+              util_track.add_new_object((top, left, bottom, right), image, counters,
                 trackers, tracker_name, str(current_frame_number)[:-2], mask)
             # else:
             #   mapped_tr_ids.append(tr_id)
