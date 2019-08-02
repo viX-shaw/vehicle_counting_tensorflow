@@ -553,14 +553,14 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
         t = trackers[allowed_trackers_1[idx]]
         t[3] = 0
         ymin, xmin, ymax, xmax = boxes[r1[idx]]
-        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], masks[r1[idx]])
         t[4].append(dt_ft)
 
     for idx, en in enumerate(c2):
         t = trackers[allowed_trackers_2[idx]]
         tr = OPENCV_OBJECT_TRACKERS[name]()
         ymin, xmin, ymax, xmax = boxes[r2[idx]]
-        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], masks[r1[idx]])
         success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         if success:
             t[0] = tr
