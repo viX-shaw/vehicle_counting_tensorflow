@@ -569,7 +569,8 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
             t[-1] = True
     print(len(r1), len(r2), len(c1), len(c2), len(boxes))
     mapped_trackers = set(r1.tolist().extend(r2.tolist()))
-    return [(box, masks[i]) for i, box in enumerate(boxes) if box not in mapped_trackers if mapped_trackers else []]
+    mapped_trackers = mapped_trackers if mapped_trackers else [] 
+    return [(box, masks[i]) for i, box in enumerate(boxes) if box not in mapped_trackers]
 
 
 
