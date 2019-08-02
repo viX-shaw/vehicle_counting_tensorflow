@@ -628,7 +628,7 @@ def add_or_match_detections_to_trackers(current_frame_number,image,boxes,classes
       if instance_masks is not None:
         _boxes.append(box_to_instance_masks_map[box])
 
-  add_to_trackers = untracked_detections(image, trackers, _boxes, tracker_name, current_frame_number, metric,
+  add_to_trackers = util_track.untracked_detections(image, trackers, _boxes, tracker_name, current_frame_number, metric,
                          iou_threshold, eu_threshold, masks = _masks)
   for en, mask in add_to_trackers:
     counters["person"]+= 1 #Hardcoded"person" , replace with appropriate with classes
