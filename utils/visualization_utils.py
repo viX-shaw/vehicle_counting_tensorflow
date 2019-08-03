@@ -614,8 +614,8 @@ def add_or_match_detections_to_trackers(current_frame_number,image,boxes,classes
   for box, c in box_to_color_map.items():
     ymin, xmin, ymax, xmax = box
     display_str_list=box_to_display_str_map[box]
-    if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or
-                                         ("truck" in display_str_list[0])
+    if (("person" in display_str_list[0]) or ("car" in display_str_list[0])
+                                        or ("truck" in display_str_list[0])
                                      or ("bus" in display_str_list[0])):
       im_height, im_width, _ = image.shape
       if use_normalized_coordinates:
