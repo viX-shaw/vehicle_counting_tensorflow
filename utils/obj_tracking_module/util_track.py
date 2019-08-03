@@ -145,9 +145,9 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             # with open('./Re-identification.txt', 'a') as f:
             #     f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
             # del t[0]
-        t[0] = tr             #uncomment 
-        dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-        t[4].append(dt_feature)
+            t[0] = tr             #uncomment 
+            dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
+            t[4].append(dt_feature)
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
@@ -253,63 +253,18 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
         #     f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
         # print(distance)
         if abs(distance) > threshold:
-            # print("Working")
-            #needs the whole track object
             pair[3]+=1
-        # else:
-        #     pair[3].append(dt_feature)
-
+        
         if age >= max_age:
             counters['lost_trackers']+=1
             print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
             del trackers[idx]
             continue
 
-        # boxes.append((bbox, car, _))  # Return updated box list        
-
-        # if ymid >= ROI_YMAX:
-        #     label_object(WHITE, WHITE, fontface, image, car, textsize, 1, xmax, xmid, xmin, ymax, ymid, ymin)
-        #     # Count left-lane, right-lane as cars ymid crosses finish line
-        #     if xmid < 630:
-        #         left_lane += 1
-        #     else:
-        #         right_lane += 1
-        #     # Stop tracking cars when they hit finish line
-        #     del trackers[n]
-        # else:
-            # Rectangle and number on the cars we are tracking
+        
         label_object(color, RED, fontface, image, car, textsize, 2, xmax, xmid, xmin, ymax, ymid, ymin)
         idx +=1
-    # Add finish line overlay/line
-    # overlay = image.copy()
-
-    # # Shade region of interest (ROI). We're really just using the top line.
-    # cv2.rectangle(overlay,
-    #               (0, ROI_YMAX),
-    #               (FRAME_WIDTH, FRAME_HEIGHT), DARK_BLUE, cv2.FILLED)
-    # cv2.addWeighted(overlay, 0.6, image, 0.4, 0, image)
-
-    # # Draw start line, if > 0
-    # if START_LINE > 0:
-    #     cv2.line(image, (0, START_LINE), (FRAME_WIDTH, START_LINE), GRAY, 4, cv2.LINE_AA)
-    # # Draw finish line with lane hash marks
-    # cv2.line(image, (0, ROI_YMAX), (FRAME_WIDTH, ROI_YMAX), LIGHT_CYAN, 4, cv2.LINE_AA)
-    # cv2.line(image, (350, ROI_YMAX - 20), (350, ROI_YMAX + 20), LIGHT_CYAN, 4, cv2.LINE_AA)
-    # cv2.line(image, (630, ROI_YMAX - 20), (630, ROI_YMAX + 20), LIGHT_CYAN, 4, cv2.LINE_AA)
-    # cv2.line(image, (950, ROI_YMAX - 20), (950, ROI_YMAX + 20), LIGHT_CYAN, 4, cv2.LINE_AA)
-
-    # # Add lane counter
-    # cv2.putText(image, "Lane counter:", (30, ROI_YMAX + 80), fontface, 1.5, LIGHT_CYAN, 4, cv2.LINE_AA)
-    # cv2.putText(image, str(left_lane), (480, ROI_YMAX + 80), fontface, 1.5, LIGHT_CYAN, 4, cv2.LINE_AA)
-    # cv2.putText(image, str(right_lane), (800, ROI_YMAX + 80), fontface, 1.5, LIGHT_CYAN, 4, cv2.LINE_AA)
-    # seconds = counters['frames'] / FRAME_FPS
-    # cv2.putText(image, "Cars/second:", (35, ROI_YMAX + 110), fontface, 0.5, LIGHT_CYAN, 1, cv2.LINE_AA)
-    # cv2.putText(image, '{0:.2f}'.format(left_lane / seconds), (480, ROI_YMAX + 110), fontface, 0.5, LIGHT_CYAN, 1, cv2.LINE_AA)
-    # cv2.putText(image, '{0:.2f}'.format(right_lane / seconds), (800, ROI_YMAX + 110), fontface, 0.5, LIGHT_CYAN, 1, cv2.LINE_AA)
-
-    # counters['left_lane'] = left_lane
-    # counters['right_lane'] = right_lane
-
+    
 def in_range(obj):
     ymin = obj['ymin']
     ymax = obj['ymax']
