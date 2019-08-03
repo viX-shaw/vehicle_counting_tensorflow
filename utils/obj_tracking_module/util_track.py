@@ -77,7 +77,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
         else:
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
-        trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature], success])
+        trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, feature, success])
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
@@ -147,18 +147,19 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             # del t[0]
             t[0] = tr             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-            t[4].append(dt_feature)
+            # t[4].append(dt_feature)
+            np.concatenate(t[4],dt_feature, axis = 1)
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         min_dist = 2.0 # Since cosine is going up slightly more than 1
         for x, (_, _, cn, age, ft, _) in enumerate(trackers):
-            a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
+            # a = np.squeeze(ft[-200:], axis = 1)
             if dist_metric == "cosine":
-                eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
+                eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
             else:
-                eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
+                eu_dist = _nn_euclidean_distance(ft[-200:], dt_ft)
 
             # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
             if eu_dist < threshold and age > 0 and min_dist > eu_dist:
@@ -178,7 +179,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 # print("Re-initializing tracker ",cn, t[2])
                 t[0] = tr
                 t[3] = 0
-                t[4].append(dt_ft)
+                # t[4].append(dt_ft)
+                np.concatenate(t[4],dt_ft, axis = 1)
                 t[-1] = True
                 # break
         else:
@@ -243,11 +245,11 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-        a = np.squeeze(np.asarray(_[-200:]), axis = 1)
+        # a = np.squeeze(np.asarray(_[-200:]), axis = 1)
         if dist_metric == "cosine":
-            distance = _nn_cosine_distance(a, np.asarray(dt_feature))
+            distance = _nn_cosine_distance(_[-200:], dt_feature)
         else:
-            distance = _nn_euclidean_distance(a, np.asarray(dt_feature))
+            distance = _nn_euclidean_distance(_[-200:], dt_feature)
         # print(distance)
         # with open("Cosine-distances.txt", 'a') as f:
         #     f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
