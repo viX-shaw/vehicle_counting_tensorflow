@@ -537,7 +537,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
 
     r1, c1 = linear_sum_assignment(CT_1)
 
-    unmapped_boxes = [i for i, box in boxes if i not in r1]
+    unmapped_boxes = [i for i, box in enumerate(boxes) if i not in r1]
     allowed_trackers_2 = [i for i, en in enumerate(trackers) if en[3] > 0]
     CT_2 = np.zeros((len(unmapped_boxes), len(allowed_trackers_2)))
     for i, en in enumerate(unmapped_boxes):
