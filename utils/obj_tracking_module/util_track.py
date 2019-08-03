@@ -57,12 +57,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
 
     xmid = int(round((xmin+xmax)/2))
     ymid = int(round((ymin+ymax)/2))
-    fontface = cv2.FONT_HERSHEY_SIMPLEX
-    fontscale = 1
-    thickness = 1
-    textsize, _baseline = cv2.getTextSize(
-        label, fontface, fontscale, thickness)
-
+    
     # dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
 
     # init tracker
