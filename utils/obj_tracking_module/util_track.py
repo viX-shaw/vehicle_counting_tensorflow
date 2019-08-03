@@ -148,7 +148,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             t[0] = tr             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             # t[4].append(dt_feature)
-            np.concatenate(t[4],dt_feature, axis = 1)
+            np.concatenate((t[4],dt_feature), axis = 1)
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
@@ -180,7 +180,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 t[0] = tr
                 t[3] = 0
                 # t[4].append(dt_ft)
-                np.concatenate(t[4],dt_ft, axis = 1)
+                np.concatenate((t[4],dt_ft), axis = 1)
                 t[-1] = True
                 # break
         else:
