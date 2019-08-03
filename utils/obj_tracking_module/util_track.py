@@ -552,7 +552,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     r2, c2 = linear_sum_assignment(CT_2)
     
     for idx, en in enumerate(c1):
-        t = trackers[allowed_trackers_1[idx]]
+        t = trackers[allowed_trackers_1[en]]
         t[3] = 0
         ymin, xmin, ymax, xmax = boxes[r1[idx]]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], masks[r1[idx]])
@@ -560,7 +560,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
 
     for idx, en in enumerate(c2):
         _id = unmapped_boxes[r2[idx]]
-        t = trackers[allowed_trackers_2[idx]]
+        t = trackers[allowed_trackers_2[en]]
         tr = OPENCV_OBJECT_TRACKERS[name]()
         ymin, xmin, ymax, xmax = boxes[_id]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], masks[_id])
