@@ -541,7 +541,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
         for j, tr in enumerate(allowed_trackers_2):
             mask = None if len(masks) == 0 else masks[i]
             dist = distance_metric_value(image, en ,trackers[tr], dist_metric, mask)
-            if dist < threshold:
+            if dist > threshold:
                 CT_2[i][j] = INFY_COST
             else:
                 CT_2[i][j] = dist
@@ -560,7 +560,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
         t = trackers[allowed_trackers_2[idx]]
         tr = OPENCV_OBJECT_TRACKERS[name]()
         ymin, xmin, ymax, xmax = boxes[r2[idx]]
-        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], masks[r1[idx]])
+        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], masks[r2[idx]])
         success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         if success:
             t[0] = tr
