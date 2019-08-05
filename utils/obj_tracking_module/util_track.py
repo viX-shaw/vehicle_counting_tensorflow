@@ -266,15 +266,15 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
         label_object(color, RED, fontface, image, car, textsize, 2, xmax, xmid, xmin, ymax, ymid, ymin)
         idx +=1
     
-def in_range(obj):
-    ymin = obj['ymin']
-    ymax = obj['ymax']
-    if ymin < START_LINE or ymax > ROI_YMAX:
-        # Don't add new trackers before start or after finish.
-        # Start line can help avoid overlaps and tracker loss.
-        # Finish line protection avoids counting the car twice.
-        return False
-    return True
+# def in_range(obj):
+#     ymin = obj['ymin']
+#     ymax = obj['ymax']
+#     if ymin < START_LINE or ymax > ROI_YMAX:
+#         # Don't add new trackers before start or after finish.
+#         # Start line can help avoid overlaps and tracker loss.
+#         # Finish line protection avoids counting the car twice.
+#         return False
+#     return True
 
 def _cosine_distance(a, b, data_is_normalized=False):
     """Compute pair-wise cosine distance between points in `a` and `b`.
