@@ -74,7 +74,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
             #     # warnings.warn(str(e))
             #     pass
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-            print(np.asarray(feature).shape)
+            print(feature.shape)
         else:
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
