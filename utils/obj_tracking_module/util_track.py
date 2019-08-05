@@ -45,6 +45,8 @@ def load_appearence_model(path_to_model):
 
 
 def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
+    cdef int ymin, xmin, ymax, xmax, xmid, ymid 
+    cdef bint success
     ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"]+counters["truck"]+ counters["bus"])
     #Age:time for which the tracker is allowed to deviate from its orignal feature 
@@ -89,11 +91,15 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         # return []  # No new classified objects to search for
         return False
 
+    cdef int ymin, xmin, ymax, xmax, xmid, ymid, area
+    cdef float box_range, dist, max_overlap
+    cdef bint success
+
     ymin, xmin, ymax, xmax = object_
     new_objects = []
 
-    ymid = (ymin+ymax)/2
-    xmid = (xmin+xmax)/2
+    ymid = int(round((ymin+ymax)/2))
+    xmid = int(round((xmin+xmax)/2))
 
     # dist = math.sqrt((center[0] - xmid)**2 + (center[1] - ymid)**2)
     # if dist<=radius*0.93:
@@ -107,7 +113,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
     area = (xmax - xmin + 1) * (ymax - ymin + 1)
     box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
     # box_range = 7.0
-    min_id = -1
+    cdef int min_id = -1
     max_overlap = 0.0
     for i, (tracker, bbox, car_no, age, feature, active) in enumerate(trackers):
         if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
@@ -115,8 +121,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             bymin = int(bbox[1])
             bxmax = int(bbox[0] + bbox[2])
             bymax = int(bbox[1] + bbox[3])
-            bxmid = (bxmin + bxmax) / 2
-            bymid = (bymin + bymax) / 2
+            bxmid = int(round((bxmin + bxmax) / 2))
+            bymid = int(round(bymin + bymax) / 2))
             #IOU-dist
             x1 = np.maximum(xmin, bxmin)
             y1 = np.maximum(ymin, bymin)
@@ -202,6 +208,8 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
     fontscale = 1
     thickness = 1
     idx = 0
+    
+    cdef int ymin, xmin, ymax, xmax, xmid, ymid
 
     # for n, pair in enumerate(trackers):
     # print("Trackers ",[t[1] for t in trackers])
