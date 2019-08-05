@@ -70,7 +70,7 @@ STANDARD_COLORS = [
     'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'GreenYellow',
     'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White',
     'WhiteSmoke', 'Yellow', 'YellowGreen'
-# ]
+]
 
 # current_path = os.getcwd()
 
