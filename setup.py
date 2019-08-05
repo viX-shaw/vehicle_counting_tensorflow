@@ -1,4 +1,4 @@
 from distutils.core import setup  
 from Cython.Build import cythonize  
 setup(ext_modules = cythonize(["./utils/obj_tracking_module/appearence_extractor.py",
-"./utils/obj_tracking_module/util_track.py", "vizualization_utils.py"], annotate=True))  
+"./utils/obj_tracking_module/util_track.py", "./utils/vizualization_utils.py"], annotate=True))  
