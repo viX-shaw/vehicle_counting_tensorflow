@@ -122,7 +122,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             bxmax = int(bbox[0] + bbox[2])
             bymax = int(bbox[1] + bbox[3])
             bxmid = int(round((bxmin + bxmax) / 2))
-            bymid = int(round(bymin + bymax) / 2))
+            bymid = int(round((bymin + bymax) / 2))
             #IOU-dist
             x1 = np.maximum(xmin, bxmin)
             y1 = np.maximum(ymin, bymin)
