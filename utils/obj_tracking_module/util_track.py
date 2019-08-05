@@ -166,7 +166,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             if dist_metric == "cosine":
                 eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
             else:
-                eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
+                eu_dist = _nn_euclidean_distance(ft[-200:], np.asarray(dt_ft))
 
             # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
             if eu_dist < threshold and age > 0 and min_dist > eu_dist:
@@ -258,7 +258,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
         if dist_metric == "cosine":
             distance = _nn_cosine_distance(_[-200:], dt_feature)
         else:
-            distance = _nn_euclidean_distance(a, np.asarray(dt_feature))
+            distance = _nn_euclidean_distance(_[-200:], np.asarray(dt_feature))
         # print(distance)
         # with open("Cosine-distances.txt", 'a') as f:
         #     f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
@@ -466,7 +466,7 @@ def distance_metric_value(image, box, tracker, dist_metric, mask):
     if dist_metric == "cosine":
         eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
     else:
-        eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
+        eu_dist = _nn_euclidean_distance(ft[-200:], np.asarray(dt_ft))
     return eu_dist
 
 def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metric,
