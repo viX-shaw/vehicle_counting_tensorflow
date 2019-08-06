@@ -8,6 +8,8 @@ import tensorflow as tf
 import warnings
 from scipy.optimize import linear_sum_assignment
 
+cimport numpy as np
+
 from .appearence_extractor import create_box_encoder
 
 WHITE = (255, 255, 255)
