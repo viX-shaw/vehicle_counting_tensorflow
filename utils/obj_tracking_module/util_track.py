@@ -236,13 +236,13 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
     # for n, pair in enumerate(trackers):
     # print("Trackers ",[t[1] for t in trackers])
     while idx < len(trackers):
-        tracker= trackers[idx]
-        _ = tracker[4]
-        active = tracker[5]
+        pair= trackers[idx]
+        _ = pair[4]
+        active = pair[5]
         textsize, _baseline = cv2.getTextSize(
             pair[2], fontface, fontscale, thickness)
         
-        pair = trackers[idx]
+        # pair = trackers[idx]
         if active:
             success, bbox = pair[0].update(image)
         else:
