@@ -47,6 +47,7 @@ def load_appearence_model(path_to_model):
 def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
     cdef int ymin, xmin, ymax, xmax, xmid, ymid 
     cdef bint success
+    cdef np.ndarray feature
     ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"]+counters["truck"]+ counters["bus"])
     #Age:time for which the tracker is allowed to deviate from its orignal feature 
@@ -94,6 +95,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
     cdef int ymin, xmin, ymax, xmax, xmid, ymid, area
     cdef float box_range, dist, max_overlap
     cdef bint success
+    cdef np.ndarray dt_feature
+    cdef np.ndarray dt_ft
 
     ymin, xmin, ymax, xmax = object_
     new_objects = []
@@ -115,7 +118,11 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
     # box_range = 7.0
     cdef int min_id = -1
     max_overlap = 0.0
-    for i, (tracker, bbox, car_no, age, feature, active) in enumerate(trackers):
+    cdef int i = 0
+    cdef int x = 0
+    while i < len(trackers):
+        tracker, bbox, car_no, age, feature, active = trackers[i]
+    # for i, (tracker, bbox, car_no, age, feature, active) in enumerate(trackers):
         if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = int(bbox[0])
             bymin = int(bbox[1])
@@ -142,6 +149,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             if dist <= box_range and overlap >= iou_threshold and overlap > max_overlap:
                 max_overlap = overlap 
                 min_id = i
+        i += 1
     if min_id != -1:
         t=trackers[min_id]
         t[3]=0 #Resetting age on detection
@@ -161,7 +169,9 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         min_dist = 2.0 # Since cosine is going up slightly more than 1
-        for x, (_, _, cn, age, ft, _) in enumerate(trackers):
+        while x < len(trackers):
+            _, _, cn, age, ft, _ = trackers[x]
+        # for x, (_, _, cn, age, ft, _) in enumerate(trackers):
             # a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
             if dist_metric == "cosine":
                 eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
@@ -173,6 +183,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 # xmin, ymin, xmax, ymax = bx
                 min_dist = eu_dist
                 min_id = x
+            x += 1
         if min_id != -1:
             t =trackers[min_id]
 
@@ -210,6 +221,8 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
     idx = 0
     
     cdef int ymin, xmin, ymax, xmax, xmid, ymid
+    cdef np.ndarray dt_feature
+    cdef float distance
 
     # for n, pair in enumerate(trackers):
     # print("Trackers ",[t[1] for t in trackers])
