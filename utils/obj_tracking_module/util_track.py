@@ -1,5 +1,5 @@
 import cv2
-import math
+# import math
 from collections import defaultdict
 import string
 import random
@@ -9,7 +9,7 @@ import warnings
 from scipy.optimize import linear_sum_assignment
 
 cimport numpy as np
-
+from libc.math cimport sqrt
 from .appearence_extractor import create_box_encoder
 
 WHITE = (255, 255, 255)
@@ -133,19 +133,25 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             bxmid = int(round((bxmin + bxmax) / 2))
             bymid = int(round((bymin + bymax) / 2))
             #IOU-dist
-            x1 = np.maximum(xmin, bxmin)
-            y1 = np.maximum(ymin, bymin)
-            x2 = np.minimum(xmax, bxmax)
-            y2 = np.minimum(ymax, bymax)
+            # x1 = np.maximum(xmin, bxmin)
+            # y1 = np.maximum(ymin, bymin)
+            # x2 = np.minimum(xmax, bxmax)
+            # y2 = np.minimum(ymax, bymax)
+            x1 = xmin if xmin > bxmin else bxmin
+            y1 = ymin if ymin > bymin else bymin
+            x2 = xmax if xmax > bymax else bymax
+            y2 = ymax if ymax > bymax else bymax
 
-            w = np.maximum(0, x2 - x1 + 1)
-            h = np.maximum(0, y2 - y1 + 1)
+            # w = np.maximum(0, x2 - x1 + 1)
+            # h = np.maximum(0, y2 - y1 + 1)
+            w = 0 if 0 > x2 - y2 +1 else x2 - y2 +1
+            h = 0 if 0 > y2 - y1 +1 else y2 - y1 +1
 
             overlap = (w * h)/area
             #Ellipse
             # dist = (((bxmid - xmid)/h_axis)**2 + ((bymid - ymid)/v_axis)**2)
 
-            dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
+            dist = sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
             # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
             # print("Overlap with Car :",car_no," is", overlap, "Frame", curr_frame_no)
             if dist <= box_range and overlap >= iou_threshold and overlap > max_overlap:
@@ -223,23 +229,24 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
     idx = 0
     
     cdef int ymin, xmin, ymax, xmax, xmid, ymid
-    cdef np.ndarray dt_feature
+    cdef np.ndarray dt_feature, _
     cdef float distance
 
     # for n, pair in enumerate(trackers):
     # print("Trackers ",[t[1] for t in trackers])
     while idx < len(trackers):
-        tracker, bx, car, age, _, active = trackers[idx]
+        tracker= trackers[idx]
+        _ = tracker[4]
         textsize, _baseline = cv2.getTextSize(
-            car, fontface, fontscale, thickness)
+            pair[2], fontface, fontscale, thickness)
         
         pair = trackers[idx]
         if active:
-            success, bbox = tracker.update(image)
+            success, bbox = pair[0].update(image)
         else:
-            if age >= max_age:
+            if pair[3] >= max_age:
                 counters['lost_trackers']+=1
-                print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
+                print("Deleting tracker {} with age {} on AOI exit..".format(car, pair[3]))
                 del trackers[idx]
                 continue
             idx+=1
@@ -248,7 +255,7 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
         # print("Tracker object", tracker.update(image))
         if not success:
             pair[-1] = False
-            print("Deleting tracker", car,"on update failure")
+            print("Deleting tracker", pair[2],"on update failure")
             # print("Lost tracker no.", car)
             # counters['lost_trackers'] += 1
             # del trackers[idx]
@@ -281,14 +288,14 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
         if abs(distance) > threshold:
             pair[3]+=1
         
-        if age >= max_age:
+        if pair[3] >= max_age:
             counters['lost_trackers']+=1
-            print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
+            print("Deleting tracker {} with age {} on AOI exit..".format(car, pair[3]))
             del trackers[idx]
             continue
 
         
-        label_object(color, RED, fontface, image, car, textsize, 2, xmax, xmid, xmin, ymax, ymid, ymin)
+        label_object(color, RED, fontface, image, pair[2], textsize, 2, xmax, xmid, xmin, ymax, ymid, ymin)
         idx +=1
     
 # def in_range(obj):
@@ -447,7 +454,7 @@ def iou_value(box, tracker):
     ymid = (ymin+ymax)/2
     xmid = (xmin+xmax)/2
     area = (xmax - xmin + 1) * (ymax - ymin + 1)
-    box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2
+    box_range = sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2
 
     bbox = tracker[1]
     bxmin = int(bbox[0])
@@ -457,7 +464,7 @@ def iou_value(box, tracker):
     bxmid = (bxmin + bxmax) / 2
     bymid = (bymin + bymax) / 2
 
-    dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)
+    dist = sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)
     if dist > box_range:
         return 0.0 # No Overlap
     #IOU-dist
