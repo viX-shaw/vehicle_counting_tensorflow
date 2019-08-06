@@ -10,6 +10,8 @@ from scipy.optimize import linear_sum_assignment
 
 cimport numpy as np
 from libc.math cimport sqrt
+from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
+
 from .appearence_extractor import create_box_encoder
 
 WHITE = (255, 255, 255)
@@ -450,107 +452,32 @@ def reframe_box_masks_to_image_masks(box_masks, boxes, image_height,
       lambda: tf.zeros([0, image_height, image_width, 1], dtype=tf.float32))
   return tf.squeeze(image_masks, axis=3)
 
-def iou_value(box, tracker):
-    ymin, xmin, ymax, xmax = box
+cdef struct Tracker_info:
+    (int, int, int, int) bbox
+    int label
+    int age
+    bint status
 
-    ymid = (ymin+ymax)/2
-    xmid = (xmin+xmax)/2
-    area = (xmax - xmin + 1) * (ymax - ymin + 1)
-    box_range = sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2
+cdef class Tracker:
 
-    bbox = tracker[1]
-    bxmin = int(bbox[0])
-    bymin = int(bbox[1])
-    bxmax = int(bbox[0] + bbox[2])
-    bymax = int(bbox[1] + bbox[3])
-    bxmid = (bxmin + bxmax) / 2
-    bymid = (bymin + bymax) / 2
+    ctypedef Tracker_info data 
 
-    dist = sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)
-    if dist > box_range:
-        return 0.0 # No Overlap
-    #IOU-dist
-    x1 = np.maximum(xmin, bxmin)
-    y1 = np.maximum(ymin, bymin)
-    x2 = np.minimum(xmax, bxmax)
-    y2 = np.minimum(ymax, bymax)
+    def __cinit__(self):
+        # allocate some memory (uninitialised, may contain arbitrary data)
+        self.data = <Tracker_info *> PyMem_Malloc(sizeof(Tracker_info))
+        if not self.data:
+            raise MemoryError()
 
-    w = np.maximum(0, x2 - x1 + 1)
-    h = np.maximum(0, y2 - y1 + 1)
+    def resize(self, size_t new_number):
+        # Allocates new_number * sizeof(double) bytes,
+        # preserving the current content and making a best-effort to
+        # re-use the original data location.
+        mem = <Tracker_info*> PyMem_Realloc(self.data, new_number * sizeof(Tracker_info))
+        if not mem:
+            raise MemoryError()
+        # Only overwrite the pointer if the memory was really reallocated.
+        # On error (mem is NULL), the originally memory has not been freed.
+        self.data = mem
 
-    overlap = (w * h)/area
-    return overlap
-
-def distance_metric_value(image, box, tracker, dist_metric, mask):
-    ymin, xmin, ymax, xmax = box
-    dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-    ft = tracker[-2]
-    # a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
-
-    if dist_metric == "cosine":
-        eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
-    else:
-        eu_dist = _nn_euclidean_distance(ft[-200:], np.asarray(dt_ft))
-    return eu_dist
-
-def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metric,
-                         iou_threshold, threshold, masks = None):
-    #Create CostMatrix with inverse iou values for linear assignment
-    INFY_COST = 100
-    #Trackers allowed to match detections based on iou
-    allowed_trackers_1 = [i for i, en in enumerate(trackers) if en[-1] or en[3] < 3]
-    CT_1 = np.zeros((len(boxes), len(allowed_trackers_1)))
-
-    for i, en in enumerate(boxes):
-        for j, tr in enumerate(allowed_trackers_1):
-            iv = iou_value(en, trackers[tr])
-            if iv < iou_threshold:
-                CT_1[i][j] = INFY_COST
-            else:
-                CT_1[i][j] = 1 / iv
-
-    r1, c1 = linear_sum_assignment(CT_1)
-
-    unmapped_boxes = [i for i, box in enumerate(boxes) if i not in r1]
-    mapped_trackers = [allowed_trackers_1[i] for i in c1]
-    allowed_trackers_2 = [i for i, en in enumerate(trackers) if en[3] > 0 and i not in mapped_trackers]
-    CT_2 = np.zeros((len(unmapped_boxes), len(allowed_trackers_2)))
-    for i, en in enumerate(unmapped_boxes):
-        for j, tr in enumerate(allowed_trackers_2):
-            mask = None if len(masks) == 0 else masks[i]
-            dist = distance_metric_value(image, boxes[en] ,trackers[tr], dist_metric, mask)
-            if dist > threshold:
-                CT_2[i][j] = INFY_COST
-            else:
-                CT_2[i][j] = dist
-            
-    r2, c2 = linear_sum_assignment(CT_2)
-    
-    for idx, en in enumerate(c1):
-        t = trackers[allowed_trackers_1[en]]
-        t[3] = 0
-        ymin, xmin, ymax, xmax = boxes[r1[idx]]
-        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], masks[r1[idx]])
-        t[4].append(dt_ft)
-
-    for idx, en in enumerate(c2):
-        _id = unmapped_boxes[r2[idx]]
-        t = trackers[allowed_trackers_2[en]]
-        tr = OPENCV_OBJECT_TRACKERS[name]()
-        ymin, xmin, ymax, xmax = boxes[_id]
-        dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], masks[_id])
-        success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
-        if success:
-            t[0] = tr
-            t[3] = 0
-            t[4].append(dt_ft)
-            t[-1] = True
-    print(len(r1), len(r2), len(c1), len(c2), len(boxes))
-    r2 = [unmapped_boxes[i] for i in r2]
-    mapped_trackers = set(np.concatenate([r1,r2]).tolist())
-    # mapped_trackers = mapped_trackers if mapped_trackers else [] 
-    return [(box, masks[i]) for i, box in enumerate(boxes) if i not in mapped_trackers]
-
-
-
-
+    def __dealloc__(self):
+        PyMem_Free(self.data)  # no-op if self.data is NULL
