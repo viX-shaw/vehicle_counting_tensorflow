@@ -144,8 +144,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
 
             # w = np.maximum(0, x2 - x1 + 1)
             # h = np.maximum(0, y2 - y1 + 1)
-            w = 0 if 0 > x2 - y2 +1 else x2 - y2 +1
-            h = 0 if 0 > y2 - y1 +1 else y2 - y1 +1
+            w = 0 if 0 > (x2 - y2 +1) else (x2 - y2 +1)
+            h = 0 if 0 > (y2 - y1 +1) else (y2 - y1 +1)
 
             overlap = (w * h)/area
             #Ellipse
