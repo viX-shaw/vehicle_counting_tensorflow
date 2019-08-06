@@ -116,7 +116,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
     # v_axis = (ymax-ymin)/2
 
     area = (xmax - xmin + 1) * (ymax - ymin + 1)
-    box_range = math.sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
+    box_range = sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
     # box_range = 7.0
     cdef int min_id = -1
     max_overlap = 0.0
@@ -231,12 +231,14 @@ def update_trackers(image, cp_image, counters, trackers, curr_frame, threshold, 
     cdef int ymin, xmin, ymax, xmax, xmid, ymid
     cdef np.ndarray dt_feature, _
     cdef float distance
+    cdef bint active
 
     # for n, pair in enumerate(trackers):
     # print("Trackers ",[t[1] for t in trackers])
     while idx < len(trackers):
         tracker= trackers[idx]
         _ = tracker[4]
+        active = tracker[5]
         textsize, _baseline = cv2.getTextSize(
             pair[2], fontface, fontscale, thickness)
         
