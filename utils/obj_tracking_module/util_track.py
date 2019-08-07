@@ -1,3 +1,4 @@
+# cython: profile=True
 import cv2
 import math
 from collections import defaultdict

@@ -1,12 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-# ----------------------------------------------
-# --- Author         : Ahmet Ozlu
-# --- Mail           : ahmetozlu93@gmail.com
-# --- Date           : 27th January 2018
-# ----------------------------------------------
-
-# Imports
+import cProfile
 import numpy as np
 import os
 import six.moves.urllib as urllib
@@ -306,4 +298,4 @@ def object_detection_function():
             cv2.destroyAllWindows()
 
 
-object_detection_function()		
+cProfile.run("object_detection_function()", sort = "time")		
