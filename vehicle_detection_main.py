@@ -186,7 +186,7 @@ def object_detection_function():
                     print ('end of the video file...')
                     break
 
-                input_frame = frame
+                input_frame = np.uint8(frame)
                 copy_frame = np.array(Image.fromarray(np.uint8(frame)).copy())
 
                 # if input_frame is copy_frame:
