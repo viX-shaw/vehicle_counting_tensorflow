@@ -194,7 +194,7 @@ def object_detection_function():
                 # else:
                 #     print("Diff objects")
                 # input_frame = load_image_into_numpy_array(frame)
-                print(type(input_frame), type(copy_frame), type(counters), type(trackers),type(str(cap.get(1))[:-2]), type(params.eu_threshold), type(params.metric), type(params.age))
+                # print(type(input_frame), type(copy_frame), type(counters), type(trackers),type(str(cap.get(1))[:-2]), type(params.eu_threshold), type(params.metric), type(params.age))
                 util_track.update_trackers(input_frame, copy_frame, counters, trackers,str(cap.get(1))[:-2], params.eu_threshold, params.metric, params.age)
                 # print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
