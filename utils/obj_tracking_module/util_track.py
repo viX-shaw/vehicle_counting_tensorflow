@@ -127,7 +127,7 @@ cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers
         age = tr_info[i].age
         active = tr_info[i].active
 
-        if active || age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
+        if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = int(bbox[0])
             bymin = int(bbox[1])
             bxmax = int(bbox[0] + bbox[2])
@@ -150,7 +150,7 @@ cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers
             dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
             # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
             # print("Overlap with Car :",car_no," is", overlap, "Frame", curr_frame_no)
-            if dist <= box_range && overlap >= iou_threshold && overlap > max_overlap:
+            if dist <= box_range and overlap >= iou_threshold and overlap > max_overlap:
                 max_overlap = overlap 
                 min_id = i
     if min_id != -1:
@@ -179,7 +179,7 @@ cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers
                 eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
 
             # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
-            if eu_dist < threshold && age > 0 && min_dist > eu_dist:
+            if eu_dist < threshold and age > 0 and min_dist > eu_dist:
                 # xmin, ymin, xmax, ymax = bx
                 min_dist = eu_dist
                 min_id = x
