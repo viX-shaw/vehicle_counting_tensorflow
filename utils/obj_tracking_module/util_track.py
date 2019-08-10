@@ -132,8 +132,8 @@ cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers
             bymin = int(bbox[1])
             bxmax = int(bbox[0] + bbox[2])
             bymax = int(bbox[1] + bbox[3])
-            bxmid = <int>(round((bxmin + bxmax) / 2)
-            bymid = <int>(round((bymin + bymax) / 2)
+            bxmid = <int>(round((bxmin + bxmax) / 2))
+            bymid = <int>(round((bymin + bymax) / 2))
             #IOU-dist
             x1 = max(xmin, bxmin)
             y1 = max(ymin, bymin)
