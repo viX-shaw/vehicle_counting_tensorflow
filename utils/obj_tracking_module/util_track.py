@@ -50,7 +50,7 @@ def load_appearence_model(path_to_model):
                                 output_name = "flatten/Reshape", batch_size=1)
 
 
-cpdef add_new_object(int[:] obj, np.ndarray image,Info *tr, list trackers, str name, str curr_frame, np.ndarray mask=None):
+cpdef add_new_object(int[:] obj, np.ndarray image,Info *tr, trackers, str name, str curr_frame, np.ndarray mask=None):
     cdef:
         int ymin, xmin, ymax, xmax, xmid, ymid
         int age = 0
@@ -93,7 +93,7 @@ cpdef add_new_object(int[:] obj, np.ndarray image,Info *tr, list trackers, str n
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers, str name, float threshold, str curr_frame_no,
+cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, trackers, str name, float threshold, str curr_frame_no,
                  str dist_metric, float iou_threshold, np.ndarray mask=None):
     # print("Eu threshold", threshold)
     if not object_:
