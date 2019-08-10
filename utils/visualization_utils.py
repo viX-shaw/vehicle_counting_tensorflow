@@ -35,6 +35,7 @@ from utils.speed_and_direction_prediction_module import speed_prediction
 # from utils.object_counting_module import object_counters
 
 from utils.obj_tracking_module import util_track
+from utils.obj_tracking_module.util_track cimport Info
 
 # color recognition module - import
 from utils.color_recognition_module import color_recognition_api
@@ -420,6 +421,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               scores,
                                               category_index,
                                               tracker_name,
+                                              Info *tr,
                                               trackers,
                                               counters,
                                               boundary,
@@ -551,7 +553,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               # print("MASK SHAPE --", mask.shape)
             
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
-            if util_track.not_tracked(image, (top, left, bottom, right),
+            if util_track.not_tracked(image, (top, left, bottom, right), tr,
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2],
                  metric, iou_threshold, mask):
             # if tr_id == -1:  
@@ -564,7 +566,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
               counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object((top, left, bottom, right), image, counters,
-                trackers, tracker_name, str(current_frame_number)[:-2], mask)
+                tr, trackers, tracker_name, str(current_frame_number)[:-2], mask)
             # else:
             #   mapped_tr_ids.append(tr_id)
             #   pass
