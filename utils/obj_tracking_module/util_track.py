@@ -89,7 +89,7 @@ cpdef add_new_object(int[:] obj, np.ndarray image,Info *tr, list trackers, str n
         add_new_Tracker(tr, length, counters, (xmin, ymin, xmax-xmin, ymax-ymin), age, counters, success)
         length +=1
         counters += 1
-        trackers.append([tracker, feature)
+        trackers.append([tracker, feature])
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
