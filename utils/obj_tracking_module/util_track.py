@@ -111,7 +111,7 @@ cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers
     xmin = <int>obj[1]
     ymax = <int>obj[2]
     xmax = <int>obj[3]
-    list new_objects = []
+    new_objects = []
 
     ymid = <int>(round(ymin+ymax)/2)
     xmid = <int>(round((xmin+xmax)/2)
