@@ -123,9 +123,9 @@ cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers
     box_range = sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
     for i in range(length):
         (tracker, feature) = trackers[i]
-         bbox = tr_info[i].bbox
-         age = tr_info[i].age
-         active = tr_info[i].active
+        bbox = tr_info[i].bbox
+        age = tr_info[i].age
+        active = tr_info[i].active
 
         if active || age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = int(bbox[0])
