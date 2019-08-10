@@ -24,6 +24,8 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 from utils.obj_tracking_module import util_track
 
+from utils.obj_tracking_module.util_track cimport Info
+
     
 parser = argparse.ArgumentParser(description='Supervised training')
 parser.add_argument("--file", type=str, default="sub-1504614469486.mp4", help="video file for inference")
@@ -128,6 +130,7 @@ def object_detection_function():
     total_passed_vehicle = 0
     lost_trackers = 0
     trackers = []
+    Info *tr = NULL
     counters = {
     "person": 0,
     "car": 0,
@@ -195,7 +198,7 @@ def object_detection_function():
                 #     print("Diff objects")
                 # input_frame = load_image_into_numpy_array(frame)
                 # print(type(input_frame), type(copy_frame), type(counters), type(trackers),type(str(cap.get(1))[:-2]), type(params.eu_threshold), type(params.metric), type(params.age))
-                util_track.update_trackers(input_frame, copy_frame, counters, trackers,str(cap.get(1))[:-2], params.eu_threshold, params.metric, params.age)
+                util_track.update_trackers(input_frame, copy_frame, counters, tr, trackers,str(cap.get(1))[:-2], params.eu_threshold, params.metric, params.age)
                 # print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
@@ -230,6 +233,7 @@ def object_detection_function():
                     np.squeeze(scores),
                     category_index,
                     params.tracker,
+                    tr,
                     trackers,
                     counters,
                     params.boundary,
