@@ -421,7 +421,7 @@ current_path = os.getcwd()
 
 
 cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
-                                              np.ndarray image,
+                                              int[:,:,:] image,
                                               np.ndarray boxes,
                                               np.ndarray classes,
                                               np.ndarray scores,
@@ -547,7 +547,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
     # print(list(display_str_list))
     # we are interested just vehicles (i.e. cars and trucks)
     if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
-            image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
+            # image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
             im_height, im_width, _ = image.shape
             if use_normalized_coordinates:
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
