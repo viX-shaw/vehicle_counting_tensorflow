@@ -225,6 +225,7 @@ cpdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list trac
     cdef int xmin
     cdef int ymin, xmax, ymax, xmid, ymid
     cdef float distance = 2.0
+    cdef np.ndarray dt_feature, a 
     #2 entities (1) [cv2 tracker instance, features]  (2) [age, status, label, bbox] (a struct called "Info")
     # Traverse both
     while idx < length:
@@ -270,10 +271,10 @@ cpdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list trac
         xmid = <int>(round((xmin+xmax)/2))
         ymid = <int>(round((ymin+ymax)/2))
 
-        np.ndarray dt_feature = feature_generator(cp_image, [bbox])
+        dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-        np.ndarray a = np.squeeze(np.asarray(features[-200:]), axis = 1)
+        a = np.squeeze(np.asarray(features[-200:]), axis = 1)
         # float distance = 2.0
         if dist_metric == "cosine":
             distance = _nn_cosine_distance(a, np.asarray(dt_feature))
