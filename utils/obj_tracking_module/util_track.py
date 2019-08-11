@@ -24,8 +24,8 @@ LIGHT_CYAN = (255, 255, 224)
 DARK_BLUE = (139, 0, 0)
 GRAY = (128, 128, 128)
 
-cdef int length = 0
-cdef int counters = 0
+length = 0
+counters = 0
 
 OPENCV_OBJECT_TRACKERS = {
     "csrt": cv2.TrackerCSRT_create,
@@ -107,10 +107,10 @@ cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers
         float box_range, overlap, dist, eu_dist
         np.ndarray dt_ft, dt_feature
     
-    ymin = <int>obj[0]
-    xmin = <int>obj[1]
-    ymax = <int>obj[2]
-    xmax = <int>obj[3]
+    ymin = <int>object_[0]
+    xmin = <int>object_[1]
+    ymax = <int>object_[2]
+    xmax = <int>object_[3]
     new_objects = []
 
     ymid = <int>(round((ymin+ymax)/2))
@@ -204,7 +204,7 @@ cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers
     return True if len(new_objects) > 0 else False
 
 
-def label_object(color, textcolor, fontface, image, car, thickness, xmax, xmid, xmin, ymax, ymid, ymin):
+def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax, ymid, ymin):
     fontface = cv2.FONT_HERSHEY_SIMPLEX
     fontscale = 1
     thickness = 1
@@ -296,7 +296,7 @@ cpdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list trac
             continue
 
         
-        label_object(color, RED, fontface, image, car, 2, xmax, xmid, xmin, ymax, ymid, ymin)
+        label_object(color, RED, image, car, 2, xmax, xmid, xmin, ymax, ymid, ymin)
         idx +=1
     
 # def in_range(obj):
@@ -557,14 +557,14 @@ cdef struct Info:
   int label
   bint status
 
-cdef Info *add_new_Tracker(Info *tracker,int length, int counters, int[:] bbox, int age, int label, bint status):
+cdef Info *add_new_Tracker(Info *tracker,int length, int counters, (int, int, int, int) bbox, int age, int label, bint status):
   cdef Info *tr
-  if *tracker == NULL:
+  if tracker == NULL:
     tr = <Info *>malloc(sizeof(Info))
-    tr = Info(bbox, age,label,status)
+    tr[0] = Info(bbox, age,label,status)
   else:
     if counters == length:
-      tr = <Info *>realloc(*tracker, (length+1)* sizeof(Info))
+      tr = <Info *>realloc(tracker, (length+1)* sizeof(Info))
     tr[length] = Info(bbox, age,label,status)
     
   return tr
