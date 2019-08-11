@@ -86,7 +86,9 @@ cpdef add_new_object(int[:] obj, np.ndarray image,Info *tr, list trackers, str n
         else:
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
+        global length, counters
         add_new_Tracker(tr, length, counters, (xmin, ymin, xmax-xmin, ymax-ymin), age, counters, success)
+        
         length +=1
         counters += 1
         trackers.append([tracker, feature])
@@ -96,7 +98,7 @@ cpdef add_new_object(int[:] obj, np.ndarray image,Info *tr, list trackers, str n
 cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers, str name, float threshold, str curr_frame_no,
                  str dist_metric, float iou_threshold, np.ndarray mask=None):
     # print("Eu threshold", threshold)
-    if not object_:
+    if object_ == NULL:
         # return []  # No new classified objects to search for
         return False
     cdef:
