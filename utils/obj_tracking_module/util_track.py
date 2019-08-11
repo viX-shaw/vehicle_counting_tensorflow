@@ -50,7 +50,7 @@ def load_appearence_model(path_to_model):
                                 output_name = "flatten/Reshape", batch_size=1)
 
 
-cpdef add_new_object((int, int, int, int) obj, np.ndarray image,Info *tr, list trackers, str name, str curr_frame, np.ndarray mask=None):
+cdef add_new_object((int, int, int, int) obj, np.ndarray image,Info *tr, list trackers, str name, str curr_frame, np.ndarray mask=None):
     cdef:
         int ymin, xmin, ymax, xmax, xmid, ymid
         int age = 0
@@ -95,7 +95,7 @@ cpdef add_new_object((int, int, int, int) obj, np.ndarray image,Info *tr, list t
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-cpdef not_tracked(np.ndarray image, (int, int, int, int) object_, Info *tr_info, list trackers, str name, float threshold, str curr_frame_no,
+cdef not_tracked(np.ndarray image, (int, int, int, int) object_, Info *tr_info, list trackers, str name, float threshold, str curr_frame_no,
                  str dist_metric, float iou_threshold, np.ndarray mask=None):
     # print("Eu threshold", threshold)
     if object_ == (0, 0 ,0 ,0):
@@ -217,7 +217,7 @@ def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax
     cv2.putText(image, car, pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
 
 
-cpdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list trackers, str curr_frame, 
+cdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list trackers, str curr_frame, 
                         float threshold, str dist_metric, int max_age=72):
     # print("Max age", max_age)
     color = (80, 220, 60)
