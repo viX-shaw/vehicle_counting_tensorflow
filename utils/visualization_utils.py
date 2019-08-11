@@ -578,69 +578,69 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               # del trackers[tr_id]
               # print("Trackers ",[t[2] for t in trackers])
 
-def add_or_match_detections_to_trackers(current_frame_number,image,boxes,classes,
-                                              scores,category_index,tracker_name,
-                                              trackers,counters,boundary,metric,instance_masks=None,
-                                              keypoints=None,use_normalized_coordinates=False,
-                                              max_boxes_to_draw=40,min_score_thresh=.55,
-                                              eu_threshold=0.2,iou_threshold=0.7,
-                                              agnostic_mode=False,line_thickness=4):
+# def add_or_match_detections_to_trackers(current_frame_number,image,boxes,classes,
+#                                               scores,category_index,tracker_name,
+#                                               trackers,counters,boundary,metric,instance_masks=None,
+#                                               keypoints=None,use_normalized_coordinates=False,
+#                                               max_boxes_to_draw=40,min_score_thresh=.55,
+#                                               eu_threshold=0.2,iou_threshold=0.7,
+#                                               agnostic_mode=False,line_thickness=4):
   
-  box_to_display_str_map = collections.defaultdict(list)
-  box_to_color_map = collections.defaultdict(str)
-  box_to_instance_masks_map = {}
+#   box_to_display_str_map = collections.defaultdict(list)
+#   box_to_color_map = collections.defaultdict(str)
+#   box_to_instance_masks_map = {}
 
-  if not max_boxes_to_draw:
-    max_boxes_to_draw = boxes.shape[0]
-  for i in range(min(max_boxes_to_draw, boxes.shape[0])):
-    if scores is None or scores[i] > min_score_thresh:
-      box = tuple(boxes[i].tolist())
-      if instance_masks is not None:
-        box_to_instance_masks_map[box] = instance_masks[i]
-      if scores is None:
-        box_to_color_map[box] = 'black'
-      else:
-        if not agnostic_mode:
-          if classes[i] in category_index.keys():
-            class_name = category_index[classes[i]]['name']         
-          else:
-            class_name = 'N/A'              
-          display_str = '{}: {}%'.format(class_name,int(100*scores[i]))
-        else:
-          display_str = 'score: {}%'.format(int(100 * scores[i]))
+#   if not max_boxes_to_draw:
+#     max_boxes_to_draw = boxes.shape[0]
+#   for i in range(min(max_boxes_to_draw, boxes.shape[0])):
+#     if scores is None or scores[i] > min_score_thresh:
+#       box = tuple(boxes[i].tolist())
+#       if instance_masks is not None:
+#         box_to_instance_masks_map[box] = instance_masks[i]
+#       if scores is None:
+#         box_to_color_map[box] = 'black'
+#       else:
+#         if not agnostic_mode:
+#           if classes[i] in category_index.keys():
+#             class_name = category_index[classes[i]]['name']         
+#           else:
+#             class_name = 'N/A'              
+#           display_str = '{}: {}%'.format(class_name,int(100*scores[i]))
+#         else:
+#           display_str = 'score: {}%'.format(int(100 * scores[i]))
 
-        box_to_display_str_map[box].append(display_str)
-        if agnostic_mode:
-          box_to_color_map[box] = 'DarkOrange'
-        else:
-          box_to_color_map[box] = STANDARD_COLORS[
-              classes[i] % len(STANDARD_COLORS)]
+#         box_to_display_str_map[box].append(display_str)
+#         if agnostic_mode:
+#           box_to_color_map[box] = 'DarkOrange'
+#         else:
+#           box_to_color_map[box] = STANDARD_COLORS[
+#               classes[i] % len(STANDARD_COLORS)]
   
-  _boxes = []
-  _masks = []
-  for box, c in box_to_color_map.items():
-    ymin, xmin, ymax, xmax = box
-    display_str_list=box_to_display_str_map[box]
-    if (("person" in display_str_list[0]) or ("car" in display_str_list[0])
-                                        or ("truck" in display_str_list[0])
-                                     or ("bus" in display_str_list[0])):
-      im_height, im_width, _ = image.shape
-      if use_normalized_coordinates:
-        (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
-                                      ymin * im_height, ymax * im_height)
-      #ROI
-      if top + boundary > im_height or top < boundary:
-        continue
-      _boxes.append((top, left, bottom, right))
-      if instance_masks is not None:
-        _masks.append(box_to_instance_masks_map[box])
+#   _boxes = []
+#   _masks = []
+#   for box, c in box_to_color_map.items():
+#     ymin, xmin, ymax, xmax = box
+#     display_str_list=box_to_display_str_map[box]
+#     if (("person" in display_str_list[0]) or ("car" in display_str_list[0])
+#                                         or ("truck" in display_str_list[0])
+#                                      or ("bus" in display_str_list[0])):
+#       im_height, im_width, _ = image.shape
+#       if use_normalized_coordinates:
+#         (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
+#                                       ymin * im_height, ymax * im_height)
+#       #ROI
+#       if top + boundary > im_height or top < boundary:
+#         continue
+#       _boxes.append((top, left, bottom, right))
+#       if instance_masks is not None:
+#         _masks.append(box_to_instance_masks_map[box])
 
-  add_to_trackers = util_track.untracked_detections(image, trackers, _boxes, tracker_name, current_frame_number, metric,
-                         iou_threshold, eu_threshold, masks = _masks)
-  for en, mask in add_to_trackers:
-    counters["person"]+= 1 #Hardcoded"person" , replace with appropriate with classes
-    util_track.add_new_object(en, image, counters,
-      trackers, tracker_name, str(current_frame_number)[:-2], mask)
+#   add_to_trackers = util_track.untracked_detections(image, trackers, _boxes, tracker_name, current_frame_number, metric,
+#                          iou_threshold, eu_threshold, masks = _masks)
+#   for en, mask in add_to_trackers:
+#     counters["person"]+= 1 #Hardcoded"person" , replace with appropriate with classes
+#     util_track.add_new_object(en, image, counters,
+#       trackers, tracker_name, str(current_frame_number)[:-2], mask)
           
 
 def non_max_suppression(boxes, max_bbox_overlap, scores=None):
