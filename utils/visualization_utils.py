@@ -35,7 +35,7 @@ from utils.speed_and_direction_prediction_module import speed_prediction
 from utils.object_counting_module import object_counters
 
 # from utils.obj_tracking_module import util_track
-from utils.obj_tracking_module.util_track cimport util_track
+cimport utils.obj_tracking_module.util_track
 
 # color recognition module - import
 from utils.color_recognition_module import color_recognition_api
@@ -192,7 +192,7 @@ def draw_bounding_box_on_image(current_frame_number,image,
 
   # if(bottom > ROI_POSITION): # if the vehicle get in ROI area, vehicle predicted_speed predicted_color algorithms are called - 200 is an arbitrary value, for my case it looks very well to set position of ROI line at y pixel 200
   #       predicted_direction, predicted_speed,  is_vehicle_detected, update_csv = speed_prediction.predict_speed(top, bottom, right, left, current_frame_number, detected_vehicle_image, ROI_POSITION)
-  predicted_direction,is_vehicle_detected, update_csv = object_counter.count_objects(top, bottom, right, left, detected_vehicle_image, ROI_POSITION, 0, 0, 2) # deviation = 3
+  predicted_direction,is_vehicle_detected, update_csv = object_counters.count_objects(top, bottom, right, left, detected_vehicle_image, ROI_POSITION, 0, 0, 2) # deviation = 3
   predicted_speed = "n.a"
   predicted_color = color_recognition_api.color_recognition(detected_vehicle_image)
   
