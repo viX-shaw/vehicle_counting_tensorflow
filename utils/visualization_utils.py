@@ -35,10 +35,12 @@ from utils.speed_and_direction_prediction_module import speed_prediction
 # from utils.object_counting_module import object_counters
 
 from utils.obj_tracking_module import util_track
-from utils.obj_tracking_module.util_track cimport Info
 
 # color recognition module - import
 from utils.color_recognition_module import color_recognition_api
+
+from utils.obj_tracking_module.util_track cimport Info
+
 
 # Variables
 is_vehicle_detected = [0]
