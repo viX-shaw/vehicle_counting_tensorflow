@@ -130,7 +130,7 @@ def object_detection_function():
     total_passed_vehicle = 0
     lost_trackers = 0
     trackers = []
-    Info *tr = NULL
+    cdef Info *tr = NULL
     counters = {
     "person": 0,
     "car": 0,
