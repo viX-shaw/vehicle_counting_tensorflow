@@ -15,6 +15,7 @@ import time
 import argparse
 import copy
 import time
+import shutil
 
 from collections import defaultdict
 from io import StringIO
@@ -24,7 +25,9 @@ from PIL import Image
 # Object detection imports
 from utils import label_map_util
 from utils import visualization_utils as vis_util
-from utils.obj_tracking_module import util_track
+# from utils.obj_tracking_module import util_track
+cimport utils.obj_tracking_module.util_track as util_track
+
 
 from utils.obj_tracking_module.util_track cimport Info
 
