@@ -39,7 +39,7 @@ from utils.obj_tracking_module import util_track
 # color recognition module - import
 from utils.color_recognition_module import color_recognition_api
 
-from obj_tracking_module.util_track cimport Info
+from utils.obj_tracking_module.util_track cimport Info
 
 
 # Variables
