@@ -219,16 +219,20 @@ cpdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list trac
                         float threshold, str dist_metric, int max_age=72):
     # print("Max age", max_age)
     color = (80, 220, 60)
-    idx = 0
-
+    cdef int idx = 0
+    cdef int age, car
+    cdef bint active 
+    cdef int xmin
+    cdef int ymin, xmax, ymax, xmid, ymid
+    cdef float distance = 2.0
     #2 entities (1) [cv2 tracker instance, features]  (2) [age, status, label, bbox] (a struct called "Info")
     # Traverse both
     while idx < length:
         # tracker, bx, car, age, _, active = trackers[idx]
         tracker, features = trackers[idx]
-        cdef int age = tr[idx].age
-        cdef int car = tr[idx].label
-        cdef bint active = tr[idx].status
+        age = tr[idx].age
+        car = tr[idx].label
+        active = tr[idx].status
         
         
         # pair = trackers[idx]
@@ -259,18 +263,18 @@ cpdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list trac
         tr[idx].bbox = bbox  #Updating current bbox of tracker "car"
         # print("Age", age)
         # print("length of feats", len(_))
-        cdef int xmin = <int>bbox[0]
-        cdef int ymin = <int>bbox[1])
-        cdef int xmax = <int>(bbox[0] + bbox[2])
-        cdef int ymax = <int>(bbox[1] + bbox[3])
-        cdef int xmid = <int>(round((xmin+xmax)/2))
-        cdef int ymid = <int>(round((ymin+ymax)/2))
+        xmin = <int>bbox[0]
+        ymin = <int>bbox[1])
+        xmax = <int>(bbox[0] + bbox[2])
+        ymax = <int>(bbox[1] + bbox[3])
+        xmid = <int>(round((xmin+xmax)/2))
+        ymid = <int>(round((ymin+ymax)/2))
 
         np.ndarray dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         np.ndarray a = np.squeeze(np.asarray(features[-200:]), axis = 1)
-        float distance = 2.0
+        # float distance = 2.0
         if dist_metric == "cosine":
             distance = _nn_cosine_distance(a, np.asarray(dt_feature))
         else:
