@@ -264,7 +264,7 @@ cpdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list trac
         # print("Age", age)
         # print("length of feats", len(_))
         xmin = <int>bbox[0]
-        ymin = <int>bbox[1])
+        ymin = <int>bbox[1]
         xmax = <int>(bbox[0] + bbox[2])
         ymax = <int>(bbox[1] + bbox[3])
         xmid = <int>(round((xmin+xmax)/2))
