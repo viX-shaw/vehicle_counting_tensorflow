@@ -420,7 +420,7 @@ def draw_mask_on_image_array(image, mask, color='red', alpha=0.7):
   np.copyto(image, np.array(pil_image.convert('RGB')))
 
 
-def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
+cdef visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               boxes,
                                               classes,
                                               scores,
