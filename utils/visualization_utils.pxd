@@ -21,4 +21,4 @@ cpdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
                                                 float eu_threshold=*,
                                                 float iou_threshold=*,
                                                 bint agnostic_mode=*,
-                                                int line_thickness=*):
+                                                int line_thickness=*)
