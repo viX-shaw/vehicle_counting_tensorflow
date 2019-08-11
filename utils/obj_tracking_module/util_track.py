@@ -95,10 +95,10 @@ cpdef add_new_object(int[:] obj, np.ndarray image,Info *tr, list trackers, str n
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-cpdef not_tracked(np.ndarray image, int[:] object_, Info *tr_info, list trackers, str name, float threshold, str curr_frame_no,
+cpdef not_tracked(np.ndarray image, (int, int, int, int) object_, Info *tr_info, list trackers, str name, float threshold, str curr_frame_no,
                  str dist_metric, float iou_threshold, np.ndarray mask=None):
     # print("Eu threshold", threshold)
-    if object_ == NULL:
+    if object_ == (0, 0 ,0 ,0):
         # return []  # No new classified objects to search for
         return False
     cdef:
