@@ -426,7 +426,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               scores,
                                               category_index,
                                               tracker_name,
-                                              Info *tr,
+                                              tr_info,
                                               trackers,
                                               counters,
                                               boundary,
@@ -529,6 +529,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # trackers = deepcopy(trackers)
   # mapped_tr_ids = []
   # for box in dt_boxes:
+  cdef Info *tr = <Info *>tr_info
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
