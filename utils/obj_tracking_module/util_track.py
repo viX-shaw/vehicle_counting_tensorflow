@@ -99,12 +99,9 @@ cdef add_new_object(box obj, np.ndarray image, list trackers, str name, str curr
         else:
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
-        global length, counters, tr
         # initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
-        add_new_Tracker(tr, length, counters, (xmin, ymin, xmax-xmin, ymax-ymin), age, counters, success)
+        add_new_Tracker((xmin, ymin, xmax-xmin, ymax-ymin), age, counters, success)
         
-        length +=1
-        counters += 1
         trackers.append([tracker, feature])
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
@@ -271,7 +268,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
                 # counters['lost_trackers']+=1
                 print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
                 del trackers[idx]
-                del_Tracker(tr, idx, length)
+                del_Tracker(idx)
                 length -= 1
                 continue
             idx+=1
@@ -318,7 +315,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
             # counters['lost_trackers']+=1
             print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
             del trackers[idx]
-            del_Tracker(tr, idx, length)
+            del_Tracker(idx)
             length -= 1
             continue
 
@@ -578,19 +575,23 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     return [(box, masks[i]) for i, box in enumerate(boxes) if i not in mapped_trackers]
 
 
-cdef Info *add_new_Tracker(Info *tracker,int length, int counters, (int, int, int, int) bbox, int age, int label, bint status):
+cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, int label, bint status):
 #   cdef Info *tr
-  if tracker == NULL:
-    tracker = <Info *>malloc(sizeof(Info))
-    tracker[0] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
-  else:
-    if counters == length:
-      tracker = <Info *>realloc(tracker, (length+1)* sizeof(Info))
-    tracker[length] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
+    global length, counters, tr
+    length +=1
+    counters += 1
+    if tr == NULL:
+        tr = <Info *>malloc(sizeof(Info))
+        tr[0] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
+    else:
+        if counters == length:
+        tr = <Info *>realloc(tr, (length+1)* sizeof(Info))
+        tr[length] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
 
 #   return tr
 
-cdef del_Tracker(Info * tracker, int index, int length):
-  for i in range(length - index):
-    tracker[index+i] = tracker[index+i+1]
+cdef del_Tracker(int index):
+    global tr, length
+    for i in range(length - index):
+        tr[index+i] = tr[index+i+1]
 
