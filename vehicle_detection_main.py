@@ -247,6 +247,7 @@ def object_detection_function():
                     instance_masks=masks,
                     keypoints=None,
                     use_normalized_coordinates=True,
+                    max_boxes_to_draw=40,
                     min_score_thresh = params.threshold,
                     eu_threshold = params.eu_threshold,
                     iou_threshold = params.iou_threshold,
