@@ -40,6 +40,7 @@ OPENCV_OBJECT_TRACKERS = {
 
 feature_generator = None
 
+cdef (int, int, int, int) bbox
 cdef struct Info:
   (int, int, int ,int) bbox
   int age
@@ -138,10 +139,10 @@ cdef not_tracked(np.ndarray image, (int, int, int, int) object_, Info *tr_info, 
         active = tr_info[i].active
 
         if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
-            bxmin = int(bbox[0])
-            bymin = int(bbox[1])
-            bxmax = int(bbox[0] + bbox[2])
-            bymax = int(bbox[1] + bbox[3])
+            bxmin = <int>(bbox[0])
+            bymin = <int>(bbox[1])
+            bxmax = <int>(bbox[0] + bbox[2])
+            bymax = <int>(bbox[1] + bbox[3])
             bxmid = <int>(round((bxmin + bxmax) / 2))
             bymid = <int>(round((bymin + bymax) / 2))
             #IOU-dist
