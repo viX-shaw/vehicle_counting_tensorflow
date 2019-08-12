@@ -141,6 +141,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
     box_range = sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
     for i in range(length):
         (tracker, feature) = trackers[i]
+        print("Not_tracked -- 0 ")
         bbox = tr[i].bbox
         age = tr[i].age
         active = tr[i].active
