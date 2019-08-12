@@ -70,10 +70,10 @@ cdef add_new_object(box *obj, np.ndarray image,Info *tr, list trackers, str name
     #Age:time for which the tracker is allowed to deviate from its orignal feature 
     # age=0
     # print(obj)
-    ymin = <int>obj[0]
-    xmin = <int>obj[1]
-    ymax = <int>obj[2]
-    xmax = <int>obj[3]
+    ymin = <int>obj.f0
+    xmin = <int>obj.f1
+    ymax = <int>obj.f2
+    xmax = <int>obj.f3
 
     xmid = <int>(round((xmin+xmax)/2))
     ymid = <int>(round((ymin+ymax)/2))
@@ -124,10 +124,10 @@ cdef not_tracked(np.ndarray image, box *object_, Info *tr_info, list trackers, s
         np.ndarray dt_ft, dt_feature
         bint active
     
-    ymin = <int>object_[0]
-    xmin = <int>object_[1]
-    ymax = <int>object_[2]
-    xmax = <int>object_[3]
+    ymin = <int>object_.f0
+    xmin = <int>object_.f1
+    ymax = <int>object_.f2
+    xmax = <int>object_.f3
     new_objects = []
 
     ymid = <int>(round((ymin+ymax)/2))
@@ -145,10 +145,10 @@ cdef not_tracked(np.ndarray image, box *object_, Info *tr_info, list trackers, s
         active = tr_info[i].active
 
         if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
-            bxmin = <int>(bbox[0])
-            bymin = <int>(bbox[1])
-            bxmax = <int>(bbox[0] + bbox[2])
-            bymax = <int>(bbox[1] + bbox[3])
+            bxmin = <int>(bbox.f0)
+            bymin = <int>(bbox.f1)
+            bxmax = <int>(bbox.f0 + bbox.f2)
+            bymax = <int>(bbox.f1 + bbox.f3)
             bxmid = <int>(round((bxmin + bxmax) / 2))
             bymid = <int>(round((bymin + bymax) / 2))
             #IOU-dist
@@ -282,10 +282,10 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list track
         tr[idx].bbox = bbox  #Updating current bbox of tracker "car"
         # print("Age", age)
         # print("length of feats", len(_))
-        xmin = <int>bbox[0]
-        ymin = <int>bbox[1]
-        xmax = <int>(bbox[0] + bbox[2])
-        ymax = <int>(bbox[1] + bbox[3])
+        xmin = <int>bbox.f0
+        ymin = <int>bbox.f1
+        xmax = <int>(bbox.f0 + bbox.f2)
+        ymax = <int>(bbox.f1 + bbox.f3)
         xmid = <int>(round((xmin+xmax)/2))
         ymid = <int>(round((ymin+ymax)/2))
 
