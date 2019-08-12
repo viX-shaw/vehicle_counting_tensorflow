@@ -66,7 +66,7 @@ cdef add_new_object(box obj, np.ndarray image, list trackers, str name, str curr
     cdef:
         int ymin, xmin, ymax, xmax, xmid, ymid
         int age = 0
-    cdef box *initial_bbox
+    # cdef box *initial_bbox
     # label = str(counters["person"]+ counters["car"]+counters["truck"]+ counters["bus"])
     #Age:time for which the tracker is allowed to deviate from its orignal feature 
     # age=0
@@ -100,8 +100,8 @@ cdef add_new_object(box obj, np.ndarray image, list trackers, str name, str curr
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         global length, counters, tr
-        initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
-        add_new_Tracker(tr, length, counters, initial_bbox, age, counters, success)
+        # initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
+        add_new_Tracker(tr, length, counters, (xmin, ymin, xmax-xmin, ymax-ymin), age, counters, success)
         
         length +=1
         counters += 1
@@ -578,15 +578,15 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     return [(box, masks[i]) for i, box in enumerate(boxes) if i not in mapped_trackers]
 
 
-cdef Info *add_new_Tracker(Info *tracker,int length, int counters, box *bbox, int age, int label, bint status):
+cdef Info *add_new_Tracker(Info *tracker,int length, int counters, (int, int, int, int) bbox, int age, int label, bint status):
 #   cdef Info *tr
   if tracker == NULL:
     tracker = <Info *>malloc(sizeof(Info))
-    tracker[0] = Info(*bbox, age,label,status)
+    tracker[0] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
   else:
     if counters == length:
       tracker = <Info *>realloc(tracker, (length+1)* sizeof(Info))
-    tracker[length] = Info(*bbox, age,label,status)
+    tracker[length] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
 
 #   return tr
 
