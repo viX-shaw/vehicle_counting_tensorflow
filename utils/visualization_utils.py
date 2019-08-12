@@ -41,7 +41,6 @@ cimport utils.obj_tracking_module.util_track as util_track
 from utils.color_recognition_module import color_recognition_api
 
 # cdef (int, int, int, int) bbox
-from utils.obj_tracking_module.util_track cimport bbox
 from utils.obj_tracking_module.util_track cimport Info
 
 # from util_track cimport Info
