@@ -42,7 +42,7 @@ cimport utils.obj_tracking_module.util_track as util_track
 from utils.color_recognition_module import color_recognition_api
 
 # cdef (int, int, int, int) bbox
-from utils.obj_tracking_module.util_track cimport Info
+# from utils.obj_tracking_module.util_track cimport Info
 from utils.obj_tracking_module.util_track cimport box as Det_box
 
 
@@ -421,7 +421,19 @@ current_path = os.getcwd()
 #   pil_mask = Image.fromarray(np.uint8(255.0*alpha*mask)).convert('L')
 #   pil_image = Image.composite(pil_solid_color, pil_image, pil_mask)
 #   np.copyto(image, np.array(pil_image.convert('RGB')))
-
+def vis_boxes_and_labels_on_image_array(current_frame_number,image,boxes,
+                                              classes,scores,category_index,tracker_name,
+                                              trackers,counters,boundary,metric,
+                                              instance_masks=None,keypoints=None,use_normalized_coordinates=False,
+                                              max_boxes_to_draw=40,min_score_thresh=.55,eu_threshold=0.2,
+                                              iou_threshold=0.7,agnostic_mode=False,line_thickness=4):
+  
+  visualize_boxes_and_labels_on_image_array(current_frame_number,image,boxes,
+                                              classes,scores,category_index,tracker_name,
+                                              trackers,counters,boundary,metric,
+                                              instance_masks,keypoints,use_normalized_coordinates,
+                                              max_boxes_to_draw,min_score_thresh,eu_threshold,
+                                              iou_threshold,agnostic_mode,line_thickness)
 
 cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
                                               np.ndarray image,
@@ -430,7 +442,6 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
                                               np.ndarray scores,
                                               np.ndarray category_index,
                                               str tracker_name,
-                                              Info *tr_info,
                                               list trackers,
                                               dict counters,
                                               float boundary,
@@ -565,7 +576,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
             
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
             det_bbox = Det_box(top, left, bottom, right)
-            if util_track.not_tracked(image, det_bbox, tr_info,
+            if util_track.not_tracked(image, det_bbox,
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2],
                  metric, iou_threshold, mask):
             # if tr_id == -1:  
@@ -578,7 +589,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
 
               counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object(det_bbox, image,
-                tr_info, trackers, tracker_name, str(current_frame_number)[:-2], mask)
+                trackers, tracker_name, str(current_frame_number)[:-2], mask)
             # else:
             #   mapped_tr_ids.append(tr_id)
             #   pass

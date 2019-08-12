@@ -24,13 +24,13 @@ from PIL import Image
 
 # Object detection imports
 from utils import label_map_util
-# from utils import visualization_utils as vis_util
-cimport utils.visualization_utils as vis_util
-from utils.obj_tracking_module import util_track
-cimport utils.obj_tracking_module.util_track as util_track
+from utils import visualization_utils as vis_util
+# cimport utils.visualization_utils as vis_util
+# from utils.obj_tracking_module import util_track
+# cimport utils.obj_tracking_module.util_track as util_track
 
 
-from utils.obj_tracking_module.util_track cimport Info
+# from utils.obj_tracking_module.util_track cimport Info
 
     
 parser = argparse.ArgumentParser(description='Supervised training')
@@ -136,7 +136,7 @@ def object_detection_function():
     total_passed_vehicle = 0
     lost_trackers = 0
     trackers = []
-    cdef Info *tr = NULL
+    # cdef Info *tr = NULL
     counters = {
     "person": 0,
     "car": 0,
@@ -204,7 +204,7 @@ def object_detection_function():
                 #     print("Diff objects")
                 # input_frame = load_image_into_numpy_array(frame)
                 # print(type(input_frame), type(copy_frame), type(counters), type(trackers),type(str(cap.get(1))[:-2]), type(params.eu_threshold), type(params.metric), type(params.age))
-                util_track.update_trackers(input_frame, copy_frame, tr, trackers,str(cap.get(1))[:-2], params.eu_threshold, params.metric, params.age)
+                util_track.update_trackers(input_frame, copy_frame, trackers,str(cap.get(1))[:-2], params.eu_threshold, params.metric, params.age)
                 # print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
@@ -231,7 +231,7 @@ def object_detection_function():
                     # if masks is not None:
                         # print(masks.shape, "boxes_shape", boxes.shape)
                     # vis_util.add_or_match_detections_to_trackers(    
-                    vis_util.visualize_boxes_and_labels_on_image_array(
+                    vis_util.vis_boxes_and_labels_on_image_array(
                     cap.get(1),
                     copy_frame,
                     np.squeeze(boxes),
@@ -239,7 +239,6 @@ def object_detection_function():
                     np.squeeze(scores),
                     category_index,
                     params.tracker,
-                    tr,
                     trackers,
                     counters,
                     params.boundary,

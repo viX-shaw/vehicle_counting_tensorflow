@@ -51,6 +51,7 @@ cdef struct Info:
     int label
     bint status
 
+cdef Info *tr = NULL
 def load_appearence_model(path_to_model):
     print(path_to_model)
     global feature_generator
@@ -61,7 +62,7 @@ def load_appearence_model(path_to_model):
                                 output_name = "flatten/Reshape", batch_size=1)
 
 
-cdef add_new_object(box obj, np.ndarray image,Info *tr, list trackers, str name, str curr_frame, np.ndarray mask=None):
+cdef add_new_object(box obj, np.ndarray image, list trackers, str name, str curr_frame, np.ndarray mask=None):
     cdef:
         int ymin, xmin, ymax, xmax, xmid, ymid
         int age = 0
@@ -108,7 +109,7 @@ cdef add_new_object(box obj, np.ndarray image,Info *tr, list trackers, str name,
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-cdef not_tracked(np.ndarray image, box object_, Info *tr_info, list trackers, str name, float threshold, str curr_frame_no,
+cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float threshold, str curr_frame_no,
                  str dist_metric, float iou_threshold, np.ndarray mask=None):
     # print("Eu threshold", threshold)
     # if object_ == (0, 0 ,0 ,0):
@@ -140,9 +141,9 @@ cdef not_tracked(np.ndarray image, box object_, Info *tr_info, list trackers, st
     box_range = sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
     for i in range(length):
         (tracker, feature) = trackers[i]
-        bbox = tr_info[i].bbox
-        age = tr_info[i].age
-        active = tr_info[i].active
+        bbox = tr[i].bbox
+        age = tr[i].age
+        active = tr[i].active
 
         if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = <int>(bbox.f0)
@@ -172,23 +173,25 @@ cdef not_tracked(np.ndarray image, box object_, Info *tr_info, list trackers, st
                 min_id = i
     if min_id != -1:
         t=trackers[min_id]
-        tr_info[min_id].age=0 #Resetting age on detection
-        tr = OPENCV_OBJECT_TRACKERS[name]()
-        success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+        tr[min_id].age=0 #Resetting age on detection
+        cv_tr_obj = OPENCV_OBJECT_TRACKERS[name]()
+        success = cv_tr_obj.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         
         if success:
             # with open('./Re-identification.txt', 'a') as f:
             #     f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
             # del t[0]
-            t[0] = tr             #uncomment 
+            t[0] = cv_tr_obj             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-            t[4].append(dt_feature)
+            t[1].append(dt_feature)
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         for x in range(length):
             (_, ft) = trackers[x]
+            age = tr[x].age
+
             a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
             if dist_metric == "cosine":
                 eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
@@ -203,18 +206,18 @@ cdef not_tracked(np.ndarray image, box object_, Info *tr_info, list trackers, st
         if min_id != -1:
             t =trackers[min_id]
             
-            tr = OPENCV_OBJECT_TRACKERS[name]()
+            cv_tr_obj = OPENCV_OBJECT_TRACKERS[name]()
             # print((xmin, ymin, xmax-xmin, ymax-ymin))
-            success = tr.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+            success = cv_tr_obj.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
             
             if success:
                 # with open('./Re-identification.txt', 'a') as f:
                 #     f.write("Re-initializing tracker {} in frame {}\n".format(t[2], curr_frame_no))
                 # print("Re-initializing tracker ",cn, t[2])
-                t[0] = tr
-                tr_info[min_id].age = 0
-                t[4].append(dt_ft)
-                tr_info[min_id].status = True
+                t[0] = cv_tr_obj
+                tr[min_id].age = 0
+                t[1].append(dt_ft)
+                tr[min_id].status = True
                 # break
         # else:
         #     new_objects.append(object_)
@@ -232,7 +235,7 @@ def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax
     cv2.putText(image, car, pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
 
 
-cdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list trackers, str curr_frame, 
+cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
                         float threshold, str dist_metric, int max_age=72):
     # print("Max age", max_age)
     color = (80, 220, 60)
@@ -243,7 +246,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list track
     cdef int ymin, xmax, ymax, xmid, ymid
     cdef float distance = 2.0
     cdef np.ndarray dt_feature, a
-    cdef box bbox 
+    # cdef box bbox 
     #2 entities (1) [cv2 tracker instance, features]  (2) [age, status, label, bbox] (a struct called "Info")
     # Traverse both
     while idx < length:
@@ -279,13 +282,13 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list track
             continue
             
 
-        tr[idx].bbox = bbox  #Updating current bbox of tracker "car"
+        tr[idx].bbox = box(bbox[0], bbox[1], bbox[2], bbox[3])  #Updating current bbox of tracker "car"
         # print("Age", age)
         # print("length of feats", len(_))
-        xmin = <int>bbox.f0
-        ymin = <int>bbox.f1
-        xmax = <int>(bbox.f0 + bbox.f2)
-        ymax = <int>(bbox.f1 + bbox.f3)
+        xmin = <int>bbox[0]
+        ymin = <int>bbox[1]
+        xmax = <int>(bbox[0] + bbox[2])
+        ymax = <int>(bbox[1] + bbox[3])
         xmid = <int>(round((xmin+xmax)/2))
         ymid = <int>(round((ymin+ymax)/2))
 
@@ -570,16 +573,16 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
 
 
 cdef Info *add_new_Tracker(Info *tracker,int length, int counters, box bbox, int age, int label, bint status):
-  cdef Info *tr
+#   cdef Info *tr
   if tracker == NULL:
-    tr = <Info *>malloc(sizeof(Info))
-    tr[0] = Info(bbox, age,label,status)
+    tracker = <Info *>malloc(sizeof(Info))
+    tracker[0] = Info(bbox, age,label,status)
   else:
     if counters == length:
-      tr = <Info *>realloc(tracker, (length+1)* sizeof(Info))
-    tr[length] = Info(bbox, age,label,status)
-    
-  return tr
+      tracker = <Info *>realloc(tracker, (length+1)* sizeof(Info))
+    tracker[length] = Info(bbox, age,label,status)
+
+#   return tr
 
 cdef del_Tracker(Info * tracker, int index, int length):
   for i in range(length - index):
