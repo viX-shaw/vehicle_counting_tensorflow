@@ -40,12 +40,16 @@ OPENCV_OBJECT_TRACKERS = {
 
 feature_generator = None
 
-cdef (int, int, int, int) bbox
+cdef struct box:
+    int f0
+    int f1
+    int f2
+    int f3
 cdef struct Info:
-  (int, int, int ,int) bbox
-  int age
-  int label
-  bint status
+    box *bbox
+    int age
+    int label
+    bint status
 
 def load_appearence_model(path_to_model):
     print(path_to_model)
@@ -57,7 +61,7 @@ def load_appearence_model(path_to_model):
                                 output_name = "flatten/Reshape", batch_size=1)
 
 
-cdef add_new_object((int, int, int, int) obj, np.ndarray image,Info *tr, list trackers, str name, str curr_frame, np.ndarray mask=None):
+cdef add_new_object(box *obj, np.ndarray image,Info *tr, list trackers, str name, str curr_frame, np.ndarray mask=None):
     cdef:
         int ymin, xmin, ymax, xmax, xmid, ymid
         int age = 0
@@ -94,7 +98,8 @@ cdef add_new_object((int, int, int, int) obj, np.ndarray image,Info *tr, list tr
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         global length, counters
-        add_new_Tracker(tr, length, counters, (xmin, ymin, xmax-xmin, ymax-ymin), age, counters, success)
+        box *initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
+        add_new_Tracker(tr, length, counters, initial_bbox, age, counters, success)
         
         length +=1
         counters += 1
@@ -102,7 +107,7 @@ cdef add_new_object((int, int, int, int) obj, np.ndarray image,Info *tr, list tr
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-cdef not_tracked(np.ndarray image, (int, int, int, int) object_, Info *tr_info, list trackers, str name, float threshold, str curr_frame_no,
+cdef not_tracked(np.ndarray image, box *object_, Info *tr_info, list trackers, str name, float threshold, str curr_frame_no,
                  str dist_metric, float iou_threshold, np.ndarray mask=None):
     # print("Eu threshold", threshold)
     # if object_ == (0, 0 ,0 ,0):
@@ -237,7 +242,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list track
     cdef int ymin, xmax, ymax, xmid, ymid
     cdef float distance = 2.0
     cdef np.ndarray dt_feature, a
-    cdef (int, int, int, int) bbox 
+    box *bbox 
     #2 entities (1) [cv2 tracker instance, features]  (2) [age, status, label, bbox] (a struct called "Info")
     # Traverse both
     while idx < length:
@@ -563,7 +568,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     return [(box, masks[i]) for i, box in enumerate(boxes) if i not in mapped_trackers]
 
 
-cdef Info *add_new_Tracker(Info *tracker,int length, int counters, (int, int, int, int) bbox, int age, int label, bint status):
+cdef Info *add_new_Tracker(Info *tracker,int length, int counters, box *bbox, int age, int label, bint status):
   cdef Info *tr
   if tracker == NULL:
     tr = <Info *>malloc(sizeof(Info))
