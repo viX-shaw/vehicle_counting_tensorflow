@@ -41,7 +41,7 @@ OPENCV_OBJECT_TRACKERS = {
 feature_generator = None
 
 cdef struct Info:
-  cdef (int, int, int ,int) bbox
+  (int, int, int ,int) bbox
   int age
   int label
   bint status
@@ -231,11 +231,12 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list track
     color = (80, 220, 60)
     cdef int idx = 0
     cdef int age, car
-    cdef bint active 
+    cdef bint active, success 
     cdef int xmin
     cdef int ymin, xmax, ymax, xmid, ymid
     cdef float distance = 2.0
-    cdef np.ndarray dt_feature, a 
+    cdef np.ndarray dt_feature, a
+    cdef (int, int, int, int) bbox 
     #2 entities (1) [cv2 tracker instance, features]  (2) [age, status, label, bbox] (a struct called "Info")
     # Traverse both
     while idx < length:
