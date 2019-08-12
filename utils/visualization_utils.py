@@ -548,7 +548,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
     # we are interested just vehicles (i.e. cars and trucks)
     if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
             # image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
-            im_height, im_width, _ = image.shape
+            im_height, im_width, _ = image.shape[:3]
             if use_normalized_coordinates:
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
