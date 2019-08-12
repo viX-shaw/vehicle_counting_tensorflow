@@ -421,7 +421,7 @@ current_path = os.getcwd()
 
 
 cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
-                                              int[:,:,:] image,
+                                              np.ndarray image,
                                               np.ndarray boxes,
                                               np.ndarray classes,
                                               np.ndarray scores,
