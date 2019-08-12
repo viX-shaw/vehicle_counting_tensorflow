@@ -245,6 +245,7 @@ def object_detection_function():
                     params.boundary,
                     params.metric,
                     instance_masks=masks,
+                    keypoints=None,
                     use_normalized_coordinates=True,
                     min_score_thresh = params.threshold,
                     eu_threshold = params.eu_threshold,
