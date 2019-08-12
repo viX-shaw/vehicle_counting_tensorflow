@@ -43,7 +43,7 @@ from utils.color_recognition_module import color_recognition_api
 
 # cdef (int, int, int, int) bbox
 from utils.obj_tracking_module.util_track cimport Info
-from utils.obj_tracking_module.util_track cimport box
+from utils.obj_tracking_module.util_track cimport box as Det_box
 
 
 # from util_track cimport Info
@@ -534,7 +534,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
   # mapped_tr_ids = []
   # for box in dt_boxes:
   # cdef Info *tr = <Info *>tr_info
-  cdef box det_bbox
+  cdef Det_box det_bbox
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
@@ -564,7 +564,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
               # print("MASK SHAPE --", mask.shape)
             
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
-            det_bbox = box(top, left, bottom, right)
+            det_bbox = Det_box(top, left, bottom, right)
             if util_track.not_tracked(image, det_bbox, tr_info,
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2],
                  metric, iou_threshold, mask):
