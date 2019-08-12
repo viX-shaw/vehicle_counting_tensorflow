@@ -1,6 +1,5 @@
 cimport numpy as np
 
-cdef (int, int, int, int) bbox
 from utils.obj_tracking_module.util_track cimport Info
 
 cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
