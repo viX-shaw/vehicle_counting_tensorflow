@@ -234,6 +234,8 @@ def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax
     pos = (xmid - textsize[0]//2, ymid + textsize[1]//2)
     cv2.putText(image, car, pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
 
+def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age):
+    update_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age)
 
 cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
                         float threshold, str dist_metric, int max_age=72):
