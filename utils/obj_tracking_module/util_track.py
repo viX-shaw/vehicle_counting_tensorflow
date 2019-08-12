@@ -65,6 +65,7 @@ cdef add_new_object(box *obj, np.ndarray image,Info *tr, list trackers, str name
     cdef:
         int ymin, xmin, ymax, xmax, xmid, ymid
         int age = 0
+    cdef box initial_bbox
     # label = str(counters["person"]+ counters["car"]+counters["truck"]+ counters["bus"])
     #Age:time for which the tracker is allowed to deviate from its orignal feature 
     # age=0
@@ -98,7 +99,7 @@ cdef add_new_object(box *obj, np.ndarray image,Info *tr, list trackers, str name
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         global length, counters
-        cdef box initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
+        initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
         add_new_Tracker(tr, length, counters, initial_bbox, age, counters, success)
         
         length +=1
