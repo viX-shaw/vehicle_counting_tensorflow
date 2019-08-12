@@ -66,7 +66,7 @@ cdef add_new_object(box obj, np.ndarray image, list trackers, str name, str curr
     cdef:
         int ymin, xmin, ymax, xmax, xmid, ymid
         int age = 0
-    cdef box initial_bbox
+    cdef box *initial_bbox
     # label = str(counters["person"]+ counters["car"]+counters["truck"]+ counters["bus"])
     #Age:time for which the tracker is allowed to deviate from its orignal feature 
     # age=0
@@ -578,7 +578,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     return [(box, masks[i]) for i, box in enumerate(boxes) if i not in mapped_trackers]
 
 
-cdef Info *add_new_Tracker(Info *tracker,int length, int counters, box bbox, int age, int label, bint status):
+cdef Info *add_new_Tracker(Info *tracker,int length, int counters, box *bbox, int age, int label, bint status):
 #   cdef Info *tr
   if tracker == NULL:
     tracker = <Info *>malloc(sizeof(Info))
