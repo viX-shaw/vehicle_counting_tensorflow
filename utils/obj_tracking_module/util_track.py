@@ -128,7 +128,7 @@ cdef not_tracked(np.ndarray image, box *object_, Info *tr_info, list trackers, s
     xmin = <int>object_.f1
     ymax = <int>object_.f2
     xmax = <int>object_.f3
-    new_objects = []
+    # new_objects = []
 
     ymid = <int>(round((ymin+ymax)/2))
     xmid = <int>(round((xmin+xmax)/2))
@@ -216,9 +216,9 @@ cdef not_tracked(np.ndarray image, box *object_, Info *tr_info, list trackers, s
                 t[4].append(dt_ft)
                 tr_info[min_id].status = True
                 # break
-        else:
-            new_objects.append(object_)
-    return True if len(new_objects) > 0 else False
+        # else:
+        #     new_objects.append(object_)
+    return True if min_id == -1 else False
 
 
 def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax, ymid, ymin):
