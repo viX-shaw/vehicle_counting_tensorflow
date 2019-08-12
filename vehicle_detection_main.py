@@ -251,6 +251,7 @@ def object_detection_function():
                     min_score_thresh = params.threshold,
                     eu_threshold = params.eu_threshold,
                     iou_threshold = params.iou_threshold,
+                    agnostic_mode = False,
                     line_thickness=4,
                     )
                     t2 = time.time()
