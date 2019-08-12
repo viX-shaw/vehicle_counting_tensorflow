@@ -1,10 +1,12 @@
 cimport numpy as np
-cdef (int, int, int, int) bbox
-cdef struct Info:
-  (int, int, int ,int) bbox
-  int age
-  int label
-  bint status
+
+cdef 
+  (int, int, int, int) bbox
+  struct Info:
+    (int, int, int ,int) bbox
+    int age
+    int label
+    bint status
 
 cdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list trackers, str curr_frame, float threshold, str dist_metric, int max_age=*)
 
