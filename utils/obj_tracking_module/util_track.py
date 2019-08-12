@@ -240,6 +240,7 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
 cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
                         float threshold, str dist_metric, int max_age=72):
     # print("Max age", max_age)
+    global length
     color = (80, 220, 60)
     cdef int idx = 0
     cdef int age, car
