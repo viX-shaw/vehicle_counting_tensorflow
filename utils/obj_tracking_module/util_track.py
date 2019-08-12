@@ -40,6 +40,12 @@ OPENCV_OBJECT_TRACKERS = {
 
 feature_generator = None
 
+cdef struct Info:
+  (int, int, int ,int) bbox
+  int age
+  int label
+  bint status
+
 def load_appearence_model(path_to_model):
     print(path_to_model)
     global feature_generator
@@ -554,12 +560,6 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     # mapped_trackers = mapped_trackers if mapped_trackers else [] 
     return [(box, masks[i]) for i, box in enumerate(boxes) if i not in mapped_trackers]
 
-
-cdef struct Info:
-  (int, int, int ,int) bbox
-  int age
-  int label
-  bint status
 
 cdef Info *add_new_Tracker(Info *tracker,int length, int counters, (int, int, int, int) bbox, int age, int label, bint status):
   cdef Info *tr
