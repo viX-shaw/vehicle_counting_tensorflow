@@ -119,7 +119,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
         int ymin, xmin, ymax, xmax, ymid, xmid, x1, x2, y1, y2, w, h, age
         int bymin, bxmin, bymax, bxmax, bymid, bxmid, area
         int min_id = -1
-        box *bbox
+        box bbox
         float max_overlap = 0.0, min_dist = 2.0
         float box_range, overlap, dist, eu_dist
         np.ndarray dt_ft, dt_feature
