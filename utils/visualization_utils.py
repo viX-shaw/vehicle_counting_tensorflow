@@ -40,7 +40,7 @@ cimport utils.obj_tracking_module.util_track as util_track
 # color recognition module - import
 from utils.color_recognition_module import color_recognition_api
 
-from utils.obj_tracking_module.util_track cimport Info
+from utils.obj_tracking_module.util_track cimport bbox, Info
 
 # from util_track cimport Info
 
@@ -530,7 +530,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
   # trackers = deepcopy(trackers)
   # mapped_tr_ids = []
   # for box in dt_boxes:
-  cdef Info *tr = <Info *>tr_info
+  # cdef Info *tr = <Info *>tr_info
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
@@ -560,7 +560,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
               # print("MASK SHAPE --", mask.shape)
             
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
-            if util_track.not_tracked(image, (top, left, bottom, right), tr,
+            if util_track.not_tracked(image, (top, left, bottom, right), tr_info,
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2],
                  metric, iou_threshold, mask):
             # if tr_id == -1:  
@@ -573,7 +573,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
 
               counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object((top, left, bottom, right), image,
-                tr, trackers, tracker_name, str(current_frame_number)[:-2], mask)
+                tr_info, trackers, tracker_name, str(current_frame_number)[:-2], mask)
             # else:
             #   mapped_tr_ids.append(tr_id)
             #   pass
