@@ -582,11 +582,11 @@ cdef Info *add_new_Tracker(Info *tracker,int length, int counters, box *bbox, in
 #   cdef Info *tr
   if tracker == NULL:
     tracker = <Info *>malloc(sizeof(Info))
-    tracker[0] = Info(bbox, age,label,status)
+    tracker[0] = Info(*bbox, age,label,status)
   else:
     if counters == length:
       tracker = <Info *>realloc(tracker, (length+1)* sizeof(Info))
-    tracker[length] = Info(bbox, age,label,status)
+    tracker[length] = Info(*bbox, age,label,status)
 
 #   return tr
 
