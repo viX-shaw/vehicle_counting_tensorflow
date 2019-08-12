@@ -1,6 +1,6 @@
 cimport numpy as np
 
-cdef 
+cdef:
   (int, int, int, int) bbox
   struct Info:
     (int, int, int ,int) bbox
