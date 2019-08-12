@@ -102,12 +102,14 @@ cdef not_tracked(np.ndarray image, (int, int, int, int) object_, Info *tr_info, 
         # return []  # No new classified objects to search for
         return False
     cdef:
-        int ymin, xmin, ymax, xmax, ymid, xmid, x1, x2, y1, y2, w, h
+        int ymin, xmin, ymax, xmax, ymid, xmid, x1, x2, y1, y2, w, h, age
         int bymin, bxmin, bymax, bxmax, bymid, bxmid, area
         int min_id = -1
+        (int, int, int, int) bbox
         float max_overlap = 0.0, min_dist = 2.0
         float box_range, overlap, dist, eu_dist
         np.ndarray dt_ft, dt_feature
+        bint active
     
     ymin = <int>object_[0]
     xmin = <int>object_[1]
