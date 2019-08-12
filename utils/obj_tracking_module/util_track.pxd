@@ -6,7 +6,7 @@ cdef struct box:
   int f2
   int f3
 cdef struct Info:
-  (int, int, int ,int) bbox
+  box bbox
   int age
   int label
   bint status
