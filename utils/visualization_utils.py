@@ -40,10 +40,10 @@ cimport utils.obj_tracking_module.util_track as util_track
 # color recognition module - import
 from utils.color_recognition_module import color_recognition_api
 
-from utils.obj_tracking_module.util_track cimport bbox, Info
+from utils.obj_tracking_module.util_track cimport Info
 
 # from util_track cimport Info
-
+cdef (int, int, int, int) bbox
 
 # Variables
 is_vehicle_detected = [0]
