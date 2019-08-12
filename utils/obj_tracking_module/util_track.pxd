@@ -1,4 +1,5 @@
 cimport numpy as np
+cdef (int, int, int, int) bbox
 cdef struct Info:
   (int, int, int ,int) bbox
   int age
