@@ -26,7 +26,7 @@ from PIL import Image
 from utils import label_map_util
 from utils import visualization_utils as vis_util
 # cimport utils.visualization_utils as vis_util
-# from utils.obj_tracking_module import util_track
+from utils.obj_tracking_module import util_track
 # cimport utils.obj_tracking_module.util_track as util_track
 
 

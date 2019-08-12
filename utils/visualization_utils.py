@@ -31,15 +31,15 @@ from copy import deepcopy
 from utils.image_utils import image_saver
 
 #  predicted_speed predicted_color module - import
-from utils.speed_and_direction_prediction_module import speed_prediction
-from utils.object_counting_module import object_counters
+# from utils.speed_and_direction_prediction_module import speed_prediction
+# from utils.object_counting_module import object_counters
 
 # from utils.obj_tracking_module import util_track
 cdef (int, int ,int ,int) bbox
 cimport utils.obj_tracking_module.util_track as util_track
 
 # color recognition module - import
-from utils.color_recognition_module import color_recognition_api
+# from utils.color_recognition_module import color_recognition_api
 
 # cdef (int, int, int, int) bbox
 # from utils.obj_tracking_module.util_track cimport Info
