@@ -104,9 +104,9 @@ cdef add_new_object((int, int, int, int) obj, np.ndarray image,Info *tr, list tr
 cdef not_tracked(np.ndarray image, (int, int, int, int) object_, Info *tr_info, list trackers, str name, float threshold, str curr_frame_no,
                  str dist_metric, float iou_threshold, np.ndarray mask=None):
     # print("Eu threshold", threshold)
-    if object_ == (0, 0 ,0 ,0):
-        # return []  # No new classified objects to search for
-        return False
+    # if object_ == (0, 0 ,0 ,0):
+    #     # return []  # No new classified objects to search for
+    #     return False
     cdef:
         int ymin, xmin, ymax, xmax, ymid, xmid, x1, x2, y1, y2, w, h, age
         int bymin, bxmin, bymax, bxmax, bymid, bxmid, area
