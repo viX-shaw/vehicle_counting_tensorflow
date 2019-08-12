@@ -41,7 +41,7 @@ OPENCV_OBJECT_TRACKERS = {
 feature_generator = None
 
 cdef struct Info:
-  (int, int, int ,int) bbox
+  cdef (int, int, int ,int) bbox
   int age
   int label
   bint status

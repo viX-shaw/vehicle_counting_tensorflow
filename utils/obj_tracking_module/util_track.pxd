@@ -1,6 +1,6 @@
 cimport numpy as np
 cdef struct Info:
-  (int, int, int ,int) bbox
+  cdef (int, int, int ,int) bbox
   int age
   int label
   bint status
