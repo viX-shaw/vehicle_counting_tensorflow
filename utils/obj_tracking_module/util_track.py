@@ -144,7 +144,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
         bbox = tr[i].bbox
         age = tr[i].age
         active = tr[i].active
-
+        print("Not_tracked -- 1 ")
         if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = <int>(bbox.f0)
             bymin = <int>(bbox.f1)
@@ -164,6 +164,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
             overlap = (w * h)/area
             #Ellipse
             # dist = (((bxmid - xmid)/h_axis)**2 + ((bymid - ymid)/v_axis)**2)
+            print("Not_tracked -- 2 ")
 
             dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
             # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
@@ -221,6 +222,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
                 # break
         # else:
         #     new_objects.append(object_)
+    print("Not_tracked -- 3 ")    
     return True if min_id == -1 else False
 
 
