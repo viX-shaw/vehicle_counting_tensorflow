@@ -98,7 +98,7 @@ cdef add_new_object(box *obj, np.ndarray image,Info *tr, list trackers, str name
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         global length, counters
-        box *initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
+        cdef box initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
         add_new_Tracker(tr, length, counters, initial_bbox, age, counters, success)
         
         length +=1
@@ -117,7 +117,7 @@ cdef not_tracked(np.ndarray image, box *object_, Info *tr_info, list trackers, s
         int ymin, xmin, ymax, xmax, ymid, xmid, x1, x2, y1, y2, w, h, age
         int bymin, bxmin, bymax, bxmax, bymid, bxmid, area
         int min_id = -1
-        (int, int, int, int) bbox
+        box bbox
         float max_overlap = 0.0, min_dist = 2.0
         float box_range, overlap, dist, eu_dist
         np.ndarray dt_ft, dt_feature
@@ -242,7 +242,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, Info *tr, list track
     cdef int ymin, xmax, ymax, xmid, ymid
     cdef float distance = 2.0
     cdef np.ndarray dt_feature, a
-    box *bbox 
+    cdef box bbox 
     #2 entities (1) [cv2 tracker instance, features]  (2) [age, status, label, bbox] (a struct called "Info")
     # Traverse both
     while idx < length:
@@ -568,7 +568,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     return [(box, masks[i]) for i, box in enumerate(boxes) if i not in mapped_trackers]
 
 
-cdef Info *add_new_Tracker(Info *tracker,int length, int counters, box *bbox, int age, int label, bint status):
+cdef Info *add_new_Tracker(Info *tracker,int length, int counters, box bbox, int age, int label, bint status):
   cdef Info *tr
   if tracker == NULL:
     tr = <Info *>malloc(sizeof(Info))
