@@ -585,8 +585,8 @@ cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, int label, bint s
         tr[0] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
     else:
         if counters == length:
-        tr = <Info *>realloc(tr, (length+1)* sizeof(Info))
-        tr[length] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
+            tr = <Info *>realloc(tr, (length+1)* sizeof(Info))
+            tr[length] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
 
 #   return tr
 
