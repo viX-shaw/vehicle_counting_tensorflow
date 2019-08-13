@@ -118,7 +118,7 @@ def create_box_encoder(model_filename, input_name="images",
     image_shape = image_encoder.image_shape
 
     def encoder(image, boxes, mask=None):
-        print("feat ext 1")
+        # print("feat ext 1")
         # print(image.shape)
         image_patches = []
         #adding dummy images to make batch_size 10 permanently because of googlenet
@@ -148,7 +148,7 @@ def create_box_encoder(model_filename, input_name="images",
                 patch = np.random.uniform(
                     0., 255., image_shape).astype(np.uint8)
             image_patches.append(patch)
-        print("feat ext 2")        
+        # print("feat ext 2")        
         image_patches = np.asarray(image_patches)
         return image_encoder(image_patches, batch_size)
 
