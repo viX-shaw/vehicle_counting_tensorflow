@@ -182,7 +182,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
             # del t[0]
             t[0] = cv_tr_obj             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-            t[1].append(dt_feature)
+            t[1] = np.concatenate([t[1],dt_feature])
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
@@ -191,11 +191,11 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
             (_, ft) = trackers[x]
             age = tr[x].age
 
-            a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
+            # a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
             if dist_metric == "cosine":
-                eu_dist = _nn_cosine_distance(a, np.asarray(dt_ft))
+                eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
             else:
-                eu_dist = _nn_euclidean_distance(a, np.asarray(dt_ft))
+                eu_dist = _nn_euclidean_distance(ft[-200:], dt_ft)
 
             # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
             if eu_dist < threshold and age > 0 and min_dist > eu_dist:
@@ -215,7 +215,8 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
                 # print("Re-initializing tracker ",cn, t[2])
                 t[0] = cv_tr_obj
                 tr[min_id].age = 0
-                t[1].append(dt_ft)
+                t[1] = np.concatenate([t[1],dt_ft])
+                # t[1].append(dt_ft)
                 tr[min_id].status = True
                 # break
         # else:
@@ -248,7 +249,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
     cdef int xmin
     cdef int ymin, xmax, ymax, xmid, ymid
     cdef float distance = 2.0
-    cdef np.ndarray dt_feature, a
+    cdef np.ndarray dt_feature
     # cdef box bbox 
     #2 entities (1) [cv2 tracker instance, features]  (2) [age, status, label, bbox] (a struct called "Info")
     # Traverse both
@@ -298,12 +299,12 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
-        a = np.squeeze(np.asarray(features[-200:]), axis = 1)
+        # a = np.squeeze(np.asarray(features[-200:]), axis = 1)
         # float distance = 2.0
         if dist_metric == "cosine":
-            distance = _nn_cosine_distance(a, np.asarray(dt_feature))
-        else:
-            distance = _nn_euclidean_distance(a, np.asarray(dt_feature))
+                eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
+            else:
+                eu_dist = _nn_euclidean_distance(ft[-200:], dt_ft)
         # print(distance)
         # with open("Cosine-distances.txt", 'a') as f:
         #     f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
