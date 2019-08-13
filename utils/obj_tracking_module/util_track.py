@@ -228,7 +228,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
 def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax, ymid, ymin):
     fontface = cv2.FONT_HERSHEY_SIMPLEX
     fontscale = 1
-    thickness = 1
+    # thickness = 1
     textsize, _baseline = cv2.getTextSize(
             str(car), fontface, fontscale, thickness)
     cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, thickness)
