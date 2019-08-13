@@ -302,9 +302,9 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
         # a = np.squeeze(np.asarray(features[-200:]), axis = 1)
         # float distance = 2.0
         if dist_metric == "cosine":
-                eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
-            else:
-                eu_dist = _nn_euclidean_distance(ft[-200:], dt_ft)
+            eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
+        else:
+            eu_dist = _nn_euclidean_distance(ft[-200:], dt_ft)
         # print(distance)
         # with open("Cosine-distances.txt", 'a') as f:
         #     f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
