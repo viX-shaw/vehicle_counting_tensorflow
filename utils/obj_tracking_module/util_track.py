@@ -240,7 +240,7 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
     try:
         update_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age)
     except Exception as e:
-        print(repr(e))
+        print(repr(e)
 cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
                         float threshold, str dist_metric, int max_age=72):
     global length
