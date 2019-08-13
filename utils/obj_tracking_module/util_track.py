@@ -139,11 +139,11 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
     box_range = sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
     for i in range(length):
         (tracker, feature) = trackers[i]
-        # print("Not_tracked -- 0 ")
+        print("Not_tracked -- 0 ")
         bbox = tr[i].bbox
         age = tr[i].age
         active = tr[i].status
-        # print("Not_tracked -- 1 ")
+        print("Not_tracked -- 1 ")
         if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = <int>(bbox.f0)
             bymin = <int>(bbox.f1)
@@ -241,8 +241,8 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
 
 cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
                         float threshold, str dist_metric, int max_age=72):
-    # print("Max age", max_age)
     global length
+    print("length", length, len(trackers))
     color = (80, 220, 60)
     cdef int idx = 0
     cdef int age, car

@@ -576,7 +576,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
             
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
             det_bbox = Det_box(top, left, bottom, right)
-            print("Calling not_tracked")
+            # print("Calling not_tracked")
             if util_track.not_tracked(image, det_bbox,
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2],
                  metric, iou_threshold, mask):
@@ -589,7 +589,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
               # np.copyto(image, np.array(image_pil))
 
               counters[display_str_list[0][:-5]]+=1
-              print("callind add_new_object")
+              # print("callind add_new_object")
               util_track.add_new_object(det_bbox, image,
                 trackers, tracker_name, str(current_frame_number)[:-2], mask)
             # else:
