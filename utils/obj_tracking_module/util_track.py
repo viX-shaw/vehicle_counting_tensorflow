@@ -138,11 +138,11 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
     box_range = sqrt((xmax-xmin)**2 + (ymax-ymin)**2)/2    #UNCOMMENT
     for i in range(length):
         (tracker, feature) = trackers[i]
-        print("Not_tracked -- 0 ")
+        # print("Not_tracked -- 0 ")
         bbox = tr[i].bbox
         age = tr[i].age
         active = tr[i].status
-        print("Not_tracked -- 1 ")
+        # print("Not_tracked -- 1 ")
         if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = <int>(bbox.f0)
             bymin = <int>(bbox.f1)
@@ -162,7 +162,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
             overlap = (w * h)/area
             #Ellipse
             # dist = (((bxmid - xmid)/h_axis)**2 + ((bymid - ymid)/v_axis)**2)
-            print("Not_tracked -- 2 ")
+            # print("Not_tracked -- 2 ")
 
             dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
             # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
@@ -221,7 +221,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
                 # break
         # else:
         #     new_objects.append(object_)
-    print("Not_tracked -- 3 ")    
+    # print("Not_tracked -- 3 ")    
     return True if min_id == -1 else False
 
 
@@ -230,7 +230,7 @@ def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax
     fontscale = 1
     thickness = 1
     textsize, _baseline = cv2.getTextSize(
-            car, fontface, fontscale, thickness)
+            str(car), fontface, fontscale, thickness)
     cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, thickness)
     pos = (xmid - textsize[0]//2, ymid + textsize[1]//2)
     cv2.putText(image, car, pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
