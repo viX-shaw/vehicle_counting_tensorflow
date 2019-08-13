@@ -24,8 +24,9 @@ LIGHT_CYAN = (255, 255, 224)
 DARK_BLUE = (139, 0, 0)
 GRAY = (128, 128, 128)
 
-length = 0
-counters = 0
+cdef:
+    int length = 0
+    int counters = 0
 
 OPENCV_OBJECT_TRACKERS = {
     "csrt": cv2.TrackerCSRT_create,
@@ -100,7 +101,7 @@ cdef add_new_object(box obj, np.ndarray image, list trackers, str name, str curr
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         # initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
-        add_new_Tracker((xmin, ymin, xmax-xmin, ymax-ymin), age, counters, success)
+        add_new_Tracker((xmin, ymin, xmax-xmin, ymax-ymin), age, success)
         
         trackers.append([tracker, feature])
         # print("Car - ", label, "is added")
@@ -576,18 +577,18 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     return [(box, masks[i]) for i, box in enumerate(boxes) if i not in mapped_trackers]
 
 
-cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, int label, bint status):
+cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, bint status):
 #   cdef Info *tr
     global length, counters, tr
     length +=1
     counters += 1
     if tr == NULL:
         tr = <Info *>malloc(sizeof(Info))
-        tr[0] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
+        tr[0] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age, counters ,status)
     else:
         if counters == length:
-            tr = <Info *>realloc(tr, (length+1)* sizeof(Info))
-            tr[length] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age,label,status)
+            tr = <Info *>realloc(tr, (length)* sizeof(Info))
+        tr[length-1] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age, counters ,status)
 
 #   return tr
 
