@@ -132,7 +132,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
     ymid = <int>(round((ymin+ymax)/2))
     xmid = <int>(round((xmin+xmax)/2))
 
-    if not trackers:
+    if not trackers: # use length
         return True
 
     area = (xmax - xmin + 1) * (ymax - ymin + 1)
