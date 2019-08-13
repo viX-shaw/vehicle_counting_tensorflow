@@ -299,13 +299,13 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
         ymax = <int>(bbox[1] + bbox[3])
         xmid = <int>(round((xmin+xmax)/2))
         ymid = <int>(round((ymin+ymax)/2))
-        # print("update 5")
+        print("update 5")
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         # a = np.squeeze(np.asarray(features[-200:]), axis = 1)
         # float distance = 2.0
-        # print("update 6")
+        print("update 6")
         if dist_metric == "cosine":
             eu_dist = _nn_cosine_distance(features[-200:], dt_feature)
         else:
