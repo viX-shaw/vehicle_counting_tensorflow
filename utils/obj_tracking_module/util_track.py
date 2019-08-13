@@ -183,7 +183,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
             # del t[0]
             t[0] = cv_tr_obj             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
-            t[1] = np.concatenate((t[1],dt_feature), axis = 1)
+            t[1] = np.concatenate((t[1],dt_feature), axis = 0)
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
@@ -216,7 +216,7 @@ cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float t
                 # print("Re-initializing tracker ",cn, t[2])
                 t[0] = cv_tr_obj
                 tr[min_id].age = 0
-                t[1] = np.concatenate((t[1],dt_ft), axis = 1)
+                t[1] = np.concatenate((t[1],dt_ft), axis = 0)
                 # t[1].append(dt_ft)
                 tr[min_id].status = True
                 # break
