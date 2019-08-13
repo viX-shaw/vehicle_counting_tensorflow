@@ -299,7 +299,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
         ymax = <int>(bbox[1] + bbox[3])
         xmid = <int>(round((xmin+xmax)/2))
         ymid = <int>(round((ymin+ymax)/2))
-        print("update 5")
+        print("update 5", bbox)
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
@@ -325,7 +325,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
             length -= 1
             continue
 
-        # print("update 8")
+        print("update 8")
         label_object(color, RED, image, car, 2, xmax, xmid, xmin, ymax, ymid, ymin)
         idx +=1
     
