@@ -233,7 +233,7 @@ def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax
             str(car), fontface, fontscale, thickness)
     cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, thickness)
     pos = (xmid - textsize[0]//2, ymid + textsize[1]//2)
-    cv2.putText(image, car, pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
+    cv2.putText(image, str(car), pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
 
 def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age):
     update_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age)
