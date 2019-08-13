@@ -278,7 +278,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
             idx+=1
             tr[idx].age +=1
             continue
-        # print("update 3")
+        print("update 3")
         # print("Tracker object", tracker.update(image))
         if not success:
             tr[idx].status = False
@@ -289,7 +289,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
             idx+=1
             continue
             
-        # print("update 4")
+        print("update 4")
         tr[idx].bbox = box(bbox[0], bbox[1], bbox[2], bbox[3])  #Updating current bbox of tracker "car"
         # print("Age", age)
         # print("length of feats", len(_))
