@@ -257,7 +257,7 @@ cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str c
     # Traverse both
     while idx < length:
         # tracker, bx, car, age, _, active = trackers[idx]
-        print("length----", length, len(trackers))
+        print("length----", length, len(trackers), idx)
         # print("update 1")
 
         tracker, features = trackers[idx]
