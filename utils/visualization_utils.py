@@ -427,14 +427,14 @@ def vis_boxes_and_labels_on_image_array(current_frame_number,image,boxes,
                                               instance_masks=None,keypoints=None,use_normalized_coordinates=False,
                                               max_boxes_to_draw=40,min_score_thresh=.55,eu_threshold=0.2,
                                               iou_threshold=0.7,agnostic_mode=False,line_thickness=4):
-  print("Vis util start")  
+  # print("Vis util start")  
   visualize_boxes_and_labels_on_image_array(current_frame_number,image,boxes,
                                               classes,scores,category_index,tracker_name,
                                               trackers,counters,boundary,metric,
                                               instance_masks,keypoints,use_normalized_coordinates,
                                               max_boxes_to_draw,min_score_thresh,eu_threshold,
                                               iou_threshold,agnostic_mode,line_thickness)
-  print("Vis util end")
+  # print("Vis util end")
 
 cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
                                               np.ndarray image,
