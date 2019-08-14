@@ -47,7 +47,7 @@ cdef struct box:
     int f2
     int f3
 cdef struct Info:
-    box *bbox
+    box bbox
     int age
     int label
     bint status
