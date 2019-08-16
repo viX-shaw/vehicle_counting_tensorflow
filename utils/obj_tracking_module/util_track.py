@@ -235,7 +235,7 @@ def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax
     cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, thickness)
     pos = (xmid - textsize[0]//2, ymid + textsize[1]//2)
     cv2.putText(image, str(car), pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
-    print("label_object")
+    # print("label_object")
 
 def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age):
     try:
@@ -258,7 +258,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
     # Traverse both
     while idx < length:
         # tracker, bx, car, age, _, active = trackers[idx]
-        print("length----", length, len(trackers), idx)
+        # print("length----", length, len(trackers), idx)
         # print("update 1")
 
         tracker, features = trackers[idx]
