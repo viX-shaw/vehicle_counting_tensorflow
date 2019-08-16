@@ -11,8 +11,8 @@ cdef struct Info:
   int label
   bint status
 
-cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, float threshold, str dist_metric, int max_age=*)
+cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, float threshold, str dist_metric, int max_age=*) except *
 
-cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float threshold, str curr_frame_no,str dist_metric, float iou_threshold, np.ndarray mask=*)
-cdef add_new_object(box obj, np.ndarray image, list trackers, str name, str curr_frame, np.ndarray mask=*)
+cdef void not_tracked(np.ndarray image, box object_, list trackers, str name, float threshold, str curr_frame_no,str dist_metric, float iou_threshold, np.ndarray mask=*) except *
+cdef bint add_new_object(box obj, np.ndarray image, list trackers, str name, str curr_frame, np.ndarray mask=*) except -1
 
