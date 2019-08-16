@@ -206,7 +206,7 @@ def object_detection_function():
                 # print(type(input_frame), type(copy_frame), type(counters), type(trackers),type(str(cap.get(1))[:-2]), type(params.eu_threshold), type(params.metric), type(params.age))
                 util_track.updt_trackers(input_frame, copy_frame, trackers,str(cap.get(1))[:-2], params.eu_threshold, params.metric, params.age)
                 # print("Total trackers ", trackers,"in frame no.", cap.get(1))
-
+                print("Finished Update trackers.")
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                 if cap.get(1) % params.sr == 0:
                     t1 = time.time()

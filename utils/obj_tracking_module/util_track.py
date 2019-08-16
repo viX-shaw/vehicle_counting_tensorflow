@@ -266,7 +266,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         car = tr[idx].label
         active = tr[idx].status
         
-        # print("update 2")
+        print("update 2")
         # pair = trackers[idx]
         if active:
             success, bbox = tracker.update(image)
@@ -281,7 +281,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
             idx+=1
             tr[idx].age +=1
             continue
-        # print("update 3")
+        print("update 3")
         # print("Tracker object", tracker.update(image))
         if not success:
             tr[idx].status = False
@@ -292,7 +292,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
             idx+=1
             continue
             
-        # print("update 4")
+        print("update 4")
         tr[idx].bbox = box(bbox[0], bbox[1], bbox[2], bbox[3])  #Updating current bbox of tracker "car"
         # print("Age", age)
         # print("length of feats", len(_))
@@ -308,7 +308,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
         # a = np.squeeze(np.asarray(features[-200:]), axis = 1)
         # float distance = 2.0
-        # print("update 6")
+        print("update 6")
         if dist_metric == "cosine":
             eu_dist = _nn_cosine_distance(features[-200:], dt_feature)
         else:
