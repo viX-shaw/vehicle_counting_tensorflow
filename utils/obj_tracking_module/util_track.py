@@ -592,7 +592,7 @@ cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, bint status):
     length +=1
     counters += 1
     if tr == NULL:
-        print("Memory error")
+        # print("Memory error")
         tr = <Info *>PyMem_Malloc(sizeof(Info))
         if not tr:
             raise MemoryError()
