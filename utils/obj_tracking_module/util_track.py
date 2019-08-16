@@ -28,6 +28,7 @@ GRAY = (128, 128, 128)
 cdef:
     int length = 0
     int counters = 0
+    int max_len = 0
 
 OPENCV_OBJECT_TRACKERS = {
     "csrt": cv2.TrackerCSRT_create,
@@ -587,18 +588,19 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
 
 cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, bint status):
 #   cdef Info *tr
-    global length, counters, tr
+    global length, counters, tr, max_len
     length +=1
     counters += 1
     if tr == NULL:
+        print("Memory error")
         tr = <Info *>PyMem_Malloc(sizeof(Info))
         if not tr:
-            print("Memory error")
             raise MemoryError()
         tr[0] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age, counters ,status)
     else:
-        if counters == length:
-            tr = <Info *>PyMem_Realloc(tr, (length)* sizeof(Info))
+        if max_len < length:
+            max_len = length
+            tr = <Info *>PyMem_Realloc(tr, (max_len)* sizeof(Info))
             if not tr:
                 print("Memory error")
                 raise MemoryError()
