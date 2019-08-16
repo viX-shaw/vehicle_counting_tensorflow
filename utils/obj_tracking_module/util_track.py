@@ -302,7 +302,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         ymax = <int>(bbox[1] + bbox[3])
         xmid = <int>(round((xmin+xmax)/2))
         ymid = <int>(round((ymin+ymax)/2))
-        # print("update 5", bbox)
+        print("update 5", bbox)
         dt_feature = feature_generator(cp_image, [bbox])
     
         # print("Detection bbox feature shape", np.asarray(dt_feature).shape)
