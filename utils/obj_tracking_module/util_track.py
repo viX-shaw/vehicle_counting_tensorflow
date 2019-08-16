@@ -63,7 +63,7 @@ def load_appearence_model(path_to_model):
                                 output_name = "flatten/Reshape", batch_size=1)
 
 
-cdef add_new_object(box obj, np.ndarray image, list trackers, str name, str curr_frame, np.ndarray mask=None):
+cdef void add_new_object(box obj, np.ndarray image, list trackers, str name, str curr_frame, np.ndarray mask=None) except *:
     cdef:
         int ymin, xmin, ymax, xmax, xmid, ymid
         int age = 0
@@ -107,8 +107,8 @@ cdef add_new_object(box obj, np.ndarray image, list trackers, str name, str curr
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
-cdef not_tracked(np.ndarray image, box object_, list trackers, str name, float threshold, str curr_frame_no,
-                 str dist_metric, float iou_threshold, np.ndarray mask=None):
+cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, float threshold, str curr_frame_no,
+                 str dist_metric, float iou_threshold, np.ndarray mask=None) except -1:
     # print("Eu threshold", threshold)
     # if object_ == (0, 0 ,0 ,0):
     #     # return []  # No new classified objects to search for
@@ -242,8 +242,8 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
         update_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age)
     except Exception as e:
         print(repr(e))
-cdef update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
-                        float threshold, str dist_metric, int max_age=72):
+cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
+                        float threshold, str dist_metric, int max_age=72) except *:
     global length
     color = (80, 220, 60)
     cdef int idx = 0
