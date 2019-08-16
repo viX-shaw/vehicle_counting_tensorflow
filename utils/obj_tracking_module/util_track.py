@@ -11,6 +11,7 @@ from scipy.optimize import linear_sum_assignment
 
 from libc.stdlib cimport malloc, free, realloc
 from libc.math cimport round, sqrt
+from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 # from .vehicle_detection_main cimport Info 
 cimport numpy as np
 
@@ -590,11 +591,15 @@ cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, bint status):
     length +=1
     counters += 1
     if tr == NULL:
-        tr = <Info *>malloc(sizeof(Info))
+        tr = <Info *>PyMem_Malloc(sizeof(Info))
+        if not tr:
+            raise MemoryError()
         tr[0] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age, counters ,status)
     else:
         if counters == length:
-            tr = <Info *>realloc(tr, (length)* sizeof(Info))
+            tr = <Info *>PyMem_Realloc(tr, (length)* sizeof(Info))
+            if not tr:
+                raise MemoryError()
         tr[length-1] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age, counters ,status)
 
 #   return tr
