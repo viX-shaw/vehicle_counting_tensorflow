@@ -547,7 +547,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
   # for box in dt_boxes:
   # cdef Info *tr = <Info *>tr_info
   cdef Det_box det_bbox
-  # print("Vis util 0")
+  print("Vis util 0")
   for box, c in box_to_color_map.items():
     # print("Vis util 1")
     # if int(current_frame_number) % 100 == 0:
@@ -564,7 +564,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
     
     # print(list(display_str_list))
     # we are interested just vehicles (i.e. cars and trucks)
-    # print("Vis util 2")
+    print("Vis util 2")
 
     if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
             # image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
@@ -582,7 +582,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
             det_bbox = Det_box(top, left, bottom, right)
             # print("Calling not_tracked")
-            # print("Vis util 3")
+            print("Vis util 3")
             if util_track.not_tracked(image, det_bbox,
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2],
                  metric, iou_threshold, mask):
@@ -596,7 +596,7 @@ cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
 
               counters[display_str_list[0][:-5]]+=1
               # print("callind add_new_object")
-              # print("Vis util 4")
+              print("Vis util 4")
               util_track.add_new_object(det_bbox, image,
                 trackers, tracker_name, str(current_frame_number)[:-2], mask)
             # else:
