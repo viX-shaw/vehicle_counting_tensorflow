@@ -274,7 +274,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         else:
             if age >= max_age:
                 # counters['lost_trackers']+=1
-                print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
+                print("Deleting tracker {} with age {} on AOI exit..{}".format(car, age, length))
                 del trackers[idx]
                 del_Tracker(idx)
                 length -= 1
@@ -323,7 +323,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         # print("update 7")
         if age >= max_age:
             # counters['lost_trackers']+=1
-            print("Deleting tracker {} with age {} on AOI exit..".format(car, age))
+            print("Deleting tracker {} with age {} on AOI exit..{}".format(car, age, length))
             del trackers[idx]
             del_Tracker(idx)
             length -= 1
