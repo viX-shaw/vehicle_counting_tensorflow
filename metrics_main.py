@@ -135,7 +135,7 @@ def object_detection_function():
     detections = np.loadtxt(os.path.join(params.sequence_dir, "det/det.txt")
                                                         , delimiter=',')
     print(image_filenames)
-    for key, entry in OrderedDict(sorted(image_filenames.items())).iteritems():
+    for key, entry in OrderedDict(sorted(image_filenames.items())).items():
         boxes ,scores, classes = get_detboxes_classes_and_scores(detections, key)
         # (ret, frame) = cap.read()
         input_frame = np.uint8(np.asarray(Image.load(entry)))
