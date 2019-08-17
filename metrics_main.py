@@ -1,12 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-# ----------------------------------------------
-# --- Author         : Ahmet Ozlu
-# --- Mail           : ahmetozlu93@gmail.com
-# --- Date           : 27th January 2018
-# ----------------------------------------------
 
-# Imports
 import numpy as np
 import os
 import six.moves.urllib as urllib
@@ -139,7 +132,7 @@ def object_detection_function():
     for key, entry in image_filenames.items():
         t1 = time.time()
         boxes ,scores, classes = get_detboxes_classes_and_scores(detections, key)
-        print("boxs , scores, classes shapes", boxes.shape, scores.shape, classes.shape, key )
+        # print("boxs , scores, classes shapes", boxes.shape, scores.shape, classes.shape, key )
         # (ret, frame) = cap.read()
         input_frame = np.uint8(np.asarray(Image.open(entry)))
         copy_frame = input_frame.copy()
@@ -168,9 +161,9 @@ def object_detection_function():
         vis_util.visualize_boxes_and_labels_on_image_array(
         str(key),
         copy_frame,
-        np.squeeze(boxes),
-        np.squeeze(classes).astype(np.int32),
-        np.squeeze(scores),
+        boxes,
+        classes.astype(np.int32),
+        scores,
         category_index,
         params.tracker,
         trackers,
