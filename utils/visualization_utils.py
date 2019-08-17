@@ -424,6 +424,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                               counters,
                                               boundary,
                                               metric,
+                                              seq_dir,
                                               instance_masks=None,
                                               keypoints=None,
                                               use_normalized_coordinates=False,
@@ -553,7 +554,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
             if util_track.not_tracked(image, (top, left, bottom, right),
                 trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2],
-                 metric, iou_threshold, mask):
+                 metric, iou_threshold, seq_dir, mask):
             # if tr_id == -1:  
               # generating detections for deep-mot-sort
               # image_temp = numpy.array(image_pil)              
@@ -564,7 +565,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
               counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object((top, left, bottom, right), image, counters,
-                trackers, tracker_name, str(current_frame_number)[:-2], mask)
+                trackers, tracker_name, str(current_frame_number)[:-2], seq_dir, mask)
             # else:
             #   mapped_tr_ids.append(tr_id)
             #   pass

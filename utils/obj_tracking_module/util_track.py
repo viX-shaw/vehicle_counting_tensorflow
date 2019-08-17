@@ -44,7 +44,7 @@ def load_appearence_model(path_to_model):
                                 output_name = "flatten/Reshape", batch_size=1)
 
 
-def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
+def add_new_object(obj, image, counters, trackers, name, curr_frame, seq_dir, mask=None):
     ymin, xmin, ymax, xmax = obj
     label = str(counters["person"]+ counters["car"]+counters["truck"]+ counters["bus"])
     #Age:time for which the tracker is allowed to deviate from its orignal feature 
@@ -79,6 +79,9 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, mask=None):
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature], success])
+        with open(seq_dir+"/result.txt", "a") as f:
+            f.write('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1\n'.format(
+            int(curr_frame), label, obj[0], obj[1], obj[2]-obj[0], obj[3]-obj[1]))
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
@@ -149,6 +152,10 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             t[0] = tr             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             t[4].append(dt_feature)
+            with open(seq_dir+"/result.txt", "a") as f:
+                f.write('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1\n'.format(
+                int(curr_frame), t[2], object_[0], object_[1], object_[2]-object_[0], object_[3]-object_[1]))
+        
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
@@ -181,6 +188,10 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 t[3] = 0
                 t[4].append(dt_ft)
                 t[-1] = True
+                with open(seq_dir+"/result.txt", "a") as f:
+                    f.write('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1\n'.format(
+                    int(curr_frame), t[2], object_[0], object_[1], object_[2]-object_[0], object_[3]-object_[1]))
+            
                 # break
         else:
             new_objects.append(object_)
