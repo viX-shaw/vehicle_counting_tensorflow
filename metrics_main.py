@@ -224,7 +224,7 @@ def object_detection_function():
         cv2.putText(input_frame, "Frame -"+str(key), (1000, 35),
             font, 0.8, (0,0,255), 2, cv2.FONT_HERSHEY_SIMPLEX)
 
-        cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, cap.get(1)), input_frame)
+        cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, key), input_frame)
         # del detection_masks
 
         # if cv2.waitKey(1) & 0xFF == ord('q'):
