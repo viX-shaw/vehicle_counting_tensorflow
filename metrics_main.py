@@ -178,7 +178,7 @@ def object_detection_function():
         params.metric,
         params.sequence_dir,
         instance_masks=masks,
-        use_normalized_coordinates=True,
+        use_normalized_coordinates=False,
         min_score_thresh = params.threshold,
         eu_threshold = params.eu_threshold,
         iou_threshold = params.iou_threshold,
