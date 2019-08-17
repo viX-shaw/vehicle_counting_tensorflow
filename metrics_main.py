@@ -138,7 +138,7 @@ def object_detection_function():
     for key, entry in OrderedDict(sorted(image_filenames.items())).items():
         boxes ,scores, classes = get_detboxes_classes_and_scores(detections, key)
         # (ret, frame) = cap.read()
-        input_frame = np.uint8(np.asarray(Image.load(entry)))
+        input_frame = np.uint8(np.asarray(Image.open(entry)))
         copy_frame = input_frame.copy()
         # if not ret:
         #     print ('end of the video file...')
