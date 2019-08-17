@@ -548,7 +548,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
                                             ymin * im_height, ymax * im_height)
             else:
               (left, right, top, bottom) = (xmin, xmin+w, ymin, ymin+h)
-            print("Breakpoint reached 1", image.shape, (left, right, top, bottom))
+            # print("Breakpoint reached 1", image.shape, (left, right, top, bottom))
             #ROI
             if top + boundary > im_height or top < boundary:
               continue
@@ -571,7 +571,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               counters[display_str_list[0][:6]]+=1
               util_track.add_new_object((top, left, bottom, right), image, counters,
                 trackers, tracker_name, str(current_frame_number), seq_dir, mask)
-            print("Breakpoint reached 2")
+            # print("Breakpoint reached 2")
             # else:
             #   mapped_tr_ids.append(tr_id)
             #   pass
