@@ -80,8 +80,8 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, seq_dir, ma
         # print("Adding feature to new track object", np.asarray(feature).shape)
         trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature], success])
         with open(seq_dir+"/result.txt", "a") as f:
-            f.write('{%d},{%d},{%.2f},{%.2f},{%.2f},{%.2f},1,-1,-1,-1\n'.format(
-            int(curr_frame), label, obj[0], obj[1], obj[2]-obj[0], obj[3]-obj[1]))
+            f.write('{:%d},{:%d},{:%.2f},{:%.2f},{:%.2f},{:%.2f},1,-1,-1,-1\n'.format(
+            int(curr_frame), label, obj[1], obj[0], obj[3]-obj[1], obj[2]-obj[0]))
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
@@ -153,8 +153,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             t[4].append(dt_feature)
             with open(seq_dir+"/result.txt", "a") as f:
-                f.write('{%d},{%d},{%.2f},{%.2f},{%.2f},{%.2f},1,-1,-1,-1\n'.format(
-                int(curr_frame_no), t[2], object_[0], object_[1], object_[2]-object_[0], object_[3]-object_[1]))
+                f.write('{:%d},{:%d},{:%.2f},{:%.2f},{:%.2f},{:%.2f},1,-1,-1,-1\n'.format(
+                int(curr_frame_no), t[2], object_[1], object_[0], object_[3]-object_[1], object_[2]-object_[0]))
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
@@ -188,8 +188,8 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 t[4].append(dt_ft)
                 t[-1] = True
                 with open(seq_dir+"/result.txt", "a") as f:
-                    f.write('{%d},{%d},{%.2f},{%.2f},{%.2f},{%.2f},1,-1,-1,-1\n'.format(
-                    int(curr_frame_no), t[2], object_[0], object_[1], object_[2]-object_[0], object_[3]-object_[1]))
+                    f.write('{:%d},{:%d},{:%.2f},{:%.2f},{:%.2f},{:%.2f},1,-1,-1,-1\n'.format(
+                    int(curr_frame_no), t[2], object_[1], object_[0], object_[3]-object_[1], object_[2]-object_[0]))
             
                 # break
         else:
