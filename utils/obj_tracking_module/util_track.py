@@ -86,7 +86,7 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, seq_dir, ma
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
 def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
-                 dist_metric, iou_threshold, mask=None):
+                 dist_metric, iou_threshold, seq_dir, mask=None):
     # print("Eu threshold", threshold)
     if not object_:
         # return []  # No new classified objects to search for
@@ -154,7 +154,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             t[4].append(dt_feature)
             with open(seq_dir+"/result.txt", "a") as f:
                 f.write('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1\n'.format(
-                int(curr_frame), t[2], object_[0], object_[1], object_[2]-object_[0], object_[3]-object_[1]))
+                int(curr_frame_no), t[2], object_[0], object_[1], object_[2]-object_[0], object_[3]-object_[1]))
         
             # t[-1] = True
     else:
@@ -190,7 +190,7 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 t[-1] = True
                 with open(seq_dir+"/result.txt", "a") as f:
                     f.write('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1\n'.format(
-                    int(curr_frame), t[2], object_[0], object_[1], object_[2]-object_[0], object_[3]-object_[1]))
+                    int(curr_frame_no), t[2], object_[0], object_[1], object_[2]-object_[0], object_[3]-object_[1]))
             
                 # break
         else:

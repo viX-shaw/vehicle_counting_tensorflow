@@ -553,7 +553,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
             if util_track.not_tracked(image, (top, left, bottom, right),
-                trackers, tracker_name, eu_threshold, str(current_frame_number)[:-2],
+                trackers, tracker_name, eu_threshold, str(current_frame_number),
                  metric, iou_threshold, seq_dir, mask):
             # if tr_id == -1:  
               # generating detections for deep-mot-sort
@@ -565,7 +565,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
 
               counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object((top, left, bottom, right), image, counters,
-                trackers, tracker_name, str(current_frame_number)[:-2], seq_dir, mask)
+                trackers, tracker_name, str(current_frame_number), seq_dir, mask)
             # else:
             #   mapped_tr_ids.append(tr_id)
             #   pass
@@ -634,7 +634,7 @@ def add_or_match_detections_to_trackers(current_frame_number,image,boxes,classes
   for en, mask in add_to_trackers:
     counters["person"]+= 1 #Hardcoded"person" , replace with appropriate with classes
     util_track.add_new_object(en, image, counters,
-      trackers, tracker_name, str(current_frame_number)[:-2], mask)
+      trackers, tracker_name, str(current_frame_number), mask)
           
 
 def non_max_suppression(boxes, max_bbox_overlap, scores=None):

@@ -193,38 +193,38 @@ def object_detection_function():
 
                 # if(counter == 1):
                 #     print("Detected vehicle in frame no", cap.get(1))
-    try:
-        total_passed_vehicle = counters["person"]+counters["car"]+counters["truck"]+counters["bus"]
-        lost_trackers = counters["lost_trackers"]
-    except Exception as e:
-        pass
+        try:
+            total_passed_vehicle = counters["person"]+counters["car"]+counters["truck"]+counters["bus"]
+            lost_trackers = counters["lost_trackers"]
+        except Exception as e:
+            pass
 
-    # insert information text to video frame
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    cv2.putText(
-        input_frame,
-        'Detected Vehicles: ' + str(total_passed_vehicle),
-        (10, 35),
-        font,
-        0.8,
-        (255,0,0),
-        2,
-        cv2.FONT_HERSHEY_SIMPLEX,
-        )
-    cv2.putText(
-        input_frame,
-        'Lost Trackers: ' + str(lost_trackers),
-        (400, 35),
-        font,
-        0.8,
-        (255,0,0),
-        2,
-        cv2.FONT_HERSHEY_SIMPLEX,
-        )
-    cv2.putText(input_frame, "Frame -"+str(cap.get(1))[:-2], (1000, 35),
-        font, 0.8, (0,0,255), 2, cv2.FONT_HERSHEY_SIMPLEX)
+        # insert information text to video frame
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        cv2.putText(
+            input_frame,
+            'Detected Vehicles: ' + str(total_passed_vehicle),
+            (10, 35),
+            font,
+            0.8,
+            (255,0,0),
+            2,
+            cv2.FONT_HERSHEY_SIMPLEX,
+            )
+        cv2.putText(
+            input_frame,
+            'Lost Trackers: ' + str(lost_trackers),
+            (400, 35),
+            font,
+            0.8,
+            (255,0,0),
+            2,
+            cv2.FONT_HERSHEY_SIMPLEX,
+            )
+        cv2.putText(input_frame, "Frame -"+str(key), (1000, 35),
+            font, 0.8, (0,0,255), 2, cv2.FONT_HERSHEY_SIMPLEX)
 
-    cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, cap.get(1)), input_frame)
+        cv2.imwrite('output_{}/{}.jpg'.format(params.tracker, cap.get(1)), input_frame)
         # del detection_masks
 
         # if cv2.waitKey(1) & 0xFF == ord('q'):
