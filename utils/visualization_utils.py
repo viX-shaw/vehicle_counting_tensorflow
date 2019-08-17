@@ -538,9 +538,9 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
     #   )
     display_str_list=box_to_display_str_map[box]
     
-    print("Breakpoint reached")
+    # print("Breakpoint reached")
     # we are interested just vehicles (i.e. cars and trucks)
-    if (("Person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
+    if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
             image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
             im_height, im_width, _ = image.shape
             if use_normalized_coordinates:
@@ -553,6 +553,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             if instance_masks is not None:
               mask = box_to_instance_masks_map[box]
               # print("MASK SHAPE --", mask.shape)
+
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
             if util_track.not_tracked(image, (top, left, bottom, right),
                 trackers, tracker_name, eu_threshold, str(current_frame_number),
@@ -568,6 +569,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               counters[display_str_list[0][:-5]]+=1
               util_track.add_new_object((top, left, bottom, right), image, counters,
                 trackers, tracker_name, str(current_frame_number), seq_dir, mask)
+            print("Breakpoint reached 2")
             # else:
             #   mapped_tr_ids.append(tr_id)
             #   pass
