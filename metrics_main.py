@@ -111,7 +111,13 @@ def object_detection_function():
     total_passed_vehicle = 0
     lost_trackers = 0
     trackers = []
-    counters = defaultdict()
+    counters = {
+    "person": 0,
+    "car": 0,
+    "truck":0,
+    "bus":0,
+    "lost_trackers": 0
+    }
     speed = 'waiting...'
     direction = 'waiting...'
     size = 'waiting...'
