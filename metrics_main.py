@@ -112,13 +112,13 @@ def object_detection_function():
     
             # for all the frames that are extracted from input video
     start_time = time.time()
-    image_dir = os.path.join(sequence_dir, "img1")
+    image_dir = os.path.join(params.sequence_dir, "img1")
     image_filenames = {
         int(os.path.splitext(f)[0]): os.path.join(image_dir, f)
         for f in os.listdir(image_dir)}
-    groundtruth_file = os.path.join(sequence_dir, "gt/gt.txt")
+    groundtruth_file = os.path.join(params.sequence_dir, "gt/gt.txt")
 
-    detections = np.loadtxt(os.path.join(sequence_dir, "det/det.txt")
+    detections = np.loadtxt(os.path.join(params.sequence_dir, "det/det.txt")
                                                         , delimiter=',')
     print(image_filenames)
     for key, entry in image_filenames.items():
