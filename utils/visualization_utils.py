@@ -528,7 +528,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
-    ymin, xmin, ymax, xmax = box
+    xmin, ymin, w, h = box
     mask = None
     # if instance_masks is not None:
     #   draw_mask_on_image_array(
@@ -547,7 +547,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
             else:
-              (left, right, top, bottom) = (xmin, xmax, ymin, ymax)
+              (left, right, top, bottom) = (xmin, xmin+w, ymin, ymin+h)
             print("Breakpoint reached 1", image.shape, (left, right, top, bottom))
             #ROI
             if top + boundary > im_height or top < boundary:
