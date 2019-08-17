@@ -22,7 +22,7 @@ import argparse
 import copy
 import time
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from io import StringIO
 from matplotlib import pyplot as plt
 from PIL import Image
@@ -135,7 +135,7 @@ def object_detection_function():
     detections = np.loadtxt(os.path.join(params.sequence_dir, "det/det.txt")
                                                         , delimiter=',')
     print(image_filenames)
-    for key, entry in image_filenames.items():
+    for key, entry in OrderedDict(sorted(image_filenames.items())).iteritems():
         boxes ,scores, classes = get_detboxes_classes_and_scores(detections, key)
         # (ret, frame) = cap.read()
         input_frame = np.uint8(np.asarray(Image.load(entry)))
