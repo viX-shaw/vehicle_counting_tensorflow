@@ -546,10 +546,9 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             if use_normalized_coordinates:
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
-            print("Breakpoint reached 1")
+            print("Breakpoint reached 1", image.shape, (left, right, top, bottom))
             #ROI
             if top + boundary > im_height or top < boundary:
-              print(top + boundary , im_height)
               continue
             if instance_masks is not None:
               mask = box_to_instance_masks_map[box]
