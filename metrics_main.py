@@ -69,17 +69,6 @@ except Exception as e:
 # Variables
 total_passed_vehicle = 0  # using it to count vehicles
 
-# By default I use an "SSD with Mobilenet" model here. See the detection model zoo (https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for a list of other models that can be run out-of-the-box with varying speeds and accuracies.
-# What model to download.
-# MODEL_NAME = 'ssd_mobilenet_v1_coco_2018_01_28'
-MODEL_NAME = params.model_name
-MODEL_FILE = MODEL_NAME + '.tar.gz'
-DOWNLOAD_BASE = \
-    'http://download.tensorflow.org/models/object_detection/'
-
-# Path to frozen detection graph. This is the actual model that is used for the object detection.
-PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
-
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = os.path.join('data', 'mscoco_label_map.pbtxt')
 
