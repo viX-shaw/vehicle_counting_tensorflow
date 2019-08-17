@@ -139,6 +139,7 @@ def object_detection_function():
     for key, entry in image_filenames.items():
         t1 = time.time()
         boxes ,scores, classes = get_detboxes_classes_and_scores(detections, key)
+        print("boxs , scores, classes shapes", boxes.shape, scores.shape, classes.shape, key )
         # (ret, frame) = cap.read()
         input_frame = np.uint8(np.asarray(Image.open(entry)))
         copy_frame = input_frame.copy()
