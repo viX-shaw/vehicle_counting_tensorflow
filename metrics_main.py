@@ -225,9 +225,6 @@ def object_detection_function():
     cap.release()
     cv2.destroyAllWindows()
 
-
-object_detection_function()		
-
 def get_detboxes_classes_and_scores(detection_mat, frame_idx):
     frame_indices = detection_mat[:, 0].astype(np.int)
     mask = frame_indices == frame_idx
@@ -241,3 +238,5 @@ def get_detboxes_classes_and_scores(detection_mat, frame_idx):
         # detection_list.append(Detection(bbox, confidence, feature))
     classes = np.ones((len(scores),), dtype = int)  # For person according to mscoco
     return np.asarray(detections), np.asarray(scores), classes
+
+object_detection_function()		
