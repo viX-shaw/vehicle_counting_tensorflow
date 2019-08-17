@@ -238,7 +238,5 @@ def object_detection_function():
         #         writer.writerows([csv_line.split(',')])
     end_time = time.time()
     print("Total time --", float(start_time - end_time))
-    cap.release()
-    cv2.destroyAllWindows()
 
 object_detection_function()		
