@@ -470,7 +470,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   """
   # Create a display string (and color) for every box location, group any boxes
   # that correspond to the same location.
-  print("len Boxes", len(boxes), len(classes), len(scores))
+  # print("len Boxes", len(boxes), len(classes), len(scores))
   csv_line_util = "not_available"
   counter = 0
   is_vehicle_detected = []
@@ -524,7 +524,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # trackers = deepcopy(trackers)
   # mapped_tr_ids = []
   # for box in dt_boxes:
-  print("After",len(box_to_color_map), box_to_display_str_map)
+  # print("After",len(box_to_color_map), box_to_display_str_map)
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
@@ -552,7 +552,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             if instance_masks is not None:
               mask = box_to_instance_masks_map[box]
               # print("MASK SHAPE --", mask.shape)
-            
+            print("Breakpoint reached")
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
             if util_track.not_tracked(image, (top, left, bottom, right),
                 trackers, tracker_name, eu_threshold, str(current_frame_number),
