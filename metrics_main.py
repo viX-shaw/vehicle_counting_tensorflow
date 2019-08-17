@@ -84,8 +84,22 @@ categories = label_map_util.convert_label_map_to_categories(label_map,
         max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
 
-
 # Helper code
+
+def get_detboxes_classes_and_scores(detection_mat, frame_idx):
+    frame_indices = detection_mat[:, 0].astype(np.int)
+    mask = frame_indices == frame_idx
+
+    detections=[]
+    scores = []
+    for row in detection_mat[mask]:
+        bbox, confidence, feature = row[2:6], row[6], row[10:]
+        detections.append(bbox)
+        scores.append(confidence)
+        # detection_list.append(Detection(bbox, confidence, feature))
+    classes = np.ones((len(scores),), dtype = int)  # For person according to mscoco
+    return np.asarray(detections), np.asarray(scores), classes
+
 def load_image_into_numpy_array(image):
     (im_width, im_height) = image.size
     return np.array(image.getdata()).reshape((im_height, im_width,
@@ -224,19 +238,5 @@ def object_detection_function():
     print("Total time --", float(start_time - end_time))
     cap.release()
     cv2.destroyAllWindows()
-
-def get_detboxes_classes_and_scores(detection_mat, frame_idx):
-    frame_indices = detection_mat[:, 0].astype(np.int)
-    mask = frame_indices == frame_idx
-
-    detections=[]
-    scores = []
-    for row in detection_mat[mask]:
-        bbox, confidence, feature = row[2:6], row[6], row[10:]
-        detections.append(bbox)
-        scores.append(confidence)
-        # detection_list.append(Detection(bbox, confidence, feature))
-    classes = np.ones((len(scores),), dtype = int)  # For person according to mscoco
-    return np.asarray(detections), np.asarray(scores), classes
 
 object_detection_function()		
