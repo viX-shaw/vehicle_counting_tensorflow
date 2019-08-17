@@ -470,7 +470,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   """
   # Create a display string (and color) for every box location, group any boxes
   # that correspond to the same location.
-  # print("len Boxes", len(boxes), len(classes), len(scores))
+  print("len Boxes", len(boxes), len(classes), len(scores))
   csv_line_util = "not_available"
   counter = 0
   is_vehicle_detected = []
