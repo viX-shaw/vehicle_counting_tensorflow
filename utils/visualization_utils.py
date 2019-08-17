@@ -524,7 +524,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # trackers = deepcopy(trackers)
   # mapped_tr_ids = []
   # for box in dt_boxes:
-  # print("After",len(box_to_color_map), box_to_display_str_map)
+  print("After",len(box_to_color_map), box_to_display_str_map)
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
@@ -538,21 +538,21 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
     #   )
     display_str_list=box_to_display_str_map[box]
     
-    # print(list(display_str_list))
+    print("Breakpoint reached")
     # we are interested just vehicles (i.e. cars and trucks)
-    if (("person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
+    if (("Person" in display_str_list[0]) or ("car" in display_str_list[0]) or ("truck" in display_str_list[0]) or ("bus" in display_str_list[0])):
             image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
             im_height, im_width, _ = image.shape
             if use_normalized_coordinates:
               (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                             ymin * im_height, ymax * im_height)
+            print("Breakpoint reached 1")
             #ROI
             if top + boundary > im_height or top < boundary:
               continue
             if instance_masks is not None:
               mask = box_to_instance_masks_map[box]
               # print("MASK SHAPE --", mask.shape)
-            print("Breakpoint reached")
             #tr_id receives the id of the tracker that matches the passed in bbox, otherwise returns -1
             if util_track.not_tracked(image, (top, left, bottom, right),
                 trackers, tracker_name, eu_threshold, str(current_frame_number),
