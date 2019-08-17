@@ -524,7 +524,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
   # trackers = deepcopy(trackers)
   # mapped_tr_ids = []
   # for box in dt_boxes:
-  print("After",len(box_to_color_map), box_to_display_str_map)
+  # print("After",len(box_to_color_map), box_to_display_str_map)
   for box, c in box_to_color_map.items():
     # if int(current_frame_number) % 100 == 0:
       # print("BBoxes in frame",int(current_frame_number), "is" ,len(list(box_to_color_map)))
@@ -549,6 +549,7 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             print("Breakpoint reached 1")
             #ROI
             if top + boundary > im_height or top < boundary:
+              print(top + boundary , im_height)
               continue
             if instance_masks is not None:
               mask = box_to_instance_masks_map[box]
