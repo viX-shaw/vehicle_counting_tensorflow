@@ -134,33 +134,16 @@ def object_detection_function():
         boxes ,scores, classes = get_detboxes_classes_and_scores(detections, key)
         # print("boxs , scores, classes shapes", boxes.shape, scores.shape, classes.shape, key )
         # (ret, frame) = cap.read()
-        input_frame = np.array(Image.open(entry).convert('RGB'))
+        # input_frame = np.array(Image.open(entry).convert('RGB'))
+        input_frame = np.array(cv2.imread(entry, cv2.IMREAD_COLOR))
         copy_frame = input_frame.copy()
-        # if not ret:
-        #     print ('end of the video file...')
-        #     break
-        print(input_frame.shape)
-        cv2.imwrite('/content/1.jpg', input_frame)
+        # print(input_frame.shape)
+        # cv2.imwrite('/content/1.jpg', input_frame)
         # break
 
-        # input_frame = frame
-        # copy_frame = np.array(Image.fromarray(np.uint8(frame)).copy())
-
-        # if input_frame is copy_frame:
-        #     print("Same object")
-        # else:
-        #     print("Diff objects")
-        # input_frame = load_image_into_numpy_array(frame)
         util_track.update_trackers(input_frame, copy_frame, counters, trackers, str(key), params.eu_threshold, params.metric, params.age)
         # print("Total trackers ", trackers,"in frame no.", cap.get(1))
 
-        # Expand dimensions since the model expects images to have shape: [1, None, None, 3] 
-
-        # Visualization of the results of a detection.
-
-            # if masks is not None:
-                # print(masks.shape, "boxes_shape", boxes.shape)
-            # vis_util.add_or_match_detections_to_trackers(    
         vis_util.visualize_boxes_and_labels_on_image_array(
         str(key),
         copy_frame,
