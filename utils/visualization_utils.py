@@ -544,8 +544,8 @@ def visualize_boxes_and_labels_on_image_array(current_frame_number,image,
             image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
             im_height, im_width, _ = image.shape
             if use_normalized_coordinates:
-              (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
-                                            ymin * im_height, ymax * im_height)
+              (left, right, top, bottom) = (xmin * im_width, w * im_width,
+                                            ymin * im_height, h * im_height)
             else:
               (left, right, top, bottom) = (xmin, xmin+w, ymin, ymin+h)
             # print("Breakpoint reached 1", image.shape, (left, right, top, bottom))
