@@ -54,7 +54,9 @@ parser.add_argument("--boundary", type = float, default=80.0, required =False)
 parser.add_argument("--metric", type = str, default="cosine", required =False)
 parser.add_argument("--feat_model", type = str, default="/content/veri.pb", required = False)
 
-
+parser.add_argument(
+        "--sequence_dir", help="Path to MOTChallenge sequence directory",
+        default=None, required=False)
 
 
 
@@ -241,6 +243,7 @@ def object_detection_function():
                     counters,
                     params.boundary,
                     params.metric,
+                    params.sequence_dir,
                     instance_masks=masks,
                     use_normalized_coordinates=True,
                     min_score_thresh = params.threshold,
