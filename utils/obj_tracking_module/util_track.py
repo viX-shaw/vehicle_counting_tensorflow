@@ -152,9 +152,9 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
             t[0] = tr             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             t[4].append(dt_feature)
-            with open(seq_dir+"/result.txt", "a") as f:
-                f.write('{:d},{:d},{:.2f},{:.2f},{:.2f},{:.2f},1,-1,-1,-1\n'.format(
-                int(curr_frame_no), int(t[2]), object_[1], object_[0], object_[3]-object_[1], object_[2]-object_[0]))
+            # with open(seq_dir+"/result.txt", "a") as f:
+            #     f.write('{:d},{:d},{:.2f},{:.2f},{:.2f},{:.2f},1,-1,-1,-1\n'.format(
+            #     int(curr_frame_no), int(t[2]), object_[1], object_[0], object_[3]-object_[1], object_[2]-object_[0]))
             # t[-1] = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
@@ -187,9 +187,9 @@ def not_tracked(image, object_, trackers, name, threshold, curr_frame_no,
                 t[3] = 0
                 t[4].append(dt_ft)
                 t[-1] = True
-                with open(seq_dir+"/result.txt", "a") as f:
-                    f.write('{:d},{:d},{:.2f},{:.2f},{:.2f},{:.2f},1,-1,-1,-1\n'.format(
-                    int(curr_frame_no), int(t[2]), object_[1], object_[0], object_[3]-object_[1], object_[2]-object_[0]))
+                # with open(seq_dir+"/result.txt", "a") as f:
+                #     f.write('{:d},{:d},{:.2f},{:.2f},{:.2f},{:.2f},1,-1,-1,-1\n'.format(
+                #     int(curr_frame_no), int(t[2]), object_[1], object_[0], object_[3]-object_[1], object_[2]-object_[0]))
             
                 # break
         else:
