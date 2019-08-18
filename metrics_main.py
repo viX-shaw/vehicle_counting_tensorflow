@@ -139,6 +139,8 @@ def object_detection_function():
         # if not ret:
         #     print ('end of the video file...')
         #     break
+        cv2.imwrite('/content/1.jpg', input_frame)
+        break
 
         # input_frame = frame
         # copy_frame = np.array(Image.fromarray(np.uint8(frame)).copy())
