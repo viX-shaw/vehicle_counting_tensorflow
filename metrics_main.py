@@ -134,7 +134,7 @@ def object_detection_function():
         boxes ,scores, classes = get_detboxes_classes_and_scores(detections, key)
         # print("boxs , scores, classes shapes", boxes.shape, scores.shape, classes.shape, key )
         # (ret, frame) = cap.read()
-        input_frame = np.asarray(Image.open(entry))
+        input_frame = np.asarray(Image.open(entry).convert('RGB'))
         copy_frame = input_frame.copy()
         # if not ret:
         #     print ('end of the video file...')
