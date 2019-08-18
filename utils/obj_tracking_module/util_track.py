@@ -79,9 +79,9 @@ def add_new_object(obj, image, counters, trackers, name, curr_frame, seq_dir, ma
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         trackers.append([tracker, (xmin, ymin, xmax-xmin, ymax-ymin), label, age, [feature], success])
-        with open(seq_dir+"/result.txt", "a") as f:
-            f.write('{:d},{:d},{:.2f},{:.2f},{:.2f},{:.2f},1,-1,-1,-1\n'.format(
-            int(curr_frame), int(label), obj[1], obj[0], obj[3]-obj[1], obj[2]-obj[0]))
+        # with open(seq_dir+"/result.txt", "a") as f:
+        #     f.write('{:d},{:d},{:.2f},{:.2f},{:.2f},{:.2f},1,-1,-1,-1\n'.format(
+        #     int(curr_frame), int(label), obj[1], obj[0], obj[3]-obj[1], obj[2]-obj[0]))
         # print("Car - ", label, "is added")
         # label_object(RED, RED, fontface, image, label, textsize, 4, xmax, xmid, xmin, ymax, ymid, ymin)
 
