@@ -56,7 +56,7 @@ parser.add_argument("--feat_model", type = str, default="/content/veri.pb", requ
 
 parser.add_argument(
         "--sequence_dir", help="Path to MOTChallenge sequence directory",
-        default=None, required=False)
+        default=".", required=False)
 
 
 
