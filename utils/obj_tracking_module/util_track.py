@@ -253,8 +253,8 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
                 ymin = <int>(bbox.f1)
                 xmax = <int>(bbox.f0 + bbox.f2)
                 ymax = <int>(bbox.f1 + bbox.f3)
-                xmid = <int>(round((bxmin + bxmax) / 2))
-                ymid = <int>(round((bymin + bymax) / 2))
+                xmid = <int>(round((xmin + xmax) / 2))
+                ymid = <int>(round((ymin + ymax) / 2))
 
                 label_object(GREEN, RED, image, car, 2, xmax, xmid, xmin, ymax, ymid, ymin)
     except Exception as e:
