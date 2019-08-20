@@ -240,7 +240,7 @@ def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax
     # print("label_object")
 
 def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age, sr):
-    cdef int car, xmin, ymin, xmax, ymax, xmid, ymid
+    cdef int car, xmin, ymin, xmax, ymax, xmid, ymid, idx
     cdef box bbox
     try:
         if int(curr_frame)%sr == 0:
@@ -257,6 +257,7 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
                 ymid = <int>(round((ymin + ymax) / 2))
 
                 label_object(GREEN, RED, image, car, 2, xmax, xmid, xmin, ymax, ymid, ymin)
+                idx +=1
     except Exception as e:
         print(repr(e))
 cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
