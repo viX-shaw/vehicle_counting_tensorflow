@@ -239,9 +239,24 @@ def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax
     cv2.putText(image, str(car), pos, fontface, 1, textcolor, thickness, cv2.LINE_AA)
     # print("label_object")
 
-def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age):
+def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age, sr):
+    cdef int car, xmin, ymin, xmax, ymax, xmid, ymid
+    cdef box bbox
     try:
-        update_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age)
+        if int(curr_frame)%sr == 0:
+            update_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age)
+        else:
+            while idx < length:
+                car = tr[idx].label
+                bbox = tr[idx].bbox
+                xmin = <int>(bbox.f0)
+                ymin = <int>(bbox.f1)
+                xmax = <int>(bbox.f0 + bbox.f2)
+                ymax = <int>(bbox.f1 + bbox.f3)
+                xmid = <int>(round((bxmin + bxmax) / 2))
+                ymid = <int>(round((bymin + bymax) / 2))
+
+                label_object(GREEN, RED, image, car, 2, xmax, xmid, xmin, ymax, ymid, ymin)
     except Exception as e:
         print(repr(e))
 cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
