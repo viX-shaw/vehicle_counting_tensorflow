@@ -289,7 +289,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         if active == 0:
             success, bbox = tracker.update(image)
         else:
-            if age >= max_age:
+            if age >= max_age and active != 2:
                 # counters['lost_trackers']+=1
                 print("Deleting tracker {} with age {} on AOI exit..{}".format(car, age, length))
                 # del trackers[idx]
