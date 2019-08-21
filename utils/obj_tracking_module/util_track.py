@@ -52,7 +52,7 @@ cdef struct Info:
     box bbox
     int age
     int label
-    bint status
+    int status  # 0 - active 1- inactive 2 - deleted
 
 cdef Info *tr = NULL
 def load_appearence_model(path_to_model):
@@ -103,7 +103,7 @@ cdef void add_new_object(box obj, np.ndarray image, list trackers, str name, str
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         # initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
-        add_new_Tracker((xmin, ymin, xmax-xmin, ymax-ymin), age, success)
+        add_new_Tracker((xmin, ymin, xmax-xmin, ymax-ymin), age)
         
         trackers.append([tracker, feature])
         # print("Car - ", label, "is added")
@@ -123,7 +123,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         float max_overlap = 0.0, min_dist = 2.0
         float box_range, overlap, dist, eu_dist
         np.ndarray dt_ft, dt_feature
-        bint active
+        int active
     global tr
     ymin = <int>object_.f0
     xmin = <int>object_.f1
@@ -146,7 +146,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         age = tr[i].age
         active = tr[i].status
         # print("Not_tracked -- 1 ")
-        if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
+        if active == 0 or (age < 3 and active != 2): #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = <int>(bbox.f0)
             bymin = <int>(bbox.f1)
             bxmax = <int>(bbox.f0 + bbox.f2)
@@ -220,7 +220,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
                 tr[min_id].age = 0
                 t[1] = np.concatenate((t[1],dt_ft), axis = 0)
                 # t[1].append(dt_ft)
-                tr[min_id].status = True
+                tr[min_id].status = 0
                 # break
         # else:
         #     new_objects.append(object_)
@@ -266,7 +266,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
     color = (80, 220, 60)
     cdef int idx = 0
     cdef int age, car
-    cdef bint active, success 
+    cdef int active, success 
     cdef int xmin
     cdef int ymin, xmax, ymax, xmid, ymid
     cdef float distance = 2.0
@@ -286,15 +286,16 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         
         # print("update 2")
         # pair = trackers[idx]
-        if active:
+        if active == 0:
             success, bbox = tracker.update(image)
         else:
             if age >= max_age:
                 # counters['lost_trackers']+=1
                 print("Deleting tracker {} with age {} on AOI exit..{}".format(car, age, length))
-                del trackers[idx]
-                del_Tracker(idx)
-                length -= 1
+                # del trackers[idx]
+                # del_Tracker(idx)
+                tr[idx].status = 2
+                # length -= 1
                 continue
             idx+=1
             tr[idx].age +=1
@@ -302,7 +303,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         # print("update 3")
         # print("Tracker object", tracker.update(image))
         if not success:
-            tr[idx].status = False
+            tr[idx].status = 1
             print("Deleting tracker", car,"on update failure")
             # print("Lost tracker no.", car)
             # counters['lost_trackers'] += 1
@@ -341,9 +342,10 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         if age >= max_age:
             # counters['lost_trackers']+=1
             print("Deleting tracker {} with age {} on AOI exit..{}".format(car, age, length))
-            del trackers[idx]
-            del_Tracker(idx)
-            length -= 1
+            # del trackers[idx]
+            # del_Tracker(idx)
+            tr[idx].status = 2
+            # length -= 1
             continue
 
         # print("update 8")
@@ -602,7 +604,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     return [(box, masks[i]) for i, box in enumerate(boxes) if i not in mapped_trackers]
 
 
-cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, bint status):
+cdef Info *add_new_Tracker((int, int, int, int) bbox, int age):
 #   cdef Info *tr
     global length, counters, tr, max_len
     length +=1
@@ -612,7 +614,7 @@ cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, bint status):
         tr = <Info *>PyMem_Malloc(sizeof(Info))
         if not tr:
             raise MemoryError()
-        tr[0] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age, counters ,status)
+        tr[0] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age, counters ,0)
     else:
         if max_len < length:
             max_len = length
@@ -620,7 +622,7 @@ cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, bint status):
             if not tr:
                 print("Memory error")
                 raise MemoryError()
-        tr[length-1] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age, counters ,status)
+        tr[length-1] = Info(box(bbox[0], bbox[1], bbox[2], bbox[3]), age, counters ,0)
 
 #   return tr
 
@@ -628,4 +630,6 @@ cdef del_Tracker(int index):
     global tr, length
     for i in range(length - index - 1):
         tr[index+i] = tr[index+i+1]
+    # tr[index] = tr[length]
+    
 
