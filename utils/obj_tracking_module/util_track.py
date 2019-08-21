@@ -244,21 +244,21 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
     cdef int car, xmin, ymin, xmax, ymax, xmid, ymid, idx
     cdef box bbox
     try:
-        if int(curr_frame)%sr == 0:
-            update_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age)
-        else:
-            while idx < length:
-                car = tr[idx].label
-                bbox = tr[idx].bbox
-                xmin = <int>(bbox.f0)
-                ymin = <int>(bbox.f1)
-                xmax = <int>(bbox.f0 + bbox.f2)
-                ymax = <int>(bbox.f1 + bbox.f3)
-                xmid = <int>(round((xmin + xmax) / 2))
-                ymid = <int>(round((ymin + ymax) / 2))
+        # if int(curr_frame)%sr == 0:
+        update_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age)
+        # else:
+        #     while idx < length:
+        #         car = tr[idx].label
+        #         bbox = tr[idx].bbox
+        #         xmin = <int>(bbox.f0)
+        #         ymin = <int>(bbox.f1)
+        #         xmax = <int>(bbox.f0 + bbox.f2)
+        #         ymax = <int>(bbox.f1 + bbox.f3)
+        #         xmid = <int>(round((xmin + xmax) / 2))
+        #         ymid = <int>(round((ymin + ymax) / 2))
 
-                label_object(GREEN, RED, image, car, 2, xmax, xmid, xmin, ymax, ymid, ymin)
-                idx +=1
+        #         label_object(GREEN, RED, image, car, 2, xmax, xmid, xmin, ymax, ymid, ymin)
+        #         idx +=1
     except Exception as e:
         print(repr(e))
 cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
