@@ -9,7 +9,7 @@ cdef struct Info:
   box bbox
   int age
   int label
-  int status
+  bint status
 
 cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, float threshold, str dist_metric, int max_age=*) except *
 
