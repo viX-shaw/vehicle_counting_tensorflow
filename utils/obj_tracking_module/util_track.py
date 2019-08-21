@@ -295,6 +295,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
                 # del trackers[idx]
                 # del_Tracker(idx)
                 tr[idx].status = 2
+                idx+=1
                 # length -= 1
                 continue
             idx+=1
@@ -345,6 +346,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
             # del trackers[idx]
             # del_Tracker(idx)
             tr[idx].status = 2
+            idx+=1
             # length -= 1
             continue
 
