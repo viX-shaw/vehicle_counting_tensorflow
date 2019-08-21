@@ -191,20 +191,21 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
         for x in range(length):
-            (_, ft) = trackers[x]
-            age = tr[x].age
+            active = tr[x].status
+            if active != 2:
+                (_, ft) = trackers[x]
+                age = tr[x].age
+                # a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
+                if dist_metric == "cosine":
+                    eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
+                else:
+                    eu_dist = _nn_euclidean_distance(ft[-200:], dt_ft)
 
-            # a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
-            if dist_metric == "cosine":
-                eu_dist = _nn_cosine_distance(ft[-200:], dt_ft)
-            else:
-                eu_dist = _nn_euclidean_distance(ft[-200:], dt_ft)
-
-            # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
-            if eu_dist < threshold and age > 0 and min_dist > eu_dist:
-                # xmin, ymin, xmax, ymax = bx
-                min_dist = eu_dist
-                min_id = x
+                # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
+                if eu_dist < threshold and age > 0 and min_dist > eu_dist:
+                    # xmin, ymin, xmax, ymax = bx
+                    min_dist = eu_dist
+                    min_id = x
         if min_id != -1:
             t =trackers[min_id]
             
