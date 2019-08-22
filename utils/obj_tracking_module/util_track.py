@@ -335,12 +335,12 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         # float distance = 2.0
         # print("update 6")
         if dist_metric == "cosine":
-            eu_dist = _nn_cosine_distance(features[-200:], dt_feature)
+            distance = _nn_cosine_distance(features[-200:], dt_feature)
         else:
-            eu_dist = _nn_euclidean_distance(features[-200:], dt_feature)
+            distance = _nn_euclidean_distance(features[-200:], dt_feature)
         # print(distance)
-        # with open("Cosine-distances.txt", 'a') as f:
-        #     f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
+        with open("Cosine-distances.txt", 'a') as f:
+            f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, len(_), age))
         # print(distance)
         if abs(distance) > threshold:
             tr[idx].age +=1
