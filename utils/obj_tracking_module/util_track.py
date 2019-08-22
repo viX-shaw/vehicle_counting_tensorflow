@@ -187,8 +187,8 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         success = cv_tr_obj.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         
         if success:
-            # with open('./Re-identification.txt', 'a') as f:
-            #     f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
+            with open('./Re-identification.txt', 'a') as f:
+                f.write("Updating tracker {} in frame {}\n".format(t[2], curr_frame_no))
             # del t[0]
             t[0] = cv_tr_obj             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
@@ -220,8 +220,8 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             success = cv_tr_obj.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
             
             if success:
-                # with open('./Re-identification.txt', 'a') as f:
-                #     f.write("Re-initializing tracker {} in frame {}\n".format(t[2], curr_frame_no))
+                with open('./Re-identification.txt', 'a') as f:
+                    f.write("Re-initializing tracker {} in frame {}\n".format(t[2], curr_frame_no))
                 # print("Re-initializing tracker ",cn, t[2])
                 t[0] = cv_tr_obj
                 tr[min_id].age = 0
