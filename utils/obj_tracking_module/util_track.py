@@ -193,7 +193,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             t[0] = cv_tr_obj             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             t[1] = np.concatenate((t[1],dt_feature), axis = 0)
-            # t[-1] = True
+            tr[min_id].status = True
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
