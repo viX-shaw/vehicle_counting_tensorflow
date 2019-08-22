@@ -42,14 +42,14 @@ OPENCV_OBJECT_TRACKERS = {
 	}
 
 feature_generator = None
-cdef extern from "opencv2/core/cvstd.hpp" namespace cv:
-    cdef cppclass Ptr:
-        Ptr()
-cdef extern from "opencv2/tracking.hpp" namespace cv:
-    cdef cppclass TrackerKCF:
-        Ptr<TrackerKCF> create()
-        bool init(Mat frame, Rect bbox)
-        bool update(Mat frame, Rect bbox)
+# cdef extern from "opencv2/core/cvstd.hpp" namespace cv:
+#     cdef cppclass Ptr:
+#         Ptr()
+# cdef extern from "opencv2/tracking.hpp" namespace cv:
+#     cdef cppclass TrackerKCF:
+#         Ptr<TrackerKCF> create()
+#         bool init(Mat frame, Rect bbox)
+#         bool update(Mat frame, Rect bbox)
 cdef struct box:
     int f0
     int f1
