@@ -221,7 +221,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             
             if success:
                 with open('./Re-identification.txt', 'a') as f:
-                    f.write("Re-initializing tracker {} age {}in frame {}\n".format(tr[min_id].label,tr[min_id].age, curr_frame_no))
+                    f.write("Re-initializing tracker {} age {} in frame {}\n".format(tr[min_id].label,tr[min_id].age, curr_frame_no))
                 # print("Re-initializing tracker ",cn, t[2])
                 t[0] = cv_tr_obj
                 tr[min_id].age = 0
@@ -247,7 +247,7 @@ def label_object(color, textcolor, image, car, thickness, xmax, xmid, xmin, ymax
     # print("label_object")
 
 def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age, sr):
-    cdef int car, xmin, ymin, xmax, ymax, xmid, ymid, idx
+    cdef int car, xmin, ymin, xmax, ymax, xmid, ymid, idx = 0
     cdef box bbox
     try:
         if int(curr_frame)%sr == 0:
