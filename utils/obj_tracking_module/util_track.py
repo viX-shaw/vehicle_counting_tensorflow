@@ -152,6 +152,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         bbox = tr[i].bbox
         age = tr[i].age
         active = tr[i].status
+        car = tr[i].label
         # print("Not_tracked -- 1 ")
         if active == 0 or age <= 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = <int>(bbox.f0)
@@ -174,9 +175,9 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             # dist = (((bxmid - xmid)/h_axis)**2 + ((bymid - ymid)/v_axis)**2)
             # print("Not_tracked -- 2 ")
 
-            dist = math.sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
-            # print("Car no {} is {}units, range is {}".format(car_no, dist, box_range))
-            # print("Overlap with Car :",car_no," is", overlap, "Frame", curr_frame_no)
+            dist = sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
+            print("Car no {} is {}units, range is {}".format(car, dist, box_range))
+            print("Overlap with Car :",car,i," is", overlap, "Frame", curr_frame_no)
             if dist <= box_range and overlap >= iou_threshold and overlap > max_overlap:
                 max_overlap = overlap 
                 min_id = i
@@ -221,7 +222,8 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             
             if success:
                 with open('./Re-identification.txt', 'a') as f:
-                    f.write("Re-initializing tracker {} age {} in frame {}\n".format(tr[min_id].label,tr[min_id].age, curr_frame_no))
+                    f.write("Re-initializing tracker {} age {} status {} in frame {}\n".format(
+                        tr[min_id].label,tr[min_id].age, tr[mini_id].status, curr_frame_no))
                 # print("Re-initializing tracker ",cn, t[2])
                 t[0] = cv_tr_obj
                 tr[min_id].age = 0
@@ -347,7 +349,6 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
                 car, distance, features.shape[0], age, curr_frame, active))
         # print(distance)
         if distance > threshold:
-            print(car, distance, threshold, curr_frame)
             tr[idx].age +=1
         # print("update 7")
         if age >= max_age:
