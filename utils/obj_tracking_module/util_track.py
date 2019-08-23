@@ -271,7 +271,7 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
     #     print(repr(e))
 cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
                         float threshold, str dist_metric, int max_age=72) except *:
-    global length
+    global length, tr
     color = (80, 220, 60)
     cdef int idx = 0
     cdef int active, age, car
@@ -341,7 +341,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         else:
             distance = _nn_euclidean_distance(features[-200:], dt_feature)
         # print(distance)
-        distance = 2.0
+        # distance = 2.0
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, features.shape[0], age))
         # print(distance)
