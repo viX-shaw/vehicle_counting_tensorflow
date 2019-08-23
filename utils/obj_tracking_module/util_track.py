@@ -193,7 +193,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             t[0] = cv_tr_obj             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             t[1] = np.concatenate((t[1],dt_feature), axis = 0)
-            tr[min_id].status = 1
+            tr[min_id].status = 0
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
@@ -227,7 +227,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
                 tr[min_id].age = 0
                 t[1] = np.concatenate((t[1],dt_ft), axis = 0)
                 # t[1].append(dt_ft)
-                tr[min_id].status = 1
+                tr[min_id].status = 0
                 # break
         # else:
         #     new_objects.append(object_)
@@ -311,7 +311,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         # print("update 3")
         # print("Tracker object", tracker.update(image))
         if not success:
-            tr[idx].status = False
+            tr[idx].status = 1
             print("Deleting tracker", car,"on update failure")
             # print("Lost tracker no.", car)
             # counters['lost_trackers'] += 1
@@ -344,7 +344,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         with open("Cosine-distances.txt", 'a') as f:
             f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, features.shape[0], age))
         # print(distance)
-        distance = 2.0
+        # distance = 2.0
         if abs(distance) > threshold:
             tr[idx].age +=1
         # print("update 7")
