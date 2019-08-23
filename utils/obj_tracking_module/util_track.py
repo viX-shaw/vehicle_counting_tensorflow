@@ -343,9 +343,10 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         # print(distance)
         # distance = 2.0
         with open("Cosine-distances.txt", 'a') as f:
-            f.write("Tracker no {} : {}, ft_length: {} ,age {}\n".format(car, distance, features.shape[0], age))
+            f.write("Tracker no {} : {}, ft_length: {} ,age {}, frame {}\n".format(car, distance, features.shape[0], age, curr_frame))
         # print(distance)
         if distance > threshold:
+            print(car, distance, threshold, curr_frame)
             tr[idx].age +=1
         # print("update 7")
         if age >= max_age:
