@@ -164,8 +164,8 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             #IOU-dist
             x1 = max(xmin, bxmin)
             y1 = max(ymin, bymin)
-            x2 = max(xmax, bxmax)
-            y2 = max(ymax, bymax)
+            x2 = min(xmax, bxmax)
+            y2 = min(ymax, bymax)
 
             w = max(0, x2 - x1 + 1)
             h = max(0, y2 - y1 + 1)
@@ -176,8 +176,8 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             # print("Not_tracked -- 2 ")
 
             dist = sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
-            print("Car no {} is {}units, range is {}".format(car, dist, box_range))
-            print("Overlap with Car :",car,i," is", overlap, "Frame", curr_frame_no)
+            # print("Car no {} is {}units, range is {}".format(car, dist, box_range))
+            # print("Overlap with Car :",car,i," is", overlap, "Frame", curr_frame_no)
             if dist <= box_range and overlap >= iou_threshold and overlap > max_overlap:
                 max_overlap = overlap 
                 min_id = i
