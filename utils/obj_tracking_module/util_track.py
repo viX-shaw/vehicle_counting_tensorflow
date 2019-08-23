@@ -343,7 +343,8 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         # print(distance)
         # distance = 2.0
         with open("Cosine-distances.txt", 'a') as f:
-            f.write("Tracker no {} : {}, ft_length: {} ,age {}, frame {}\n".format(car, distance, features.shape[0], age, curr_frame))
+            f.write("Tracker no {} : {}, ft_length: {} ,age {}, frame {}, status {}\n".format(
+                car, distance, features.shape[0], age, curr_frame, active))
         # print(distance)
         if distance > threshold:
             print(car, distance, threshold, curr_frame)
