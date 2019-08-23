@@ -59,7 +59,7 @@ cdef struct Info:
     box bbox
     int age
     int label
-    bint status
+    int status
 
 cdef Info *tr = NULL
 def load_appearence_model(path_to_model):
@@ -110,7 +110,7 @@ cdef void add_new_object(box obj, np.ndarray image, list trackers, str name, str
             feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)])
         # print("Adding feature to new track object", np.asarray(feature).shape)
         # initial_bbox = box(xmin, ymin, xmax-xmin, ymax-ymin)
-        add_new_Tracker((xmin, ymin, xmax-xmin, ymax-ymin), age, success)
+        add_new_Tracker((xmin, ymin, xmax-xmin, ymax-ymin), age, 0)
         
         trackers.append([tracker, feature])
         # print("Car - ", label, "is added")
@@ -130,7 +130,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         float max_overlap = 0.0, min_dist = 2.0
         float box_range, overlap, dist, eu_dist
         np.ndarray dt_ft, dt_feature
-        bint active
+        int active
     global tr
     ymin = <int>object_.f0
     xmin = <int>object_.f1
@@ -153,7 +153,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         age = tr[i].age
         active = tr[i].status
         # print("Not_tracked -- 1 ")
-        if active or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
+        if active == 0 or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = <int>(bbox.f0)
             bymin = <int>(bbox.f1)
             bxmax = <int>(bbox.f0 + bbox.f2)
@@ -193,7 +193,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             t[0] = cv_tr_obj             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
             t[1] = np.concatenate((t[1],dt_feature), axis = 0)
-            tr[min_id].status = True
+            tr[min_id].status = 1
     else:
         # ymin, xmin, ymax, xmax = [int(en) for en in object_]
         dt_ft = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
@@ -227,7 +227,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
                 tr[min_id].age = 0
                 t[1] = np.concatenate((t[1],dt_ft), axis = 0)
                 # t[1].append(dt_ft)
-                tr[min_id].status = True
+                tr[min_id].status = 1
                 # break
         # else:
         #     new_objects.append(object_)
@@ -254,16 +254,18 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
             update_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric, max_age)
         else:
             while idx < length:
-                car = tr[idx].label
-                bbox = tr[idx].bbox
-                xmin = <int>(bbox.f0)
-                ymin = <int>(bbox.f1)
-                xmax = <int>(bbox.f0 + bbox.f2)
-                ymax = <int>(bbox.f1 + bbox.f3)
-                xmid = <int>(round((xmin + xmax) / 2))
-                ymid = <int>(round((ymin + ymax) / 2))
+                active = tr[idx].status
+                if active == 0:
+                    car = tr[idx].label
+                    bbox = tr[idx].bbox
+                    xmin = <int>(bbox.f0)
+                    ymin = <int>(bbox.f1)
+                    xmax = <int>(bbox.f0 + bbox.f2)
+                    ymax = <int>(bbox.f1 + bbox.f3)
+                    xmid = <int>(round((xmin + xmax) / 2))
+                    ymid = <int>(round((ymin + ymax) / 2))
 
-                label_object(GREEN, RED, image, car, 2, xmax, xmid, xmin, ymax, ymid, ymin)
+                    label_object(GREEN, RED, image, car, 2, xmax, xmid, xmin, ymax, ymid, ymin)
                 idx +=1
     except Exception as e:
         print(repr(e))
@@ -272,8 +274,8 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
     global length
     color = (80, 220, 60)
     cdef int idx = 0
-    cdef int age, car
-    cdef bint active, success 
+    cdef int active, age, car
+    # cdef bint success 
     cdef int xmin
     cdef int ymin, xmax, ymax, xmid, ymid
     cdef float distance = 2.0
@@ -293,7 +295,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         
         # print("update 2")
         # pair = trackers[idx]
-        if active:
+        if active == 0:
             success, bbox = tracker.update(image)
         else:
             if age >= max_age:
@@ -610,7 +612,7 @@ def untracked_detections(image, trackers, boxes, name, curr_frame_no, dist_metri
     return [(box, masks[i]) for i, box in enumerate(boxes) if i not in mapped_trackers]
 
 
-cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, bint status):
+cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, int status):
 #   cdef Info *tr
     global length, counters, tr, max_len
     length +=1
