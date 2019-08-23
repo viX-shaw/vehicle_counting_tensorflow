@@ -153,7 +153,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         age = tr[i].age
         active = tr[i].status
         # print("Not_tracked -- 1 ")
-        if active == 0 or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
+        if active == 0 or age <= 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = <int>(bbox.f0)
             bymin = <int>(bbox.f1)
             bxmax = <int>(bbox.f0 + bbox.f2)
