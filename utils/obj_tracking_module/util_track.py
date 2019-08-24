@@ -1,3 +1,4 @@
+#cython: language_level=3
 # cython: profile=True
 import cv2
 import math
