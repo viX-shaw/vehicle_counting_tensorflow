@@ -213,7 +213,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
                 eu_dist = _nn_euclidean_distance(ft[-200:], dt_ft)
 
             print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
-            if eu_dist < threshold and age > 0 and min_dist > eu_dist:
+            if eu_dist < threshold and age >=3 and min_dist > eu_dist:
                 # xmin, ymin, xmax, ymax = bx
                 min_dist = eu_dist
                 min_id = x
