@@ -644,8 +644,8 @@ cdef Info *add_new_Tracker((int, int, int, int) bbox, int age, int status):
 
 cdef del_Tracker(int index):
     global tr, length
-    for i in range(length - index - 1):
-        tr[index+i] = tr[index+i+1]
-    # tr[index] = tr[length]
+    # for i in range(length - index - 1):
+    #     tr[index+i] = tr[index+i+1]
+    tr[index] = tr[length]
     
 
