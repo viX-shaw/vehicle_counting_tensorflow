@@ -1,3 +1,4 @@
+#cython: language_level=3
 cimport numpy as np
 
 cdef visualize_boxes_and_labels_on_image_array(float current_frame_number,
