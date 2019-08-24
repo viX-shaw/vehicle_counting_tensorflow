@@ -310,6 +310,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
                 del_Tracker(idx)
                 length -= 1
                 continue
+            print("Increase age by 1 for tracker", car)
             idx+=1
             tr[idx].age +=1
             continue
