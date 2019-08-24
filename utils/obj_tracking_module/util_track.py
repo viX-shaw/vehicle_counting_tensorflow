@@ -10,7 +10,7 @@ import warnings
 from scipy.optimize import linear_sum_assignment
 
 from libc.stdlib cimport malloc, free, realloc
-from libc.math cimport round, sqrt, min, max
+from libc.math cimport round, sqrt
 from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 # from .vehicle_detection_main cimport Info 
 cimport numpy as np
