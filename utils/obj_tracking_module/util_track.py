@@ -192,6 +192,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         if success:
             with open('./Re-identification.txt', 'a') as f:
                 f.write("Updating tracker {} in frame {}\n".format(tr[min_id].label, curr_frame_no))
+            print("Updating tracker ", tr[min_id].label, curr_frame_no)            
             # del t[0]
             t[0] = cv_tr_obj             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
@@ -310,7 +311,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
                 del_Tracker(idx)
                 length -= 1
                 continue
-            print("Increase age by 1 for tracker", car)
+            print("Increase age by 1 for tracker",age,  car, curr_frame)
             idx+=1
             tr[idx].age +=1
             continue
