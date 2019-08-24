@@ -177,7 +177,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
 
             dist = sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
             # print("Car no {} is {}units, range is {}".format(car, dist, box_range))
-            # print("Overlap with Car :",car,i," is", overlap, "Frame", curr_frame_no)
+            print("Overlap with Car :",car,i," is", overlap, "Frame", curr_frame_no)
             if dist <= box_range and overlap >= iou_threshold and overlap > max_overlap:
                 max_overlap = overlap 
                 min_id = i
