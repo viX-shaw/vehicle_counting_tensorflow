@@ -203,6 +203,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         for x in range(length):
             (_, ft) = trackers[x]
             age = tr[x].age
+            cn = tr[x].label
 
             # a = np.squeeze(np.asarray(ft[-200:]), axis = 1)
             if dist_metric == "cosine":
@@ -210,7 +211,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             else:
                 eu_dist = _nn_euclidean_distance(ft[-200:], dt_ft)
 
-            # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
+            print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
             if eu_dist < threshold and age > 0 and min_dist > eu_dist:
                 # xmin, ymin, xmax, ymax = bx
                 min_dist = eu_dist
