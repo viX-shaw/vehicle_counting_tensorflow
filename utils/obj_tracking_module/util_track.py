@@ -155,7 +155,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         active = tr[i].status
         car = tr[i].label
         # print("Not_tracked -- 1 ")
-        if active == 0 or age <= 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
+        if active == 0 or age < 3: #less than sampling rate, since inactive trackers can loose out on further immediate det. based on iou 
             bxmin = <int>(bbox.f0)
             bymin = <int>(bbox.f1)
             bxmax = <int>(bbox.f0 + bbox.f2)
@@ -178,8 +178,8 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
 
             dist = sqrt((xmid - bxmid)**2 + (ymid - bymid)**2)   #uncomment
             # print("Car no {} is {}units, range is {}".format(car, dist, box_range))
-            print(w, h, area)
-            print("Overlap with Car :",car,i," is", overlap, "Frame", curr_frame_no)
+            # print(w, h, area)
+            # print("Overlap with Car :",car,i," is", overlap, "Frame", curr_frame_no)
             if dist <= box_range and overlap >= iou_threshold and overlap > max_overlap:
                 max_overlap = overlap 
                 min_id = i
