@@ -311,15 +311,15 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
                 del_Tracker(idx)
                 length -= 1
                 continue
-            print("Increase age by 1 for tracker",age,  car, curr_frame)
-            idx+=1
+            # print("Increase age by 1 for tracker",age,  car, curr_frame)
             tr[idx].age +=1
+            idx+=1
             continue
         # print("update 3")
         # print("Tracker object", tracker.update(image))
         if not success:
             tr[idx].status = 1
-            tr[idx].age +=1
+            # tr[idx].age +=1
             print("Deleting tracker", car,"on update failure", curr_frame)
             # print("Lost tracker no.", car)
             # counters['lost_trackers'] += 1
