@@ -227,7 +227,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
                 with open('./Re-identification.txt', 'a') as f:
                     f.write("Re-initializing tracker {} age {} status {} in frame {}\n".format(
                         tr[min_id].label,tr[min_id].age, tr[min_id].status, curr_frame_no))
-                print("Re-initializing tracker ",cn)
+                print("Re-initializing tracker ", tr[min_id].label)
                 t[0] = cv_tr_obj
                 tr[min_id].age = 0
                 t[1] = np.concatenate((t[1],dt_ft), axis = 0)
