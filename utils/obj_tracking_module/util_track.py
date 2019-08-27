@@ -276,6 +276,9 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
                 idx +=1
     except Exception as e:
         print(repr(e))
+
+def get_updated_coords(tracker, image):
+    return tracker.update(image)
 cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, str curr_frame, 
                         float threshold, str dist_metric, int max_age=72) except *:
     global length, tr
@@ -303,7 +306,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         # print("update 2")
         # pair = trackers[idx]
         if active == 0:
-            success, bbox = tracker.update(image)
+            success, bbox = get_updated_coords(tracker, image)
         else:
             if age >= max_age:
                 # counters['lost_trackers']+=1
