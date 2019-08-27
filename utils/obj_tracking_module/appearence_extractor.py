@@ -9,6 +9,9 @@ import string
 import tensorflow as tf
 from PIL import ImageColor, Image
 
+rgb = None
+solid_color = None
+pil_solid_color = None
 
 def _run_in_batches(f, data_dict, out, batch_size):
     data_len = len(out)
@@ -123,6 +126,13 @@ def create_box_encoder(model_filename, input_name="images",
         image_patches = []
         #adding dummy images to make batch_size 10 permanently because of googlenet
         # i = len(boxes)//10
+        global rgb, solid_color, pil_solid_color
+        if not rgb and mask is not None:
+            print("SOLID COLOR BOUNDARY CREATED")
+            rgb = ImageColor.getrgb('gray')
+            solid_color = np.expand_dims(np.ones_like(mask), axis=2) * np.reshape(list(rgb), [1, 1, 3])
+            pil_solid_color = Image.fromarray(np.uint8(solid_color)).convert('RGBA')
+                
 
         #This loop is not required since we are generating feature for only one bbox at
         #a time, but left for future if we intend to use for all boxes at once. 
@@ -131,11 +141,8 @@ def create_box_encoder(model_filename, input_name="images",
             if mask is not None:
                 if mask.shape != (image.shape[0], image.shape[1]):
                     mask = np.zeros_like(np.arange(image.shape[0]*image.shape[1]).reshape((image.shape[0], image.shape[1])))
-                rgb = ImageColor.getrgb('gray')
                 # image = np.copy(image).astype(np.uint8)
                 pil_image = Image.fromarray(image.astype(np.uint8))
-                solid_color = np.expand_dims(np.ones_like(mask), axis=2) * np.reshape(list(rgb), [1, 1, 3])
-                pil_solid_color = Image.fromarray(np.uint8(solid_color)).convert('RGBA')
                 pil_mask = Image.fromarray(np.uint8(255.0*(np.ones_like(mask)-mask))).convert('L')
                 p_image = Image.composite(pil_solid_color, pil_image, pil_mask)
                 image = np.array(p_image.convert('RGB'))
