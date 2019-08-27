@@ -261,6 +261,7 @@ def updt_trackers(image, cp_image, trackers, curr_frame, threshold, dist_metric,
         else:
             while idx < length:
                 active = tr[idx].status
+                tr[idx].age +=1
                 if active == 0:
                     car = tr[idx].label
                     bbox = tr[idx].bbox
