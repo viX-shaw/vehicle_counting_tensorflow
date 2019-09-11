@@ -100,7 +100,7 @@ cdef void add_new_object(box obj, np.ndarray image, list trackers, str name, str
 
     # tracker = OPENCV_OBJECT_TRACKERS[name]()
     tracker =  KCF.kcftracker()
-    success = tracker.init(image, [xmin, ymin, xmax-xmin, ymax-ymin)])
+    success = tracker.init(image, [xmin, ymin, xmax-xmin, ymax-ymin])
     if success:
         if mask is not None:
             # try:
