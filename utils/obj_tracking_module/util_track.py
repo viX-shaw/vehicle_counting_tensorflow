@@ -17,6 +17,7 @@ from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 cimport numpy as np
 
 from .appearence_extractor import create_box_encoder
+import KCF
 
 WHITE = (255, 255, 255)
 YELLOW = (66, 244, 238)
@@ -95,8 +96,8 @@ cdef void add_new_object(box obj, np.ndarray image, list trackers, str name, str
     # init tracker
     # tracker = cv2.TrackerKCF_create()  # Note: Try comparing KCF with MIL
 
-    # if dist <= radius*0.93:
-    tracker = OPENCV_OBJECT_TRACKERS[name]()
+    # tracker = OPENCV_OBJECT_TRACKERS[name]()
+    tracker =  KCF.kcftracker()
     success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
     if success:
         if mask is not None:
@@ -186,7 +187,8 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
     if min_id != -1:
         t=trackers[min_id]
         tr[min_id].age=0 #Resetting age on detection
-        cv_tr_obj = OPENCV_OBJECT_TRACKERS[name]()
+        # cv_tr_obj = OPENCV_OBJECT_TRACKERS[name]()
+        cv_tr_obj = KCF.kcftracker()
         success = cv_tr_obj.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
         
         if success:
@@ -220,7 +222,8 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         if min_id != -1:
             t =trackers[min_id]
             
-            cv_tr_obj = OPENCV_OBJECT_TRACKERS[name]()
+            # cv_tr_obj = OPENCV_OBJECT_TRACKERS[name]()
+            cv_tr_obj = KCF.kcftracker()
             # print((xmin, ymin, xmax-xmin, ymax-ymin))
             success = cv_tr_obj.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
             
