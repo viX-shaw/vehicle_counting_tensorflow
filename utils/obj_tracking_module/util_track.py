@@ -100,7 +100,7 @@ cdef void add_new_object(box obj, np.ndarray image, list trackers, str name, str
 
     # tracker = OPENCV_OBJECT_TRACKERS[name]()
     tracker =  KCF.kcftracker()
-    success = tracker.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+    success = tracker.init(image, [xmin, ymin, xmax-xmin, ymax-ymin)])
     if success:
         if mask is not None:
             # try:
@@ -191,7 +191,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         tr[min_id].age=0 #Resetting age on detection
         # cv_tr_obj = OPENCV_OBJECT_TRACKERS[name]()
         cv_tr_obj = KCF.kcftracker()
-        success = cv_tr_obj.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+        success = cv_tr_obj.init(image, [xmin, ymin, xmax-xmin, ymax-ymin])
         
         if success:
             with open('./Re-identification.txt', 'a') as f:
@@ -227,7 +227,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             # cv_tr_obj = OPENCV_OBJECT_TRACKERS[name]()
             cv_tr_obj = KCF.kcftracker()
             # print((xmin, ymin, xmax-xmin, ymax-ymin))
-            success = cv_tr_obj.init(image, (xmin, ymin, xmax-xmin, ymax-ymin))
+            success = cv_tr_obj.init(image, [xmin, ymin, xmax-xmin, ymax-ymin])
             
             if success:
                 with open('./Re-identification.txt', 'a') as f:
