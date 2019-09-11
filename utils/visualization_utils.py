@@ -37,6 +37,7 @@ from utils.image_utils import image_saver
 # from utils.obj_tracking_module import util_track
 cdef (int, int ,int ,int) bbox
 cimport utils.obj_tracking_module.util_track as util_track
+cimport numpy as np
 
 # color recognition module - import
 # from utils.color_recognition_module import color_recognition_api
