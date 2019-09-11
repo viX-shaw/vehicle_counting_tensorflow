@@ -23,8 +23,6 @@ incdr = [numpy.get_include()]
 
 ext = [
     Extension('util_track', ['utils/obj_tracking_module/util_track.pyx'],
-        libraries = ['KCF', 'cvt'],
-        library_dirs = libdr,
         include_dirs = incdr
         ),
     Extension('visualization_utils', ['utils/visualization_utils.pyx'],

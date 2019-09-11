@@ -1,5 +1,7 @@
 #cython: language_level=3, boundscheck=False
 # cython: profile=True
+import sys
+sys.path.append("/content/E/vehicle_counting_tensorflow/utils/obj_tracking_module")
 import cv2
 import math
 from collections import defaultdict
