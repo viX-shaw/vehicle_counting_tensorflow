@@ -22,10 +22,10 @@ libdr = ['/content/E/vehicle_counting_tensorflow/utils/obj_tracking_module']
 incdr = [numpy.get_include()]
 
 ext = [
-    Extension('util_track', ['utils/obj_tracking_module/util_track.pyx'],
+    Extension('utils.obj_tracking_module.util_track', ['utils/obj_tracking_module/util_track.pyx'],
         include_dirs = incdr
         ),
-    Extension('visualization_utils', ['utils/visualization_utils.pyx'],
+    Extension('utils.visualization_utils', ['utils/visualization_utils.pyx'],
         include_dirs = incdr
         )
 ]
