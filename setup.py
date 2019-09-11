@@ -31,6 +31,7 @@ ext = [
 ]
 
 setup(
+    package_data = {'vehicle_counting_tensorflow/utils/obj_tracking_module': ['*.pxd']}
     cmdclass = {'build_ext': build_ext},
 	ext_modules = ext
 )
