@@ -17,7 +17,7 @@ from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 cimport numpy as np
 
 from .appearence_extractor import create_box_encoder
-from . import KCF
+import KCF
 
 WHITE = (255, 255, 255)
 YELLOW = (66, 244, 238)
