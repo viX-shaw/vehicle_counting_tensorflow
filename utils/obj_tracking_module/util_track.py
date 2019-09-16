@@ -196,7 +196,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
         if success:
             with open('./Re-identification.txt', 'a') as f:
                 f.write("Updating tracker {} in frame {}\n".format(tr[min_id].label, curr_frame_no))
-            print("Updating tracker ", tr[min_id].label, curr_frame_no)            
+            # print("Updating tracker ", tr[min_id].label, curr_frame_no)            
             # del t[0]
             t[0] = cv_tr_obj             #uncomment 
             dt_feature = feature_generator(image, [(xmin, ymin, xmax-xmin, ymax-ymin)], mask)
@@ -216,7 +216,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
             else:
                 eu_dist = _nn_euclidean_distance(ft[-200:], dt_ft)
 
-            print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
+            # print("car no ", cn, "eu-dist -", eu_dist, "Frame", curr_frame_no, "Age", age)
             if eu_dist < threshold and age > 0 and min_dist > eu_dist:
                 # xmin, ymin, xmax, ymax = bx
                 min_dist = eu_dist
@@ -233,7 +233,7 @@ cdef bint not_tracked(np.ndarray image, box object_, list trackers, str name, fl
                 with open('./Re-identification.txt', 'a') as f:
                     f.write("Re-initializing tracker {} age {} status {} in frame {}\n".format(
                         tr[min_id].label,tr[min_id].age, tr[min_id].status, curr_frame_no))
-                print("Re-initializing tracker ", tr[min_id].label)
+                # print("Re-initializing tracker ", tr[min_id].label)
                 t[0] = cv_tr_obj
                 tr[min_id].age = 0
                 t[1] = np.concatenate((t[1],dt_ft), axis = 0)
@@ -315,7 +315,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         else:
             if age >= max_age:
                 # counters['lost_trackers']+=1
-                print("Deleting tracker {} with age {} on AOI exit..{}".format(car, age, length))
+                # print("Deleting tracker {} with age {} on AOI exit..{}".format(car, age, length))
                 del trackers[idx]
                 del_Tracker(idx)
                 length -= 1
@@ -329,7 +329,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         if not success:
             tr[idx].status = 1
             # tr[idx].age +=1
-            print("Deleting tracker", car,"on update failure", curr_frame,"bbox", bbox)
+            # print("Deleting tracker", car,"on update failure", curr_frame,"bbox", bbox)
             # print("Lost tracker no.", car)
             # counters['lost_trackers'] += 1
             # del trackers[idx]
@@ -368,7 +368,7 @@ cdef void update_trackers(np.ndarray image, np.ndarray cp_image, list trackers, 
         # print("update 7")
         if age >= max_age:
             # counters['lost_trackers']+=1
-            print("Deleting tracker {} with age {} on AOI exit..{}".format(car, age, length))
+            # print("Deleting tracker {} with age {} on AOI exit..{}".format(car, age, length))
             del trackers[idx]
             del_Tracker(idx)
             length -= 1
